@@ -26,7 +26,7 @@ async function checkForScheduledMessages(client) {
 
     SCHEDULE.find({
 
-        guildID: '801490791071613029' // change to itf
+        guildID: '614193406838571085'
 
     }, (err, data) => {
 

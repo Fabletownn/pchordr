@@ -282,7 +282,7 @@ async function playRound(interaction, data) {
         const firstPlayer = collected.first().author;
         const lastPlayer = collected.last().author;
 
-        if (firstPlayer.id === lastPlayer.id) { // !==
+        if (firstPlayer.id !== lastPlayer.id) {
 
             POINTS.findOne({
 

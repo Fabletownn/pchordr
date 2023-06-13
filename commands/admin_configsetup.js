@@ -59,14 +59,14 @@ module.exports = {
                 .addComponents(
                     new ButtonBuilder()
                         .setCustomId('setup-reset')
-                        .setEmoji('✅') // 1022548599697051790
+                        .setEmoji('1022548599697051790')
                         .setLabel('Reset')
                         .setStyle(ButtonStyle.Success),
                 )
                 .addComponents(
                     new ButtonBuilder()
                         .setCustomId('setup-cancel')
-                        .setEmoji('❌') // 1022548597390180382
+                        .setEmoji('1022548597390180382')
                         .setLabel('Cancel')
                         .setStyle(ButtonStyle.Danger),
                 );

@@ -71,7 +71,7 @@ module.exports = async (Discord, client, interaction) => {
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('schedule-viewmsg')
-                            .setEmoji('👁️') // 1063265606566166628
+                            .setEmoji('1063265606566166628')
                             .setLabel('View Message')
                             .setStyle(ButtonStyle.Primary),
                     )
