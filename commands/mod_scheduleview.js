@@ -35,7 +35,7 @@ module.exports = {
 
                 for (var i = 0; i < data.length; i++) {
 
-                    // BROKEN - DATA.LENGTH IS UNDEFINED
+                    // BROKEN - DATA.LENGTH IS UNDEFINED.
     
                     if (!(currentSchedules.some((v) => data[i].scheduleID.includes(v)))) {
     
