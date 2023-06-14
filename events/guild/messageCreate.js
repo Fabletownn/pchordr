@@ -32,14 +32,14 @@ module.exports = async (Discord, client, message) => {
                     const preLink = messageSplit[twitterIndex];
                     const repLink = preLink.replace(/twitter/, 'vxtwitter');
 
-                    const reactionFilter = (reaction, userRequested) => reaction.emoji.id === '✨' && !userRequested.bot && userRequested.id !== process.env.CLIENTID;
+                    const reactionFilter = (reaction, userRequested) => reaction.emoji.id === '✨' && !userRequested.bot && reaction.user.id !== process.env.CLIENTID;
+
+                    await message.react('✨');
 
                     const vxReaction = await message.createReactionCollector({
                         reactionFilter,
                         time: 300000
                     });
-
-                    await message.react('✨');
 
                     vxReaction.on('collect', async (r, user) => {
 
