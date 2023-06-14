@@ -46,7 +46,7 @@ for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
     const command = require(filePath);
 
-    client.commands.set([]);
+    client.application?.commands.set([]);
 
 }
 
