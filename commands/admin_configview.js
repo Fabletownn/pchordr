@@ -52,7 +52,7 @@ module.exports = {
                     { name: `Art ID`, value: `<#${data.artChat || 'None'}>`, inline: true },
                     { name: `Game Photography ID`, value: `<#${data.gpChat || 'None'}>`, inline: true },
                     { name: `Supporters Chat ID`, value: `<#${data.supportersChat || 'None'}>`, inline: true },
-                    { name: `GTB Chat ID`, value: `<@&${data.gtbChat || 'None'}>`, inline: true },
+                    { name: `GTB Chat ID`, value: `<#${data.gtbChat || 'None'}>`, inline: true },
                     { name: `Administrator Role ID`, value: `<@&${data.adminRole || 'None'}>`, inline: true },
                     { name: `Moderator Role ID`, value: `<@&${data.modRole || 'None'}>`, inline: true },
                     { name: `Supporters Role ID`, value: `<@&${data.supportersRole || 'None'}>`, inline: true },
