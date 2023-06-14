@@ -14,6 +14,8 @@ module.exports = async (Discord, client) => {
 
     client.user.setPresence({ activities: [{ name: `I Talk's Podcast!`, type: ActivityType.Streaming, url: 'https://twitch.tv/italk69' }] });
 
+    client.channels.cache.get('890718960016838686').send(`${client.user.username} is online.`);
+
     cron.schedule('* * * * *', () => {
 
         checkForScheduledMessages(client);
