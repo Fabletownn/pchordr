@@ -34,7 +34,7 @@ module.exports = {
         }, async (err, data) => {
 
             if (err) return console.log(err);
-            if (data) return interaction.reply({ content: `Couldn't set the owner of that role, as they already own one! (already owned role ID: ${data.roleID})` });
+            //if (data) return interaction.reply({ content: `Couldn't set the owner of that role, as they already own one! (already owned role ID: ${data.roleID})` });
 
             const newRoleData = new CUSTOM({
                 guildID: interaction.guild.id,
