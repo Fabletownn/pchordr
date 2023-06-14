@@ -128,7 +128,7 @@ module.exports = {
                 case "serverupdateschat":
 
                     if (!interaction.guild.channels.cache.get(configVal)) return interaction.reply({ content: 'Failed to set that ID as the Server Updates channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>\n\nThis parameter requires you to provide the channel\'s ID, not the mention.' });
-                    if (interaction.guild.channels.cache.get(configVal).type !== ChannelType.GuildText) return interaction.reply({ content: 'Failed to set that ID as the Server Updates channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>' });
+                    if (interaction.guild.channels.cache.get(configVal).type !== ChannelType.GuildAnnouncement) return interaction.reply({ content: 'Failed to set that ID as the Server Updates channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>' });
 
                     if (data.serverUpdatesChat === configVal) return interaction.reply({ content: 'That channel is already in use.' });
 

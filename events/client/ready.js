@@ -26,7 +26,7 @@ async function checkForScheduledMessages(client) {
 
     SCHEDULE.find({
 
-        guildID: '614193406838571085'
+        guildID: process.env.GUILDID
 
     }, (err, data) => {
 
