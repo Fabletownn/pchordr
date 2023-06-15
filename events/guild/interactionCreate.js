@@ -109,7 +109,7 @@ module.exports = async (Discord, client, interaction) => {
 
         } else if (interaction.customId === 'custom-role-editor') {
 
-            const roleName = interaction.fields.getTextInputValue('custom-role-name');
+            const roleName = interaction.fields.getTextInputValue('custom-role-name').toLowerCase();
             const customRole = interaction.guild.roles.cache.find((role) => role.name.toLowerCase() === roleName);
             const newRoleName = interaction.fields.getTextInputValue('custom-wanted-name');
             const newRoleHex = interaction.fields.getTextInputValue('custom-wanted-color');
