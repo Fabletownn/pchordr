@@ -31,9 +31,10 @@ module.exports = {
 
             if (!data) return interaction.reply({ content: `Failed to remove that owner, as there is no data for that role. Add an owner using the \`/custom-role-set-owner\` or \`/custom-role-add\` commands.` });
 
-            const confMessage = `Member owning the role <@&${data.roleID}> will no longer have ownership and be able to edit the role.`;
+            const confMessage = `Member owning the role <@&${data.roleID}> will no longer have ownership and be able to edit the role.\n\nIt is now safe to remove the role from the user and/or delete the custom role if necessary.`;
 
             await data.delete();
+            
             await interaction.reply({ content: confMessage, allowedMentions: { parse: [] } });
 
         });

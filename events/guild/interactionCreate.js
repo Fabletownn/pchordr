@@ -1,6 +1,7 @@
 const CONFIG = require('../../models/config.js');
 const GTB = require('../../models/gtb.js');
 const SCHEDULE = require('../../models/schedules.js');
+const CUSTOM = require('../../models/customs.js');
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = async (Discord, client, interaction) => {
@@ -76,14 +77,14 @@ module.exports = async (Discord, client, interaction) => {
                             .setStyle(ButtonStyle.Primary),
                     )
 
-                const schedResponse = await interaction.reply({ content: `Scheduled message to send in <#${interaction.channel.id}>, on <t:${dateObjectUnix}:F>${addImageText}. <:bITFGG:1022548636481114172>`, components: [optViewRow], ephemeral: true });
+                const schedResponse = await interaction.reply({ content: `Scheduled message to send in <#${interaction.channel.id}>, on <t:${dateObjectUnix}:F>${addImageText}. <:bITFGG:1022548636481114172>\n\nSchedule ID: **${scheduleID}**`, components: [optViewRow], ephemeral: true });
 
-                setTimeout(() => schedResponse.edit({ content: `Scheduled message to send in <#${interaction.channel.id}>, on <t:${dateObjectUnix}:F>${addImageText}. <:bITFGG:1022548636481114172>`, components: [], ephemeral: true }), 60000);
+                setTimeout(() => schedResponse.edit({ content: `Scheduled message to send in <#${interaction.channel.id}>, on <t:${dateObjectUnix}:F>${addImageText}. <:bITFGG:1022548636481114172>\n\nSchedule ID: **${scheduleID}**`, components: [], ephemeral: true }), 60000);
 
                 interaction.client.on('interactionCreate', async (interaction) => {
 
                     if (interaction.isButton()) {
-        
+
                         if (interaction.customId === 'schedule-viewmsg') {
 
                             if (imageInput !== null) {
@@ -97,12 +98,85 @@ module.exports = async (Discord, client, interaction) => {
                             }
 
                             await schedResponse.edit({ content: `Scheduled message to send in <#${interaction.channel.id}>, on <t:${dateObjectUnix}:F>${addImageText}. <:bITFGG:1022548636481114172>`, components: [], ephemeral: true });
-        
+
                         }
-        
+
                     }
-        
+
                 });
+
+            });
+
+        } else if (interaction.customId === 'custom-role-editor') {
+
+            const roleName = interaction.fields.getTextInputValue('custom-role-name');
+            const customRole = interaction.guild.roles.cache.find((role) => role.name.toLowerCase() === roleName);
+            const newRoleName = interaction.fields.getTextInputValue('custom-wanted-name');
+            const newRoleHex = interaction.fields.getTextInputValue('custom-wanted-color');
+
+            var propertiesEdited = [];
+
+            if (!customRole) return interaction.reply({ content: `Could not find a role in the server with the name of **${roleName}**.`, allowedMentions: { parse: [] } });
+
+            if (newRoleHex && !newRoleHex.match(/(^[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i)) return interaction.reply({ content: `The hex code given of **${newRoleHex}** is improper or cannot be used.`, allowedMentions: { parse: [] } });
+
+            CUSTOM.findOne({
+
+                guildID: interaction.guild.id,
+                roleID: customRole.id
+
+            }, async (err, data) => {
+
+                if (err) return interaction.reply({ content: `Could not find owner data for that role (**${roleName}**). If this is your custom role, ask a Moderator to set you as the owner.` });
+
+                if (!data) return interaction.reply({ content: `There is not yet a claimed owner for that role (**${roleName}**). If this is your custom role, ask a Moderator to set you as the owner.` });
+
+                if (data.roleOwner !== interaction.user.id) return interaction.reply({ content: `Could not change the assets of your role (**${roleName}**). You are not the owner of that custom role!` });
+
+                await interaction.deferReply();
+
+                if (newRoleName) {
+
+                    try {
+
+                        customRole.edit({ name: newRoleName });
+
+                        propertiesEdited.push(`role name (now: **${newRoleName}**)`);
+
+                    } catch (err) {
+
+                        propertiesEdited.push(`role name (now: **invalid**)`);
+
+                        return;
+
+                    }
+
+                }
+
+                if (newRoleHex) {
+
+                    try {
+
+                        customRole.edit({ color: newRoleHex });
+
+                        propertiesEdited.push(`role color (now: **${newRoleHex}**)`);
+
+                    } catch (err) {
+
+                        propertiesEdited.push(`role name (now: **invalid**)`);
+
+                        return;
+
+                    }
+
+                }
+
+                if ((propertiesEdited.length <= 0) || (propertiesEdited.length === undefined)) return interaction.editReply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.` });
+                if (!newRoleName && !newRoleHex) return interaction.editReply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.` });
+
+                await interaction.editReply({ content: `Edited the following assets of your custom role: ${propertiesEdited.join(', ')}.` });
+
+                propertiesEdited = [];
 
             });
 
@@ -239,7 +313,7 @@ module.exports = async (Discord, client, interaction) => {
 
                     emergencyEmbedAlert(interaction, interaction.user, `Hate Speech`);
 
-                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **__[Hate Speech](https://discord.com/channels/614193406838571085/871591995536191488)__**.`, components: [], ephemeral: true });
+                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **Hate Speech**.`, components: [], ephemeral: true });
 
                     break;
 
@@ -247,7 +321,7 @@ module.exports = async (Discord, client, interaction) => {
 
                     emergencyEmbedAlert(interaction, interaction.user, `NSFW Content`);
 
-                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **__[NSFW Content](https://discord.com/channels/614193406838571085/871591995536191488)__**.`, components: [], ephemeral: true });
+                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **NSFW Content**.`, components: [], ephemeral: true });
 
                     break;
 
@@ -255,7 +329,7 @@ module.exports = async (Discord, client, interaction) => {
 
                     emergencyEmbedAlert(interaction, interaction.user, `Spam`);
 
-                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **__[Spam](https://discord.com/channels/614193406838571085/871591995536191488)__**.`, components: [], ephemeral: true });
+                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **Spam**.`, components: [], ephemeral: true });
 
                     break;
 
@@ -263,7 +337,7 @@ module.exports = async (Discord, client, interaction) => {
 
                     emergencyEmbedAlert(interaction, interaction.user, `Troll`);
 
-                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **__[Troll](https://discord.com/channels/614193406838571085/871591995536191488)__**.`, components: [], ephemeral: true });
+                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **Troll**.`, components: [], ephemeral: true });
 
                     break;
 
@@ -289,49 +363,60 @@ module.exports = async (Discord, client, interaction) => {
 
 async function emergencyEmbedAlert(interaction, userRequested, reason) {
 
-    const assistance_embed = new EmbedBuilder()
-        .setTitle(`Assistance Request`)
-        .setDescription(`${userRequested} (@${interaction.user.username}) has flagged an __**[emergency](https://discord.com/channels/${interaction.message.guild.id}/${interaction.message.channel.id})**__ in ${interaction.message.channel}!\n\n- **React with <:bITFNotes:1022548667317624842> to confirm you are handling this request.**\n\nSelected Reason: **${reason}**`)
-        .setColor('eed202')
-        .setFooter({
-            text: 'Nobody is handling this request yet',
-            iconURL: userRequested.displayAvatarURL({
-                dynamic: true
-            })
-        })
-        .setTimestamp()
+    CONFIG.findOne({
 
-    await interaction.client.channels.cache.get('1011053577302716498').send({ content: `<@&672857887894274058> <@&614196214078111745> Somebody needs your help!`, embeds: [assistance_embed] }).then(async (assistMessage) => {
+        guildID: interaction.guild.id
 
-        await assistMessage.react(`<:bITFNotes:1022548667317624842>`);
+    }, async (err, data) => {
 
-        const dealFilter = (reaction, userRequested) => reaction.emoji.id === '1022548667317624842' && !userRequested.bot;
+        if (err) return console.log(err);
+        if (!data) return;
 
-        const reactionAdded = await assistMessage.createReactionCollector(dealFilter, {
-            time: 10800000
-        });
-
-        reactionAdded.on('collect', async (r, user) => {
-
-            const assistanceEmbed2 = new EmbedBuilder()
-                .setTitle(`Emergency Being Handled`)
-                .setDescription(`${userRequested} (@${interaction.user.username}) has flagged an __**[emergency](https://discord.com/channels/${interaction.message.guild.id}/${interaction.message.channel.id})**__ in ${interaction.message.channel}!\n\nSelected Reason: **${reason}**.`)
-                .setColor('ff5154')
-                .setFooter({
-                    text: 'This request is being handled',
-                    iconURL: user.displayAvatarURL({
-                        dynamic: true
-                    })
+        const assistance_embed = new EmbedBuilder()
+            .setTitle(`Assistance Request`)
+            .setDescription(`${userRequested} (@${interaction.user.username}) has flagged an __**[emergency](https://discord.com/channels/${interaction.message.guild.id}/${interaction.message.channel.id})**__ in ${interaction.message.channel}!\n\n- **React with <:bITFNotes:1022548667317624842> to confirm you are handling this request.**\n\nSelected Reason: **${reason}**`)
+            .setColor('eed202')
+            .setFooter({
+                text: 'Nobody is handling this request yet',
+                iconURL: userRequested.displayAvatarURL({
+                    dynamic: true
                 })
-                .setTimestamp()
+            })
+            .setTimestamp()
 
-            if (!user.bot && r.emoji.id === '1022548667317624842') {
+        await interaction.client.channels.cache.get(data.modChat).send({ content: `<@&672857887894274058> <@&614196214078111745> Somebody needs your help!`, embeds: [assistance_embed] }).then(async (assistMessage) => {
 
-                await assistMessage.edit({ embeds: [assistanceEmbed2] });
+            await assistMessage.react(`<:bITFNotes:1022548667317624842>`);
 
-                await assistMessage.reactions.removeAll().catch(error => console.error(error));
+            const dealFilter = (reaction, userRequested) => reaction.emoji.id === '1022548667317624842' && !userRequested.bot;
 
-            }
+            const reactionAdded = await assistMessage.createReactionCollector(dealFilter, {
+                time: 10800000
+            });
+
+            reactionAdded.on('collect', async (r, user) => {
+
+                const assistanceEmbed2 = new EmbedBuilder()
+                    .setTitle(`Emergency Being Handled`)
+                    .setDescription(`${userRequested} (@${interaction.user.username}) has flagged an __**[emergency](https://discord.com/channels/${interaction.message.guild.id}/${interaction.message.channel.id})**__ in ${interaction.message.channel}!\n\nSelected Reason: **${reason}**.`)
+                    .setColor('ff5154')
+                    .setFooter({
+                        text: 'This request is being handled',
+                        iconURL: user.displayAvatarURL({
+                            dynamic: true
+                        })
+                    })
+                    .setTimestamp()
+
+                if (!user.bot && r.emoji.id === '1022548667317624842') {
+
+                    await assistMessage.edit({ embeds: [assistanceEmbed2] });
+
+                    await assistMessage.reactions.removeAll().catch(error => console.error(error));
+
+                }
+
+            });
 
         });
 

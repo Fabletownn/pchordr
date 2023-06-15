@@ -10,7 +10,7 @@ const {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('schedule')
-        .setDescription('Schedules a message or announcement to send')
+        .setDescription('Schedules a message or announcement to send (interactive)')
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
 
@@ -32,7 +32,7 @@ module.exports = {
                     new TextInputBuilder()
                         .setCustomId('schedule-time')
                         .setLabel('Scheduled Time')
-                        .setPlaceholder('00:00 PM/AM (EST)')
+                        .setPlaceholder('00:00 PM/AM (UTC)')
                         .setStyle(TextInputStyle.Short)
                         .setRequired(true)
                 ),

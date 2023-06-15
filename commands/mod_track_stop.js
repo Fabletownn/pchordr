@@ -34,6 +34,7 @@ module.exports = {
             const confMessage = `Any messages sent from <@${data.userID}> will no longer be tracked and logged to <#${data.channel}>. <:bITFVictory:1063265610303295619>`;
 
             await data.delete();
+            
             await interaction.reply({ content: confMessage, allowedMentions: { parse: [] } });
 
         });

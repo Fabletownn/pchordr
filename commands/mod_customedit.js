@@ -1,104 +1,52 @@
 const CUSTOM = require('../models/customs.js');
 const {
     SlashCommandBuilder,
-    PermissionFlagsBits
+    PermissionFlagsBits,
+    ActionRowBuilder,
+    ModalBuilder,
+    TextInputBuilder,
+    TextInputStyle
 } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('custom-role-edit')
-        .setDescription('Allows members to edit their own custom roles')
-        .setDMPermission(false)
-        .addStringOption((option) =>
-            option.setName('role')
-                .setDescription('What is the name of your custom role?')
-                .setMaxLength(100)
-                .setRequired(true)
-        )
-        .addStringOption((option) =>
-            option.setName('name')
-                .setDescription('What name do you want the custom role to have?')
-                .setMaxLength(100)
-                .setRequired(false)
-        )
-        .addStringOption((option) =>
-            option.setName('hex-color')
-                .setDescription('What color do you want the custom role to have? (hex code)')
-                .setMinLength(6)
-                .setMaxLength(6)
-                .setRequired(false)
-        ),
+        .setDescription('Allows members to edit their own custom roles (interactive)')
+        .setDMPermission(false),
 
     async execute(interaction) {
 
-        const roleName = interaction.options.getString('role').toLowerCase();
-        const customRole = interaction.guild.roles.cache.find((role) => role.name.toLowerCase() === roleName);
-        const newRoleName = interaction.options.getString('name');
-        const newRoleHex = interaction.options.getString('hex-color');
+        const modal = new ModalBuilder()
+            .setCustomId('custom-role-editor')
+            .setTitle('Edit Your Custom Role')
+            .addComponents([
+                new ActionRowBuilder().addComponents(
+                    new TextInputBuilder()
+                        .setCustomId('custom-role-name')
+                        .setLabel('Custom Role Name')
+                        .setPlaceholder('The name of your custom role..')
+                        .setStyle(TextInputStyle.Short)
+                        .setRequired(true)
+                ),
+                new ActionRowBuilder().addComponents(
+                    new TextInputBuilder()
+                        .setCustomId('custom-wanted-name')
+                        .setLabel('Your New Name')
+                        .setPlaceholder('What you want your custom role name to be changed to..')
+                        .setStyle(TextInputStyle.Short)
+                        .setRequired(false)
+                ),
+                new ActionRowBuilder().addComponents(
+                    new TextInputBuilder()
+                        .setCustomId('custom-wanted-color')
+                        .setLabel('Your New Color')
+                        .setPlaceholder('What you want your custom role color to be changed to.. (hex code)')
+                        .setStyle(TextInputStyle.Short)
+                        .setRequired(false)
+                ),
+            ]);
 
-        var propertiesEdited = [];
-
-        if (!customRole) return interaction.reply({ content: `Could not find a role in the server with the name of **${roleName}**.`, allowedMentions: { parse: [] } });
-        if (newRoleHex && !newRoleHex.match(/(^[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i)) return interaction.reply({ content: `The hex code given of **${newRoleHex}** is improper or cannot be used.`, allowedMentions: { parse: [] } });
-
-        CUSTOM.findOne({
-
-            guildID: interaction.guild.id,
-            roleID: customRole.id
-
-        }, async (err, data) => {
-
-            if (err) return interaction.reply({ content: `Could not find owner data for that role (**${roleName}**). If this is your custom role, ask a Moderator to set you as the owner.` });
-
-            if (!data) return interaction.reply({ content: `Could not find owner data for that role (**${roleName}**). If this is your custom role, ask a Moderator to set you as the owner.` });
-
-            if (data.roleOwner !== interaction.user.id) return interaction.reply({ content: `Could not change data for that role (**${roleName}**). You are not the owner of that custom role!` });
-
-            await interaction.deferReply();
-
-            if (newRoleName) {
-
-                try {
-
-                    customRole.edit({ name: newRoleName });
-
-                    propertiesEdited.push(`role name (**${newRoleName}**)`);
-
-                } catch (err) {
-
-                    propertiesEdited.push(`role name (**invalid**)`);
-
-                    return;
-
-                }
-
-            }
-
-            if (newRoleHex) {
-
-                try {
-
-                    customRole.edit({ color: newRoleHex });
-
-                    propertiesEdited.push(`role color (**${newRoleHex}**)`);
-
-                } catch (err) {
-
-                    propertiesEdited.push(`role name (**invalid**)`);
-
-                    return;
-
-                }
-
-            }
-
-            if ((propertiesEdited.length <= 0) || (propertiesEdited.length === undefined)) return interaction.editReply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.` });
-
-            await interaction.editReply({ content: `Edited the following assets of your custom role: ${propertiesEdited.join(', ')}.` });
-
-            propertiesEdited = [];
-
-        });
+        await interaction.showModal(modal);
 
     },
 

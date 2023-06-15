@@ -54,7 +54,7 @@ module.exports = {
 
             }
 
-            await interaction.reply({ content: `All scheduled messages have been listed below.\n\n${currentSchedules || 'None'}\n\nTo delete a scheduled message, use the \`/schedule-delete\` command.\nTo schedule a message, use the \`/schedule\` modal command.` });
+            await interaction.reply({ content: `All scheduled messages have been listed below.\n\n${currentSchedules || 'None'}\n\nTo delete a scheduled message, use the \`/schedule-remove\` command.\nTo schedule a message, use the \`/schedule\` command.` });
 
         });
 
