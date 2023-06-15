@@ -118,17 +118,17 @@ module.exports = async (Discord, client, interaction) => {
 
             if (!customRole) {
                 
-                await interaction.guild.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role with the name **${roleName}** but it could not be found`, allowedMentions: { parse: [] } });
+                await client.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role with the name **${roleName}** but it could not be found`, allowedMentions: { parse: [] } });
                 
-                return interaction.reply({ content: `Could not find a role in the server with the name of **${roleName}**.`, allowedMentions: { parse: [] } });
+                return interaction.reply({ content: `Could not find a role in the server with the name of **${roleName}**.`, ephemeral: true });
 
             }
 
             if (newRoleHex && !newRoleHex.match(/(^[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i)) {
 
-                await interaction.guild.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role with the color **${newRoleHex}** but it was improper`, allowedMentions: { parse: [] } });
+                await client.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role with the color **${newRoleHex}** but it was improper`, allowedMentions: { parse: [] } });
                 
-                return interaction.reply({ content: `The hex code given of **${newRoleHex}** is improper or cannot be used.`, allowedMentions: { parse: [] } });
+                return interaction.reply({ content: `The hex code given of **${newRoleHex}** is improper or cannot be used.`, ephemeral: true });
 
             }
 
@@ -143,21 +143,19 @@ module.exports = async (Discord, client, interaction) => {
 
                 if (!data) {
 
-                    await interaction.guild.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role **${roleName}** but it did not have ownership`, allowedMentions: { parse: [] } });
+                    await client.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role **${roleName}** but it did not have ownership`, allowedMentions: { parse: [] } });
                     
-                    return interaction.reply({ content: `There is not yet a claimed owner for that role (**${roleName}**). If this is your custom role, ask a Moderator to set you as the owner.`, allowedMentions: { parse: [] } });
+                    return interaction.reply({ content: `There is not yet a claimed owner for that role (**${roleName}**). If this is your custom role, ask a Moderator to set you as the owner.`, ephemeral: true });
 
                 }
 
                 if (data.roleOwner !== interaction.user.id) {
 
-                    await interaction.guild.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit the role of someone else (**${roleName}**) but did not have ownership`, allowedMentions: { parse: [] } });
+                    await client.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit the role of someone else (**${roleName}**) but did not have ownership`, allowedMentions: { parse: [] } });
                     
-                    return interaction.reply({ content: `Could not change the assets of your role (**${roleName}**). You are not the owner of that custom role!`, allowedMentions: { parse: [] } });
+                    return interaction.reply({ content: `Could not change the assets of your role (**${roleName}**). You are not the owner of that custom role!`, ephemeral: true });
 
                 }
-
-                await interaction.deferReply();
 
                 if (newRoleName) {
 
@@ -195,12 +193,12 @@ module.exports = async (Discord, client, interaction) => {
 
                 }
 
-                if ((propertiesEdited.length <= 0) || (propertiesEdited.length === undefined)) return interaction.editReply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.`, allowedMentions: { parse: [] } });
-                if (!newRoleName && !newRoleHex) return interaction.editReply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.`, allowedMentions: { parse: [] } });
+                if ((propertiesEdited.length <= 0) || (propertiesEdited.length === undefined)) return interaction.editReply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.`, ephemeral: true });
+                if (!newRoleName && !newRoleHex) return interaction.editReply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.`, ephemeral: true });
 
-                await interaction.editReply({ content: `Edited the following assets of your custom role: ${propertiesEdited.join(', ')}.`, allowedMentions: { parse: [] } });
+                await interaction.editReply({ content: `Edited the following assets of your custom role: ${propertiesEdited.join(', ')}.`, ephemeral: true });
                 
-                await interaction.guild.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) edited a role of theirs **${roleName}** with the following assets: ${propertiesEdited.join(', ')}.`, allowedMentions: { parse: [] } });
+                await client.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) edited a role of theirs **${roleName}** with the following assets: ${propertiesEdited.join(', ')}.`, allowedMentions: { parse: [] } });
 
                 propertiesEdited = [];
 
@@ -410,7 +408,7 @@ async function emergencyEmbedAlert(interaction, userRequested, reason) {
             })
             .setTimestamp()
 
-        await interaction.interaction.guild.channels.cache.get(data.modChat).send({ content: `<@&672857887894274058> <@&614196214078111745> Somebody needs your help!`, embeds: [assistance_embed] }).then(async (assistMessage) => {
+        await interaction.client.channels.cache.get(data.modChat).send({ content: `<@&672857887894274058> <@&614196214078111745> Somebody needs your help!`, embeds: [assistance_embed] }).then(async (assistMessage) => {
 
             await assistMessage.react(`<:bITFNotes:1022548667317624842>`);
 
