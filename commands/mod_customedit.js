@@ -14,7 +14,7 @@ module.exports = {
         .setDescription('Allows members to edit their own custom roles (interactive)')
         .setDMPermission(false),
 
-    async execute(interaction) {
+    async execute(client, interaction) {
 
         const modal = new ModalBuilder()
             .setCustomId('custom-role-editor')
