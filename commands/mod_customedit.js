@@ -48,6 +48,8 @@ module.exports = {
 
         await interaction.showModal(modal);
 
+        await interaction.channels.cache.get('890718960016838686').send(`<@${interaction.user.id}> (@${interaction.user.username}) prompted a custom role edit with the command`);
+
     },
 
 };
