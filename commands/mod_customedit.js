@@ -14,7 +14,7 @@ module.exports = {
         .setDescription('Allows members to edit their own custom roles (interactive)')
         .setDMPermission(false),
 
-    async execute(client, interaction) {
+    async execute(interaction) {
 
         const modal = new ModalBuilder()
             .setCustomId('custom-role-editor')
@@ -48,7 +48,7 @@ module.exports = {
 
         await interaction.showModal(modal);
 
-        await client.channels.cache.get('890718960016838686').send(`<@${interaction.user.id}> (@${interaction.user.username}) prompted a custom role edit with the command`);
+        await interaction.guild.channels.cache.get('890718960016838686').send(`<@${interaction.user.id}> (@${interaction.user.username}) prompted a custom role edit with the command`);
 
     },
 

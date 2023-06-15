@@ -58,7 +58,7 @@ client.events = new Collection();
 
 });
 
-client.on('interactionCreate', async interaction => {
+client.on('interactionCreate', async (interaction) => {
 
     const command = client.commands.get(interaction.commandName);
 
@@ -76,7 +76,7 @@ client.on('interactionCreate', async interaction => {
     
             await interaction.reply({ content: 'An issue occurred trying to execute that command. Contact <@528759471514845194> with the following code if this continues happening. <:bITFSweat:1022548683176284281>\n\nError Code: **`' + errorCode + '`**', ephemeral: true });
 
-            await client.channels.cache.get('855582788308566026').send(`## ${errorCode}\n\n**User**: ${interaction.user.username} (${interaction.user.id})\n**Command**: /${interaction.commandName}\n**Error**: ${error}`);
+            await client.channels.cache.get('890718960016838686').send(`## ${errorCode}\n\n**User**: ${interaction.user.username} (${interaction.user.id})\n**Command**: /${interaction.commandName}\n**Error**: ${error}`);
             
         }
 
