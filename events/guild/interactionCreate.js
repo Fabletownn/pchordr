@@ -139,7 +139,7 @@ module.exports = async (Discord, client, interaction) => {
 
             }, async (err, data) => {
 
-                if (err) return interaction.reply({ content: `Could not find owner data for that role (**${roleName}**). If this is your custom role, ask a Moderator to set you as the owner.`, allowedMentions: { parse: [] } });
+                if (err) return console.log(err);
 
                 if (!data) {
 
@@ -193,10 +193,10 @@ module.exports = async (Discord, client, interaction) => {
 
                 }
 
-                if ((propertiesEdited.length <= 0) || (propertiesEdited.length === undefined)) return interaction.editReply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.`, ephemeral: true });
-                if (!newRoleName && !newRoleHex) return interaction.editReply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.`, ephemeral: true });
+                if ((propertiesEdited.length <= 0) || (propertiesEdited.length === undefined)) return interaction.reply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.`, ephemeral: true });
+                if (!newRoleName && !newRoleHex) return interaction.reply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.`, ephemeral: true });
 
-                await interaction.editReply({ content: `Edited the following assets of your custom role: ${propertiesEdited.join(', ')}.`, ephemeral: true });
+                await interaction.reply({ content: `Edited the following assets of your custom role: ${propertiesEdited.join(', ')}.`, ephemeral: true });
                 
                 await client.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) edited a role of theirs **${roleName}** with the following assets: ${propertiesEdited.join(', ')}.`, allowedMentions: { parse: [] } });
 
