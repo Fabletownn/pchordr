@@ -118,7 +118,7 @@ module.exports = async (Discord, client, interaction) => {
 
             if (!customRole) {
                 
-                await interaction.guild.channels.cache.get('890718960016838686').send(`<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role with the name **${roleName}** but it could not be found`);
+                await interaction.guild.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role with the name **${roleName}** but it could not be found`, allowedMentions: { parse: [] } });
                 
                 return interaction.reply({ content: `Could not find a role in the server with the name of **${roleName}**.`, allowedMentions: { parse: [] } });
 
@@ -126,7 +126,7 @@ module.exports = async (Discord, client, interaction) => {
 
             if (newRoleHex && !newRoleHex.match(/(^[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i)) {
 
-                await interaction.guild.channels.cache.get('890718960016838686').send(`<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role with the color **${newRoleHex}** but it was improper`);
+                await interaction.guild.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role with the color **${newRoleHex}** but it was improper`, allowedMentions: { parse: [] } });
                 
                 return interaction.reply({ content: `The hex code given of **${newRoleHex}** is improper or cannot be used.`, allowedMentions: { parse: [] } });
 
@@ -139,21 +139,21 @@ module.exports = async (Discord, client, interaction) => {
 
             }, async (err, data) => {
 
-                if (err) return interaction.reply({ content: `Could not find owner data for that role (**${roleName}**). If this is your custom role, ask a Moderator to set you as the owner.` });
+                if (err) return interaction.reply({ content: `Could not find owner data for that role (**${roleName}**). If this is your custom role, ask a Moderator to set you as the owner.`, allowedMentions: { parse: [] } });
 
                 if (!data) {
 
-                    await interaction.guild.channels.cache.get('890718960016838686').send(`<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role **${roleName}** but it did not have ownership`);
+                    await interaction.guild.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role **${roleName}** but it did not have ownership`, allowedMentions: { parse: [] } });
                     
-                    return interaction.reply({ content: `There is not yet a claimed owner for that role (**${roleName}**). If this is your custom role, ask a Moderator to set you as the owner.` });
+                    return interaction.reply({ content: `There is not yet a claimed owner for that role (**${roleName}**). If this is your custom role, ask a Moderator to set you as the owner.`, allowedMentions: { parse: [] } });
 
                 }
 
                 if (data.roleOwner !== interaction.user.id) {
 
-                    await interaction.guild.channels.cache.get('890718960016838686').send(`<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit the role of someone else (**${roleName}**) but did not have ownership`);
+                    await interaction.guild.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit the role of someone else (**${roleName}**) but did not have ownership`, allowedMentions: { parse: [] } });
                     
-                    return interaction.reply({ content: `Could not change the assets of your role (**${roleName}**). You are not the owner of that custom role!` });
+                    return interaction.reply({ content: `Could not change the assets of your role (**${roleName}**). You are not the owner of that custom role!`, allowedMentions: { parse: [] } });
 
                 }
 
@@ -195,11 +195,12 @@ module.exports = async (Discord, client, interaction) => {
 
                 }
 
-                if ((propertiesEdited.length <= 0) || (propertiesEdited.length === undefined)) return interaction.editReply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.` });
-                if (!newRoleName && !newRoleHex) return interaction.editReply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.` });
+                if ((propertiesEdited.length <= 0) || (propertiesEdited.length === undefined)) return interaction.editReply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.`, allowedMentions: { parse: [] } });
+                if (!newRoleName && !newRoleHex) return interaction.editReply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.`, allowedMentions: { parse: [] } });
 
-                await interaction.editReply({ content: `Edited the following assets of your custom role: ${propertiesEdited.join(', ')}.` });
-                await interaction.guild.channels.cache.get('890718960016838686').send(`<@${interaction.user.id}> (@${interaction.user.username}) edited a role of theirs **${roleName}** with the following assets: ${propertiesEdited.join(', ')}.`);
+                await interaction.editReply({ content: `Edited the following assets of your custom role: ${propertiesEdited.join(', ')}.`, allowedMentions: { parse: [] } });
+                
+                await interaction.guild.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) edited a role of theirs **${roleName}** with the following assets: ${propertiesEdited.join(', ')}.`, allowedMentions: { parse: [] } });
 
                 propertiesEdited = [];
 
