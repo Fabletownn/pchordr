@@ -32,7 +32,7 @@ module.exports = {
                     new TextInputBuilder()
                         .setCustomId('custom-wanted-name')
                         .setLabel('Your New Name')
-                        .setPlaceholder('What you want your custom role name to be changed to..')
+                        .setPlaceholder('Your new role name..')
                         .setStyle(TextInputStyle.Short)
                         .setRequired(false)
                 ),
@@ -40,7 +40,7 @@ module.exports = {
                     new TextInputBuilder()
                         .setCustomId('custom-wanted-color')
                         .setLabel('Your New Color')
-                        .setPlaceholder('What you want your custom role color to be changed to.. (hex code)')
+                        .setPlaceholder('Your new role color (hex code)..')
                         .setStyle(TextInputStyle.Short)
                         .setRequired(false)
                 ),
@@ -48,7 +48,7 @@ module.exports = {
 
         await interaction.showModal(modal);
 
-        await interaction.channels.cache.get('890718960016838686').send(`<@${interaction.user.id}> (@${interaction.user.username}) prompted a custom role edit with the command`);
+        await client.channels.cache.get('890718960016838686').send(`<@${interaction.user.id}> (@${interaction.user.username}) prompted a custom role edit with the command`);
 
     },
 
