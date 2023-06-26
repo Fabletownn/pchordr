@@ -2,6 +2,7 @@ const {
     SlashCommandBuilder,
     PermissionFlagsBits
 } = require('discord.js');
+const CONFIG = require('../models/config.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -17,37 +18,52 @@ module.exports = {
 
     async execute(interaction) {
 
-        let reason = `(no reason specified)`;
-        if (interaction.options.getString('reason')) reason = interaction.options.getString('reason');
+        CONFIG.findOne({
 
-        if (!interaction.member.roles.cache.has('993341600778436618')) return interaction.reply({ content: `Failed to put you on a break. You are either already on break, or not a staff member. <:bITFSweat:1022548683176284281>`, ephemeral: true });
+            guildID: interaction.guild.id
 
-        if (interaction.member.roles.cache.has('993341640758538312')) {
+        }, async (err, data) => {
 
-            await interaction.guild.member.roles.remove('614196214078111745').then(async () => {
+            if (err) return console.log(err);
+            if (!data) return interaction.reply({ content: `Failed to go on a break! Ask an Admin to complete configuration.` });
 
-                await interaction.member.roles.remove('614195872347062273')
-                await interaction.member.roles.add('991785406028845199');
+            let reason = `(no reason specified)`;
+            if (interaction.options.getString('reason')) reason = interaction.options.getString('reason');
 
-                await interaction.reply({ content: `${interaction.user} (Administrator) has just taken a break. Reason: **${reason}**` });
+            if (!interaction.member.roles.cache.has(data.modRole)) return interaction.reply({ content: `Failed to put you on a break. You are either already on break, or not a staff member. <:bITFSweat:1022548683176284281>`, ephemeral: true });
 
-            });
+            if (interaction.member.roles.cache.has(data.adminRole)) {
 
-        } else if (interaction.member.roles.cache.has('993341600778436618')) {
+                await interaction.guild.member.roles.remove(data.modRole).then(async () => {
 
-            await interaction.member.roles.remove('993341600778436618').then(async () => {
+                    await interaction.member.roles.remove(data.adminRole)
+                    await interaction.member.roles.add('1019684924372045947');
 
-                await interaction.member.roles.add('991785406028845199');
+                    await interaction.guild.channels.cache.get(data.modChat).send({ content: `${interaction.user} (Administrator) has just taken a break. Reason: **${reason}**` });
 
-                await interaction.reply({ content: `${interaction.user} (Moderator) has just taken a break. Reason: **${reason}**` });
+                    await interaction.reply({ content: `Successfully went on break.`, ephemeral: true });
 
-            });
+                });
 
-        } else {
+            } else if (interaction.member.roles.cache.has(data.modRole)) {
 
-            return;
+                await interaction.member.roles.remove(data.modRole).then(async () => {
 
-        }
+                    await interaction.member.roles.add('1019684924372045947');
+
+                    await interaction.guild.channels.cache.get(data.modChat).send({ content: `${interaction.user} (Moderator) has just taken a break. Reason: **${reason}**` });
+
+                    await interaction.reply({ content: `Successfully went on break.`, ephemeral: true });
+
+                });
+
+            } else {
+
+                return;
+
+            }
+
+        });
 
     },
 

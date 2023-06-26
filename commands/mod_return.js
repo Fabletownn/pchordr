@@ -2,6 +2,7 @@ const {
     SlashCommandBuilder,
     PermissionFlagsBits
 } = require('discord.js');
+const CONFIG = require('../models/config.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -12,23 +13,36 @@ module.exports = {
 
     async execute(interaction) {
 
-        if (!interaction.member.roles.cache.has('1019684924372045947')) return interaction.editReply({ content: `<:pcErrorT:1091446147811397712> Could not return. User is either already staff member, stepped down (Alumni), or not previous staff member.`, ephemeral: false });
+        CONFIG.findOne({
 
-        if (interaction.member.roles.cache.has('1019684924372045947')) {
+            guildID: interaction.guild.id
 
-            await interaction.member.roles.remove('1019684924372045947').then(async () => {
+        }, async (err, data) => {
 
-                await interaction.member.roles.add('614196214078111745');
+            if (err) return console.log(err);
+            if (!data) return interaction.reply({ content: `Failed to return. Ask an Admin to set configuration back up.` });
 
-                await interaction.reply({ content: `${interaction.user} is **back from break**. Welcome back!`, ephemeral: true });
+            if (!interaction.member.roles.cache.has('1019684924372045947')) return interaction.editReply({ content: `Failed to return, you are not on break.`, ephemeral: false });
 
-            });
+            if (interaction.member.roles.cache.has('1019684924372045947')) {
 
-        } else {
+                await interaction.member.roles.remove('1019684924372045947').then(async () => {
 
-            return;
+                    await interaction.member.roles.add(data.modRole);
 
-        }
+                    await interaction.guild.channels.cache.get(data.modChat).send({ content: `${interaction.user} is **back from break**. Welcome back!`, ephemeral: true });
+
+                    await interaction.reply({ content: `Successfully returned. Welcome back!`, ephemeral: true });
+
+                });
+
+            } else {
+
+                return;
+
+            }
+
+        });
 
     },
 
