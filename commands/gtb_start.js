@@ -76,7 +76,7 @@ module.exports = {
 
 };
 
-let roundsPlayed = 1;
+var roundsPlayed = 1;
 
 async function playRound(interaction, data) {
 
