@@ -70,6 +70,8 @@ module.exports = {
 
                             await interaction.channel.send({ content: `Congratulations to <@${participant}> for winning the <@&${cData.gtbRole}> role! (total score: **${data.points} points**)`, allowedMentions: { parse: [] } });
 
+                            await data.delete();
+
                         }
 
                     });
