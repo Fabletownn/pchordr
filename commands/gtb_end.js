@@ -58,19 +58,19 @@ module.exports = {
                         guildID: interaction.guild.id,
                         userID: participant
 
-                    }, async (err, data) => {
+                    }, async (pErr, pData) => {
 
-                        if (err) return console.log(err);
+                        if (pErr) return console.log(pErr);
 
-                        if (!data) return;
+                        if (!pData) return;
 
-                        if (data.points >= 3) {
+                        if (pData.points >= 3) {
 
-                            await interaction.client.guilds.cache.get(interaction.guild.id).members.cache.get(participant).roles.add(cData.gtbRole).catch((err) => console.log(`Failed to provide player ${participant} with the role before of an error.\n${err}`));
+                            await interaction.client.guilds.cache.get(interaction.guild.id).members.cache.get(participant).roles.add(cData.gtbRole).catch((err) => console.log(`Failed to provide player ${participant} with the role because of an error.\n${err}`));
 
-                            await interaction.channel.send({ content: `Congratulations to <@${participant}> for winning the <@&${cData.gtbRole}> role! (total score: **${data.points} points**)`, allowedMentions: { parse: [] } });
+                            await interaction.channel.send({ content: `Congratulations to <@${participant}> for winning the <@&${cData.gtbRole}> role! (total score: **${pData.points} points**)`, allowedMentions: { parse: [] } });
 
-                            await data.delete();
+                            await pData.delete();
 
                         }
 
