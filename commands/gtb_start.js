@@ -55,6 +55,8 @@ module.exports = {
 
             if (roundNumber === 21) {
 
+                console.log('ROUND NUMBER 21 CALLED');
+
                 const gameStartingLine = `Chat has been locked as Guess The Blank begins in 20 seconds. Get those fingers ready! <:bITFGaming:1022548630948810752>\nYour answers do not have to be perfect. Using punctuation, spaces and/or capitals will not mess up your answers.\n\nPlayers with the **Guess The Blank Champion** role may still participate; however, points will not be awarded to said player if answered correctly.\nConnection speeds may affect how you may see answers being clocked in. Those that are marked correct is what the bot deems to be "first" and "last".\n\n***For speed reasons, the URLs will be posted in chat instead of the file. If not already, please go over to User Settings > Text & Images > Show Website Preview Info From Links Pasted In Chat: ON***\n\nIf you feel as if you deserved a point for an answer that did not get marked correct, you are free to ask a staff member to manually grant points to you.\n_ _`;
 
                 await interaction.editReply({ content: gameStartingLine });
@@ -64,7 +66,7 @@ module.exports = {
 
                     await playRound(interaction, data);
 
-                }, 5000);
+                }, 2000);
 
             }
 
@@ -348,7 +350,7 @@ async function playRound(interaction, data) {
 
             await lockChat(interaction);
 
-            setTimeout(async () => await playRound(interaction, data), 3000);
+            setTimeout(async () => await playRound(interaction, data), 2000);
 
         }
 
