@@ -78,8 +78,6 @@ module.exports = {
 
                         participants.splice(pArrayIndex, 1);
 
-                        interaction.channel.send(`DELETED <@${participant}>`)
-
                     });
 
                 });
