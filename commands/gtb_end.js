@@ -72,6 +72,8 @@ module.exports = {
 
                             await pData.delete();
 
+                            console.log(participants);
+
                         }
 
                     });
