@@ -53,7 +53,7 @@ module.exports = {
 
             }
 
-            if (roundNumber === 1) {
+            if (roundNumber === 21) {
 
                 console.log('CALLED');
 
