@@ -64,17 +64,21 @@ module.exports = {
 
                         if (!pData) return;
 
-                        if (pData.points >= 3) {
+                        let pArrayIndex = participants.indexOf(participant);
 
-                            let pArrayIndex = participants.indexOf(participant);
+                        if (pData.points >= 3) {
 
                             await interaction.client.guilds.cache.get(interaction.guild.id).members.cache.get(participant).roles.add(cData.gtbRole).catch((err) => console.log(`Failed to provide player ${participant} with the role because of an error.\n${err}`));
 
                             await interaction.channel.send({ content: `Congratulations to <@${participant}> for winning the <@&${cData.gtbRole}> role! (total score: **${pData.points} points**)`, allowedMentions: { parse: [] } });
 
-                            await pData.delete().then(() => participants.splice(pArrayIndex, 1).then(() => interaction.channel.send('REMOVED <@' + participant + '>')));
-
                         }
+
+                        await pData.delete();
+
+                        participants.splice(pArrayIndex, 1);
+
+                        interaction.channel.send(`DELETED <@${participant}>`)
 
                     });
 
