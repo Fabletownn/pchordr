@@ -78,7 +78,15 @@ var roundsPlayed = 1;
 
 async function playRound(interaction, data) {
 
-    if (roundsPlayed === 21) return interaction.channel.send({ content: `This game of **Guess The Blank** has ended! To ensure this game was monitored by a staff member, one can run the \`/gtb-end\` command. <:bITFGG:1022548636481114172>` });
+    console.log(roundsPlayed);
+
+    if (roundsPlayed === 21) {
+
+        console.log(`rounds: ${roundsPlayed}`);
+        
+        return interaction.channel.send({ content: `This game of **Guess The Blank** has ended! To ensure this game was monitored by a staff member, one can run the \`/gtb-end\` command. <:bITFGG:1022548636481114172>` });
+
+    }
 
     unlockChat(interaction);
     
@@ -348,13 +356,13 @@ async function playRound(interaction, data) {
 
             await lockChat(interaction);
 
-            roundsPlayed++;
-
             setTimeout(async () => await playRound(interaction, data), 3000);
 
         }
 
     });
+
+    roundsPlayed++;
 
 }
 
