@@ -22,7 +22,7 @@
     "depd": "^2.0.0",
     "destroy": "^1.2.0",
     "discord-api-types": "^0.37.5",
-    "discord.js": "^14.11.0",
+    "discord.js": "^14.12.0",
     "dotenv": "^16.1.4",
     "ee-first": "^1.1.1",
     "encodeurl": "^1.0.2",
