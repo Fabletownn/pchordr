@@ -8,7 +8,7 @@ const {
     EmbedBuilder
 } = require('discord.js');
 
-var roundsPlayed = 1;
+let roundsPlayed;
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -20,6 +20,8 @@ module.exports = {
     async execute(interaction) {
 
         await interaction.reply({ content: `Setting game up!`, ephemeral: true });
+
+        roundsPlayed = 1;
 
         GTB.findOne({
 
