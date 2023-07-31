@@ -8,8 +8,7 @@ const {
     EmbedBuilder
 } = require('discord.js');
 
-var roundsPlayed = 1;
-let newGame;
+var roundsPlayed;
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -20,7 +19,7 @@ module.exports = {
 
     async execute(interaction) {
 
-        newGame = true;
+        roundsPlayed = 1;
 
         await interaction.reply({ content: `Setting game up!`, ephemeral: true });
 
@@ -80,16 +79,6 @@ module.exports = {
 };
 
 async function playRound(interaction, data) {
-
-    if (newGame == true) {
-
-        roundsPlayed = 1;
-
-        newGame = false;
-
-        console.log("new game");
-
-    }
 
     console.log(roundsPlayed);
     console.log(interaction.channel.id);
