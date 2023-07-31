@@ -79,6 +79,7 @@ var roundsPlayed = 1;
 async function playRound(interaction, data) {
 
     console.log(roundsPlayed);
+    console.log(interaction.channel.id);
 
     if (roundsPlayed === 21) {
 
