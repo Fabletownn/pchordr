@@ -9,6 +9,7 @@ const {
 } = require('discord.js');
 
 var roundsPlayed = 1;
+let newGame;
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -19,7 +20,9 @@ module.exports = {
 
     async execute(interaction) {
 
-        await interaction.reply({ content: `Setting game up..`, ephemeral: true });
+        newGame = true;
+
+        await interaction.reply({ content: `Setting game up!`, ephemeral: true });
 
         GTB.findOne({
 
@@ -77,6 +80,16 @@ module.exports = {
 };
 
 async function playRound(interaction, data) {
+
+    if (newGame == true) {
+
+        roundsPlayed = 1;
+
+        newGame = false;
+
+        console.log("new game");
+
+    }
 
     console.log(roundsPlayed);
     console.log(interaction.channel.id);
