@@ -8,7 +8,7 @@ const {
     EmbedBuilder
 } = require('discord.js');
 
-var roundsPlayed;
+var roundsPlayed = 1;
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -19,8 +19,6 @@ module.exports = {
 
     async execute(interaction) {
 
-        roundsPlayed = 1;
-
         await interaction.reply({ content: `Setting game up!`, ephemeral: true });
 
         GTB.findOne({
@@ -29,8 +27,8 @@ module.exports = {
 
         }, async (err, data) => {
 
-            if (err) return interaction.reply({ content: 'An unknown issue came up and I could not view GTB. <:bITFSweat:1022548683176284281>', ephemeral: true });
-            if (!data) return interaction.reply({ content: 'Could not view GTB values since data hasn\'t been set up yet. Use the `/gtb-setup` command to get started. <:bITFSweat:1022548683176284281>' });
+            if (err) return interaction.channel.send({ content: 'An unknown issue came up and I could not view GTB. <:bITFSweat:1022548683176284281>', ephemeral: true });
+            if (!data) return interaction.channel.send({ content: 'Could not view GTB values since data hasn\'t been set up yet. Use the `/gtb-setup` command to get started. <:bITFSweat:1022548683176284281>' });
 
             const gtbRounds = [data.round1, data.round2, data.round3, data.round4, data.round5, data.round6, data.round7, data.round8, data.round9, data.round10, data.round11, data.round12, data.round13, data.round14, data.round15, data.round16, data.round17, data.round18, data.round19, data.round20];
             let roundNumber = 0;
@@ -39,7 +37,7 @@ module.exports = {
 
                 if (roundInfo === undefined) {
 
-                    interaction.reply({ content: 'Failed to start a game. Not all rounds have answers and images set; view settings using the `/gtb-view` command.\n\nCheck the following setting: Round #' + roundNumber });
+                    interaction.channel.send({ content: 'Failed to start a game. Not all rounds have answers and images set; view settings using the `/gtb-view` command.\n\nCheck the following setting: Round #' + roundNumber });
 
                     break;
 
@@ -47,7 +45,7 @@ module.exports = {
 
                 if (!roundInfo[0] || !roundInfo[1]) {
 
-                    interaction.reply({ content: 'Failed to start a game. Not all rounds have answers and images set; view settings using the `/gtb-view` command.\n\nCheck the following setting: Round #' + roundNumber });
+                    interaction.channel.send({ content: 'Failed to start a game. Not all rounds have answers and images set; view settings using the `/gtb-view` command.\n\nCheck the following setting: Round #' + roundNumber });
 
                     break;
 
@@ -85,7 +83,7 @@ async function playRound(interaction, data) {
 
     if (roundsPlayed >= 21) {
 
-        console.log(`ended, rounds: ${roundsPlayed}`);
+        console.log(`!\n\n\nended, rounds: ${roundsPlayed}\n\n\n!`);
         
         return interaction.channel.send({ content: `This game of **Guess The Blank** has ended! To ensure this game was monitored by a staff member, one can run the \`/gtb-end\` command. <:bITFGG:1022548636481114172>` });
 
