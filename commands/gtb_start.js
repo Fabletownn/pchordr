@@ -17,7 +17,7 @@ module.exports = {
 
     async execute(interaction) {
 
-        await interaction.deferReply();
+        var roundsPlayed = 1;
 
         GTB.findOne({
 
@@ -25,8 +25,8 @@ module.exports = {
 
         }, async (err, data) => {
 
-            if (err) return interaction.editReply({ content: 'An unknown issue came up and I could not view GTB. <:bITFSweat:1022548683176284281>', ephemeral: true });
-            if (!data) return interaction.editReply({ content: 'Could not view GTB values since data hasn\'t been set up yet. Use the `/gtb-setup` command to get started. <:bITFSweat:1022548683176284281>' });
+            if (err) return interaction.reply({ content: 'An unknown issue came up and I could not view GTB. <:bITFSweat:1022548683176284281>', ephemeral: true });
+            if (!data) return interaction.reply({ content: 'Could not view GTB values since data hasn\'t been set up yet. Use the `/gtb-setup` command to get started. <:bITFSweat:1022548683176284281>' });
 
             const gtbRounds = [data.round1, data.round2, data.round3, data.round4, data.round5, data.round6, data.round7, data.round8, data.round9, data.round10, data.round11, data.round12, data.round13, data.round14, data.round15, data.round16, data.round17, data.round18, data.round19, data.round20];
             let roundNumber = 0;
@@ -35,7 +35,7 @@ module.exports = {
 
                 if (roundInfo === undefined) {
 
-                    interaction.editReply({ content: 'Failed to start a game. Not all rounds have answers and images set; view settings using the `/gtb-view` command.\n\nCheck the following setting: Round #' + roundNumber });
+                    interaction.reply({ content: 'Failed to start a game. Not all rounds have answers and images set; view settings using the `/gtb-view` command.\n\nCheck the following setting: Round #' + roundNumber });
 
                     break;
 
@@ -43,7 +43,7 @@ module.exports = {
 
                 if (!roundInfo[0] || !roundInfo[1]) {
 
-                    interaction.editReply({ content: 'Failed to start a game. Not all rounds have answers and images set; view settings using the `/gtb-view` command.\n\nCheck the following setting: Round #' + roundNumber });
+                    interaction.reply({ content: 'Failed to start a game. Not all rounds have answers and images set; view settings using the `/gtb-view` command.\n\nCheck the following setting: Round #' + roundNumber });
 
                     break;
 
@@ -57,7 +57,7 @@ module.exports = {
 
                 const gameStartingLine = `Chat has been locked as Guess The Blank begins in 20 seconds. Get those fingers ready! <:bITFGaming:1022548630948810752>\nYour answers do not have to be perfect. Using punctuation, spaces and/or capitals will not mess up your answers.\n\nPlayers with the **Guess The Blank Champion** role may still participate; however, points will not be awarded to said player if answered correctly.\nConnection speeds may affect how you may see answers being clocked in. Those that are marked correct is what the bot deems to be "first" and "last".\n\n***For speed reasons, the URLs will be posted in chat instead of the file. If not already, please go over to User Settings > Text & Images > Show Website Preview Info From Links Pasted In Chat: ON***\n\nIf you feel as if you deserved a point for an answer that did not get marked correct, you are free to ask a staff member to manually grant points to you.\n_ _`;
 
-                await interaction.editReply({ content: gameStartingLine });
+                await interaction.reply({ content: gameStartingLine });
                 await lockChat(interaction);
 
                 setTimeout(async () => {
@@ -81,7 +81,7 @@ async function playRound(interaction, data) {
     console.log(roundsPlayed);
     console.log(interaction.channel.id);
 
-    if (roundsPlayed === 21) {
+    if (roundsPlayed >= 21) {
 
         console.log(`rounds: ${roundsPlayed}`);
         
