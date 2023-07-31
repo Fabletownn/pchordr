@@ -8,7 +8,7 @@ const {
     EmbedBuilder
 } = require('discord.js');
 
-let roundsPlayed;
+var roundsPlayed;
 
 module.exports = {
     data: new SlashCommandBuilder()
