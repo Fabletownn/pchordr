@@ -25,7 +25,7 @@ module.exports = async (Discord, client, oldMember, newMember) => {
         const twitchRoleID = data.twitchRole;
         const youtubeRoleID = data.ytRole;
 
-        if ((boosterRoleID === null) || (twitchRoleID === null) || (youtubeRoleID === null) || (supporterRoleID === null) || (supportersChannelID === null)) return;
+        if ((boosterRoleID === null) || (twitchRoleID === null) || (youtubeRoleID === null) || (supporterRoleID === null) || (supportersChannelID === null)) return console.log('B/T/Y/S/C is null')
 
         if ((!oldMember.roles.cache.has(boosterRoleID)) && (newMember.roles.cache.has(boosterRoleID))) {
 
@@ -33,6 +33,10 @@ module.exports = async (Discord, client, oldMember, newMember) => {
 
             newMember.roles.add(supporterRoleID);
 
+        }
+        else
+        {
+            console.log('Booster role was already there')
         }
 
         if ((!oldMember.roles.cache.has(twitchRoleID)) && (newMember.roles.cache.has(twitchRoleID))) {
@@ -42,6 +46,10 @@ module.exports = async (Discord, client, oldMember, newMember) => {
             newMember.roles.add(supporterRoleID);
 
         }
+        else
+        {
+            console.log('Twitch role was already there')
+        }
 
         if (!oldMember.roles.cache.has(youtubeRoleID) && newMember.roles.cache.has(youtubeRoleID)) {
 
@@ -49,6 +57,10 @@ module.exports = async (Discord, client, oldMember, newMember) => {
 
             newMember.roles.add(supporterRoleID);
 
+        }
+        else
+        {
+            console.log('YouTube role was already there')
         }
 
     });

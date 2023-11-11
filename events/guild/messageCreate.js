@@ -22,7 +22,7 @@ module.exports = async (Discord, client, message) => {
 
             if (data.vxtwitter === true) {
 
-                const twitterRegex = /(https:\/\/twitter\.com\/)/;
+                const twitterRegex = /(https:\/\/twitter\.com\/)|(https:\/\/x\.com\/)/;
 
                 if (message.content.match(twitterRegex)) {
 
@@ -30,7 +30,7 @@ module.exports = async (Discord, client, message) => {
                     const twitterIndex = messageSplit.findIndex(msg => msg.includes('twitter.com/'));
 
                     const preLink = messageSplit[twitterIndex];
-                    const repLink = preLink.replace(/twitter/, 'vxtwitter');
+                    const repLink = preLink.replace(/(twitter)|(x)/, 'vxtwitter');
 
                     await message.react('✨');
 
