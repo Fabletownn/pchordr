@@ -27,7 +27,7 @@ module.exports = async (Discord, client, oldMember, newMember) => {
 
         if ((boosterRoleID === null) || (twitchRoleID === null) || (youtubeRoleID === null) || (supporterRoleID === null) || (supportersChannelID === null)) return console.log('B/T/Y/S/C is null')
 
-        if ((!oldMember.roles.cache.has(boosterRoleID)) && (newMember.roles.cache.has(boosterRoleID))) {
+        if (!oldMember.roles.cache.has(boosterRoleID) && newMember.roles.cache.has(boosterRoleID)) {
 
             client.channels.cache.get(supportersChannelID).send(`${newMember} has just supported I Talk on **Discord**. Welcome to <#652578641343152148>!\n\nYour access to this channel will not expire once your Boost expires. Thank you for the support. <:bITFGift:1022548639542951977>`);
 
@@ -39,9 +39,9 @@ module.exports = async (Discord, client, oldMember, newMember) => {
             console.log('Booster role was already there')
         }
 
-        if ((!oldMember.roles.cache.has(twitchRoleID)) && (newMember.roles.cache.has(twitchRoleID))) {
+        if (!oldMember.roles.cache.has(twitchRoleID) && newMember.roles.cache.has(twitchRoleID)) {
 
-            client.channels.cache.get(supportersChannelID).send(`${newMember} has just supported I Talk on **Twitch**. Welcome to <#652578641343152148>!\n\nYour access to this channel will not expire once your Boost expires. Thank you for the support. <:bITFBits:1022548606995136572>`);
+            client.channels.cache.get(supportersChannelID).send(`${newMember} has just supported I Talk on **Twitch**. Welcome to <#652578641343152148>!\n\nYour access to this channel will not expire once your subscription expires. Thank you for the support. <:bITFBits:1022548606995136572>`);
 
             newMember.roles.add(supporterRoleID);
 
@@ -53,7 +53,7 @@ module.exports = async (Discord, client, oldMember, newMember) => {
 
         if (!oldMember.roles.cache.has(youtubeRoleID) && newMember.roles.cache.has(youtubeRoleID)) {
 
-            client.channels.cache.get(supportersChannelID).send(`${newMember} has just supported I Talk on **YouTube**. Welcome to <#652578641343152148>!\n\nYour access to this channel will not expire once your Boost expires. Thank you for the support. <:bITFVictory:1063265610303295619>`);
+            client.channels.cache.get(supportersChannelID).send(`${newMember} has just supported I Talk on **YouTube**. Welcome to <#652578641343152148>!\n\nYour access to this channel will not expire once your subscription expires. Thank you for the support. <:bITFVictory:1063265610303295619>`);
 
             newMember.roles.add(supporterRoleID);
 
