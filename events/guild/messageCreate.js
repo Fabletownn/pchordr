@@ -169,7 +169,7 @@ module.exports = async (Discord, client, message) => {
                                 notifmsg.edit({ content: `${notifmsg.content}\n\nAdded <@&${data.giveawayWinnerRole}> role to ${winnerCounter} members..` });
                             }
 
-                            notifmsg.edit({ content: `${notifmsg.content}\n\nDone. <:bITFGG:1022548636481114172>`});
+                            message.guild.channels.cache.get(data.modChat).send({ content: `Done! <:bITFGG:1022548636481114172>`});
                         });
                     }
                 }
