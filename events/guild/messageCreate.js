@@ -137,7 +137,7 @@ module.exports = async (Discord, client, message) => {
             if (message.channel.id === data.giveawayChannel) {
                 if (data.autogiveaway === true) {
                     if (data.modChat !== null) {
-                        message.guild.channels.cache.get(data.modChat).send({ content: '<@528759471514845194>:' });
+                        message.guild.channels.cache.get(data.modChat).send({ content: 'A giveaway has been detected, <@528759471514845194>:' });
                         // Clear channel
                         if (data.giveawayWinnerChannel !== null) {
                             await message.guild.channels.cache.get(data.giveawayWinnerChannel).bulkDelete(50);
@@ -148,13 +148,12 @@ module.exports = async (Discord, client, message) => {
                         if (data.giveawayWinnerRole !== null) {
                             await message.guild.roles.cache.find(role => role.id === data.giveawayWinnerRole).members.forEach(async (winner) => {
                                 await winner.roles.remove(data.giveawayWinnerRole);
-                                await message.guild.channels.cache.get(data.modChat).send({ content: `Removed <@&${data.giveawayWinnerRole}> role from <@${winner.user.id}>..` });
+                                await message.guild.channels.cache.get(data.modChat).send({ content: `Removed <@&${data.giveawayWinnerRole}> role from <@${winner.user.id}>..`, allowedMentions: { parse: [] } });
                             });
 
                             await message.mentions.users.forEach(async (winner) => {
                                 await message.guild.members.cache.get(winner.id).roles.add(data.giveawayWinnerRole);
-                                winnerCounter++;
-                                await message.guild.channels.cache.get(data.modChat).send({ content: `Added <@&${data.giveawayWinnerRole}> role to <@${winner.id}>..` });
+                                await message.guild.channels.cache.get(data.modChat).send({ content: `Added <@&${data.giveawayWinnerRole}> role to <@${winner.id}>..`, allowedMentions: { parse: [] } });
                             });
                         }
 
