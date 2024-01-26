@@ -157,7 +157,7 @@ module.exports = async (Discord, client, message) => {
                         }
 
                         setTimeout(() => {
-                            // Add winner role for every mentioned user in #giveaways
+                            // Add winner role for every mentioned user in giveaways
                             if (data.giveawayWinnerRole !== null) {
                                 let winnerCounter = 0;
 
