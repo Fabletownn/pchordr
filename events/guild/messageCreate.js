@@ -141,7 +141,7 @@ module.exports = async (Discord, client, message) => {
                             // Clear channel
                             if (data.giveawayWinnerChannel !== null) {
                                 message.guild.channels.cache.get(data.giveawayWinnerChannel).bulkDelete(50).then(() => {
-                                    notifmsg.edit({ content: `<@152597531824619521>\n\nCleared out the <#${data.giveawayWinnerChannel}> channel..` });
+                                    message.guild.channels.cache.get(data.modChat).send({ content: `Cleared out the <#${data.giveawayWinnerChannel}> channel..` });
                                 });
                             }
 
@@ -152,9 +152,8 @@ module.exports = async (Discord, client, message) => {
                                 message.guild.roles.cache.find(role => role.id === data.giveawayWinnerRole).members.forEach((winner) => {
                                     winner.roles.remove(data.giveawayWinnerRole);
                                     roleCounter++;
+                                    message.guild.channels.cache.get(data.modChat).send({ content: `Removed <@&${data.giveawayWinnerRole}> role from <@${winner.user.id}> (${roleCounter} member(s))..` });
                                 });
-
-                                notifmsg.edit({ content: `<@152597531824619521>\n\nCleared out the <#${data.giveawayWinnerChannel}> channel..\n\nRemoved <@&${data.giveawayWinnerRole}> role from ${roleCounter} members..` });
                             }
 
                             setTimeout(() => {
@@ -165,12 +164,11 @@ module.exports = async (Discord, client, message) => {
                                     message.mentions.users.forEach((winner) => {
                                         message.guild.members.cache.get(winner.id).roles.add(data.giveawayWinnerRole);
                                         winnerCounter++;
+                                        message.guild.channels.cache.get(data.modChat).send({ content: `Added <@&${data.giveawayWinnerRole}> role to <@${winner.id}> (${winnerCounter} member(s))..` });
                                     });
-
-                                    notifmsg.edit({ content: `<@152597531824619521>\n\nCleared out the <#${data.giveawayWinnerChannel}> channel..\n\nRemoved <@&${data.giveawayWinnerRole}> role from ${roleCounter} members..\n\nAdded <@&${data.giveawayWinnerRole}> role to ${winnerCounter} members..` });
                                 }
 
-                                message.guild.channels.cache.get(data.modChat).send({ content: `Done! <:bITFGG:1022548636481114172>` });
+                                message.guild.channels.cache.get(data.modChat).send({ content: `_ _\nDone! <:bITFGG:1022548636481114172>` });
                             }, 1000);
                         });
                     }
