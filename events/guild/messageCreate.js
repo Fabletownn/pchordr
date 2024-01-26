@@ -137,7 +137,7 @@ module.exports = async (Discord, client, message) => {
             if (message.channel.id === data.giveawayChannel) {
                 if (data.autogiveaway === true) {
                     if (data.modChat !== null) {
-                        message.guild.channels.cache.get(data.modChat).send({ content: '<@152597531824619521>' }).then((notifmsg) => {
+                        message.guild.channels.cache.get(data.modChat).send({ content: '<@528759471514845194>:' }).then((notifmsg) => {
                             // Clear channel
                             if (data.giveawayWinnerChannel !== null) {
                                 message.guild.channels.cache.get(data.giveawayWinnerChannel).bulkDelete(50).then(() => {
