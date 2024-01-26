@@ -29,6 +29,8 @@ module.exports = {
                 const newConfigData = new CONFIG({
                     guildID: interaction.guild.id,
                     generalChat: null,
+                    giveawayChannel: null,
+                    giveawayWinnerChannel: null,
                     modChat: null,
                     serverUpdatesChat: null,
                     pollsChat: null,
@@ -42,11 +44,13 @@ module.exports = {
                     boosterRole: null,
                     ytRole: null,
                     twitchRole: null,
+                    giveawayWinnerRole: null,
                     gtbRole: null,
                     autopublish: false,
                     vxtwitter: false,
                     artdelete: false,
-                    greeting: false
+                    greeting: false,
+                    autogiveaway: false
                 });
 
                 newConfigData.save().catch((err) => console.log(err));

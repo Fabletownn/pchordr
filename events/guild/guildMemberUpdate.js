@@ -34,10 +34,6 @@ module.exports = async (Discord, client, oldMember, newMember) => {
             newMember.roles.add(supporterRoleID);
 
         }
-        else
-        {
-            console.log('Booster role was already there')
-        }
 
         if (!oldMember.roles.cache.has(twitchRoleID) && newMember.roles.cache.has(twitchRoleID)) {
 
@@ -46,10 +42,6 @@ module.exports = async (Discord, client, oldMember, newMember) => {
             newMember.roles.add(supporterRoleID);
 
         }
-        else
-        {
-            console.log('Twitch role was already there')
-        }
 
         if (!oldMember.roles.cache.has(youtubeRoleID) && newMember.roles.cache.has(youtubeRoleID)) {
 
@@ -57,10 +49,6 @@ module.exports = async (Discord, client, oldMember, newMember) => {
 
             newMember.roles.add(supporterRoleID);
 
-        }
-        else
-        {
-            console.log('YouTube role was already there')
         }
 
     });

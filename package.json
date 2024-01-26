@@ -22,7 +22,7 @@
     "depd": "^2.0.0",
     "destroy": "^1.2.0",
     "discord-api-types": "^0.37.5",
-    "discord.js": "^14.12.0",
+    "discord.js": "^14.14.1",
     "dotenv": "^16.1.4",
     "ee-first": "^1.1.1",
     "encodeurl": "^1.0.2",
@@ -112,6 +112,5 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "��#\u0000 \u0000p\u0000c\u0000h\u0000o\u0000r\u0000d\u0000r\u0000\r\u0000 \u0000",
-  "devDependencies": {}
+  "description": "��#\u0000 \u0000p\u0000c\u0000h\u0000o\u0000r\u0000d\u0000r\u0000\r\u0000 \u0000"
 }

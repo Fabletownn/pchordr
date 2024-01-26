@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const configSchema = mongoose.Schema({
     guildID: String,
     generalChat: String,
+    giveawayChannel: String,
+    giveawayWinnerChannel: String,
     modChat: String,
     serverUpdatesChat: String,
     pollsChat: String,
@@ -16,11 +18,13 @@ const configSchema = mongoose.Schema({
     boosterRole: String,
     ytRole: String,
     twitchRole: String,
+    giveawayWinnerRole: String,
     gtbRole: String,
     autopublish: Boolean,
     vxtwitter: Boolean,
     artdelete: Boolean,
-    greeting: Boolean
+    greeting: Boolean,
+    autogiveaway: Boolean
 });
 
 module.exports = mongoose.model("rconfigs", configSchema);

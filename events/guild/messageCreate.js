@@ -133,6 +133,49 @@ module.exports = async (Discord, client, message) => {
 
         }
 
+        if (data.giveawayChannel !== null) {
+            if (message.channel.id === data.giveawayChannel) {
+                if (data.autogiveaway === true) {
+                    if (data.modChat !== null) {
+                        message.guild.channels.cache.get(data.modChat).send({ content: '<@152597531824619521>' }).then((notifmsg) => {
+                            // Clear channel
+                            if (data.giveawayWinnerChannel !== null) {
+                                message.guild.channels.cache.get(data.giveawayWinnerChannel).bulkDelete(50).then(() => {
+                                    notifmsg.edit({ content: `${notifmsg.content}\n\nCleared out the <#${data.giveawayWinnerChannel}> channel..` });
+                                });
+                            }
+
+                            // Remove winner role from previous winner(s)
+                            if (data.giveawayWinnerRole !== null) {
+                                let roleCounter = 0;
+
+                                message.guild.roles.cache.find(role => role.id === data.giveawayWinnerRole).members.forEach((winner) => {
+                                    winner.roles.remove(data.giveawayWinnerRole);
+                                    roleCounter++;
+                                });
+
+                                notifmsg.edit({ content: `${notifmsg.content}\n\nRemoved <@&${data.giveawayWinnerRole}> role from ${roleCounter} members..` });
+                            }
+
+                            // Add winner role for every mentioned user in #giveaways
+                            if (data.giveawayWinnerRole !== null) {
+                                let winnerCounter = 0;
+
+                                message.mentions.users.forEach((winner) => {
+                                    message.guild.members.cache.get(winner.id).roles.add(data.giveawayWinnerRole);
+                                    winnerCounter++;
+                                });
+
+                                notifmsg.edit({ content: `${notifmsg.content}\n\nAdded <@&${data.giveawayWinnerRole}> role to ${winnerCounter} members..` });
+                            }
+
+                            notifmsg.edit({ content: `${notifmsg.content}\n\nDone. <:bITFGG:1022548636481114172>`});
+                        });
+                    }
+                }
+            }
+        }
+
     });
 
     TRACK.findOne({

@@ -18,6 +18,12 @@ module.exports = {
                     name: 'Update Channel ID: General',
                     value: 'generalchat'
                 }, {
+                    name: 'Update Channel ID: Giveaway Channel',
+                    value: 'giveawaychannel'
+                }, {
+                    name: 'Update Channel ID: Giveaway Winner Channel',
+                    value: 'giveawaywinnerchannel'
+                }, {
                     name: 'Update Channel ID: Mod Chat',
                     value: 'modchat'
                 }, {
@@ -57,6 +63,9 @@ module.exports = {
                     name: 'Update Role ID: Twitch Subscribers',
                     value: 'twitchrole'
                 }, {
+                    name: 'Update Role ID: Giveaway Winner',
+                    value: 'giveawaywinnerrole'
+                }, {
                     name: 'Update Role ID: Guess The Blank Champion',
                     value: 'gtbrole'
                 }, {
@@ -71,6 +80,9 @@ module.exports = {
                 }, {
                     name: 'Toggle Feature: General Greeting',
                     value: 'greeting'
+                }, {
+                    name: 'Toggle Feature: Giveaway Winners',
+                    value: 'autogiveaway'
                 })
                 .setRequired(true)
         )
@@ -108,6 +120,34 @@ module.exports = {
                     data.save().catch((err) => console.log(err));
 
                     await interaction.reply({ content: 'Set the General Chat channel to <#' + configVal + '>. <:bITFVictory:1063265610303295619>' });
+
+                    break;
+
+                case "giveawaychannel":
+
+                    if (!interaction.guild.channels.cache.get(configVal)) return interaction.reply({ content: 'Failed to set that ID as the Giveaway channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>\n\nThis parameter requires you to provide the channel\'s ID, not the mention.' });
+                    if (interaction.guild.channels.cache.get(configVal).type !== ChannelType.GuildText) return interaction.reply({ content: 'Failed to set that ID as the Giveaway channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>' });
+
+                    if (data.giveawayChannel === configVal) return interaction.reply({ content: 'That channel is already in use.' });
+
+                    data.giveawayChannel = configVal;
+                    data.save().catch((err) => console.log(err));
+
+                    await interaction.reply({ content: 'Set the Giveaway channel to <#' + configVal + '>. <:bITFVictory:1063265610303295619>' });
+
+                    break;
+
+                case "giveawaywinnerchannel":
+
+                    if (!interaction.guild.channels.cache.get(configVal)) return interaction.reply({ content: 'Failed to set that ID as the Giveaway Winner channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>\n\nThis parameter requires you to provide the channel\'s ID, not the mention.' });
+                    if (interaction.guild.channels.cache.get(configVal).type !== ChannelType.GuildText) return interaction.reply({ content: 'Failed to set that ID as the Giveaway Winner channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>' });
+
+                    if (data.giveawayWinnerChannel === configVal) return interaction.reply({ content: 'That channel is already in use.' });
+
+                    data.giveawayWinnerChannel = configVal;
+                    data.save().catch((err) => console.log(err));
+
+                    await interaction.reply({ content: 'Set the Giveaway Winner channel to <#' + configVal + '>. <:bITFVictory:1063265610303295619>' });
 
                     break;
 
@@ -300,6 +340,19 @@ module.exports = {
 
                     break;
 
+                case "giveawaywinnerrole":
+
+                    if (!interaction.guild.roles.cache.get(configVal)) return interaction.reply({ content: 'Failed to set that ID as the Giveaway Winner role, as it does not exist or not found. <:bITFSweat:1022548683176284281>\n\nThis parameter requires you to provide the role\'s ID, not the mention.' });
+
+                    if (data.giveawayWinnerRole === configVal) return interaction.reply({ content: 'That role is already in use.' });
+
+                    data.giveawayWinnerRole = configVal;
+                    data.save().catch((err) => console.log(err));
+
+                    await interaction.reply({ content: 'Set the Giveaway Winner role to <@&' + configVal + '>. <:bITFVictory:1063265610303295619>', allowedMentions: { parse: [] } });
+
+                    break;
+
                 case "autopublish":
 
                     if ((configVal !== 'off' && configVal !== 'false' && configVal !== 'on' && configVal !== 'true')) return interaction.reply({ content: 'Failed to set that value. Unknown parameter was given (only accepts true/false or on/off factors).' });
@@ -414,6 +467,37 @@ module.exports = {
                         data.save().catch((err) => console.log(err));
 
                         await interaction.reply({ content: `Disabled greeting in the <#${data.generalChat}> channel. <:bITFVictory:1063265610303295619>` });
+
+                    } else {
+
+                        await interaction.reply({ content: 'Failed to set that value. Unknown parameter was given (only accepts true/false or on/off factors). <:bITFSweat:1022548683176284281>' });
+
+                    }
+
+                    break;
+
+                case "autogiveaway":
+
+                    if ((configVal !== 'off' && configVal !== 'false' && configVal !== 'on' && configVal !== 'true')) return interaction.reply({ content: 'Failed to set that value. Unknown parameter was given (only accepts true/false or on/off factors).' });
+                    if (data.giveawayChannel === null || data.modChat === null) return interaction.reply({ content: 'Failed to set that as it is dependent on other value(s). Ensure the Giveaway & ModChat channel is set before updating this one.' });
+
+                    if (configVal === 'true' || configVal === 'on') {
+
+                        if (data.autogiveaway === true) return interaction.reply({ content: 'The automatic giveaway winner trigger is already enabled.' });
+
+                        data.autogiveaway = true;
+                        data.save().catch((err) => console.log(err));
+
+                        await interaction.reply({ content: `Enabled the automatic giveaway winner trigger in the <#${data.giveawayChannel}> channel. <:bITFVictory:1063265610303295619>` });
+
+                    } else if (configVal === 'false' || configVal === 'off') {
+
+                        if (data.autogiveaway === false) return interaction.reply({ content: 'The automatic giveaway winner trigger is already disabled.' });
+
+                        data.autogiveaway = false;
+                        data.save().catch((err) => console.log(err));
+
+                        await interaction.reply({ content: `Disabled the automatic giveaway winner in the <#${data.giveawayChannel}> channel. <:bITFVictory:1063265610303295619>` });
 
                     } else {
 
