@@ -49,7 +49,7 @@ module.exports = {
 
             const configEmbed = new EmbedBuilder()
                 .setAuthor({ name: 'Configuration Settings', iconURL: interaction.guild.iconURL({ dynamic: true })})
-                .setFields([
+                .addFields(
                     { name: `Giveaway Channel ID`, value: `<#${data.giveawayChannel || 'None'}>`, inline: true },
                     { name: `Giveaway Winner Channel ID`, value: `<#${data.giveawayWinnerChannel || 'None'}>`, inline: true },
                     { name: `Mod Chat ID`, value: `<#${data.modChat || 'None'}>`, inline: true },
@@ -69,12 +69,12 @@ module.exports = {
                     { name: `GTB Champion Role ID`, value: `<@&${data.gtbRole || 'None'}>`, inline: true },
                     { name: `\u200b`, value: `\u200b`, inline: true },
                     { name: `\u200b`, value: `\u200b`, inline: false },
-                    { name: `Autopublishing`, value: autopublishSetting, inline: true},
-                    { name: `VXTwitter`, value: vxTwitterSetting, inline: true},
-                    { name: `Non-Art Deletion`, value: artSetting, inline: true},
-                    { name: `Greeting Reaction`, value: greetingSetting, inline: true},
-                    { name: `Giveaway Winner Trigger`, value: giveawayWinnerSetting, inline: true}
-                ]);
+                    { name: `Autopublishing`, value: autopublishSetting, inline: true },
+                    { name: `VXTwitter`, value: vxTwitterSetting, inline: true },
+                    { name: `Non-Art Deletion`, value: artSetting, inline: true },
+                    { name: `Greeting Reaction`, value: greetingSetting, inline: true },
+                    { name: `Giveaway Winner Trigger`, value: giveawayWinnerSetting, inline: true }
+                );
 
             await interaction.reply({ embeds: [configEmbed] });
 
