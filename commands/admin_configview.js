@@ -49,7 +49,7 @@ module.exports = {
 
             const configEmbed = new EmbedBuilder()
                 .setAuthor({ name: 'Configuration Settings', iconURL: interaction.guild.iconURL({ dynamic: true })})
-                .addFields([
+                .setFields([
                     { name: `Giveaway Channel ID`, value: `<#${data.giveawayChannel || 'None'}>`, inline: true },
                     { name: `Giveaway Winner Channel ID`, value: `<#${data.giveawayWinnerChannel || 'None'}>`, inline: true },
                     { name: `Mod Chat ID`, value: `<#${data.modChat || 'None'}>`, inline: true },
