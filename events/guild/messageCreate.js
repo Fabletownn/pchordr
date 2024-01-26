@@ -137,40 +137,39 @@ module.exports = async (Discord, client, message) => {
             if (message.channel.id === data.giveawayChannel) {
                 if (data.autogiveaway === true) {
                     if (data.modChat !== null) {
-                        message.guild.channels.cache.get(data.modChat).send({ content: '<@528759471514845194>:' }).then((notifmsg) => {
-                            // Clear channel
-                            if (data.giveawayWinnerChannel !== null) {
-                                message.guild.channels.cache.get(data.giveawayWinnerChannel).bulkDelete(50).then(() => {
-                                    message.guild.channels.cache.get(data.modChat).send({ content: `Cleared out the <#${data.giveawayWinnerChannel}> channel..` });
-                                });
-                            }
+                        message.guild.channels.cache.get(data.modChat).send({ content: '<@528759471514845194>:' });
+                        // Clear channel
+                        if (data.giveawayWinnerChannel !== null) {
+                            message.guild.channels.cache.get(data.giveawayWinnerChannel).bulkDelete(50).then(() => {
+                                message.guild.channels.cache.get(data.modChat).send({ content: `Cleared out the <#${data.giveawayWinnerChannel}> channel..` });
+                            });
+                        }
 
-                            // Remove winner role from previous winner(s)
+                        // Remove winner role from previous winner(s)
+                        if (data.giveawayWinnerRole !== null) {
+                            let roleCounter = 0;
+
+                            message.guild.roles.cache.find(role => role.id === data.giveawayWinnerRole).members.forEach((winner) => {
+                                winner.roles.remove(data.giveawayWinnerRole);
+                                roleCounter++;
+                                message.guild.channels.cache.get(data.modChat).send({ content: `Removed <@&${data.giveawayWinnerRole}> role from <@${winner.user.id}> (${roleCounter} member(s))..` });
+                            });
+                        }
+
+                        setTimeout(() => {
+                            // Add winner role for every mentioned user in #giveaways
                             if (data.giveawayWinnerRole !== null) {
-                                let roleCounter = 0;
+                                let winnerCounter = 0;
 
-                                message.guild.roles.cache.find(role => role.id === data.giveawayWinnerRole).members.forEach((winner) => {
-                                    winner.roles.remove(data.giveawayWinnerRole);
-                                    roleCounter++;
-                                    message.guild.channels.cache.get(data.modChat).send({ content: `Removed <@&${data.giveawayWinnerRole}> role from <@${winner.user.id}> (${roleCounter} member(s))..` });
+                                message.mentions.users.forEach((winner) => {
+                                    message.guild.members.cache.get(winner.id).roles.add(data.giveawayWinnerRole);
+                                    winnerCounter++;
+                                    message.guild.channels.cache.get(data.modChat).send({ content: `Added <@&${data.giveawayWinnerRole}> role to <@${winner.id}> (${winnerCounter} member(s))..` });
                                 });
                             }
 
-                            setTimeout(() => {
-                                // Add winner role for every mentioned user in #giveaways
-                                if (data.giveawayWinnerRole !== null) {
-                                    let winnerCounter = 0;
-
-                                    message.mentions.users.forEach((winner) => {
-                                        message.guild.members.cache.get(winner.id).roles.add(data.giveawayWinnerRole);
-                                        winnerCounter++;
-                                        message.guild.channels.cache.get(data.modChat).send({ content: `Added <@&${data.giveawayWinnerRole}> role to <@${winner.id}> (${winnerCounter} member(s))..` });
-                                    });
-                                }
-
-                                message.guild.channels.cache.get(data.modChat).send({ content: `_ _\nDone! <:bITFGG:1022548636481114172>` });
-                            }, 1000);
-                        });
+                            message.guild.channels.cache.get(data.modChat).send({ content: `_ _\nDone! <:bITFGG:1022548636481114172>` });
+                        }, 1000);
                     }
                 }
             }
