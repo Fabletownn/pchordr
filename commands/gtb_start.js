@@ -356,8 +356,8 @@ async function playRound(interaction, data) {
 
         });
 
-        await collected.first().channel.permissionsOverwrites.delete(firstPlayer.id);
-        await collected.first().channel.permissionsOverwrites.delete(lastPlayer.id);
+        await collected.first().channel.permissionOverwrites.delete(firstPlayer.id);
+        await collected.first().channel.permissionOverwrites.delete(lastPlayer.id);
 
         await collected.first().channel.send(`**Correct!** The answer was **${currentAnswer}**. <:bITFCool:1022548621360635994>\n\nPlayers <@${firstPlayer.id}> and <@${lastPlayer.id}> have been awarded 1 point.`);
 
