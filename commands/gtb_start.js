@@ -86,13 +86,13 @@ async function playRound(interaction, data) {
     if (roundsPlayed >= 21) {
 
         console.log(`!\n\n\nended, rounds: ${roundsPlayed}\n\n\n!`);
-        
+
         return interaction.channel.send({ content: `This game of **Guess The Blank** has ended! To ensure this game was monitored by a staff member, one can run the \`/gtb-end\` command. <:bITFGG:1022548636481114172>` });
 
     }
 
     unlockChat(interaction);
-    
+
     await interaction.channel.send({ content: `<:bITFThink:1022548686158442537> **Round #${roundsPlayed}**: What do you see?` });
 
     var collectorFilter;
@@ -286,82 +286,41 @@ async function playRound(interaction, data) {
 
     }
 
-    const messageCollector = interaction.channel.createMessageCollector({ filter: collectorFilter, max: 2, time: 6000000 });
+    const messageCollector = interaction.channel.createMessageCollector({ filter: collectorFilter, max: 1, time: 6000000 });
 
-    messageCollector.on('end', async (collected) => {
+    messageCollector.on('end', async (collected, collectorFilter) => {
 
-        const firstPlayer = collected.first().author;
-        const lastPlayer = collected.last().author;
+        const correctPlayer = collected.first().author;
 
-        if (firstPlayer.id !== lastPlayer.id) {
+        POINTS.findOne({
 
-            POINTS.findOne({
+            guildID: interaction.guild.id,
+            userID: correctPlayer.id
 
-                guildID: interaction.guild.id,
-                userID: firstPlayer.id
+        }, async (pErr, pData) => {
 
-            }, async (pErr, pData) => {
+            if (pErr) return console.log(pErr);
 
-                if (pErr) return console.log(pErr);
+            if (!pData) {
 
-                if (!pData) {
+                const newPointsData = new POINTS({
+                    guildID: interaction.guild.id,
+                    userID: correctPlayer.id,
+                    name: correctPlayer.username,
+                    points: 1,
+                    lb: 'all'
+                });
 
-                    const newPointsData = new POINTS({
-                        guildID: interaction.guild.id,
-                        userID: firstPlayer.id,
-                        name: firstPlayer.username,
-                        points: 1,
-                        lb: 'all'
-                    });
+                await newPointsData.save().catch((err) => console.log(err));
 
-                    await newPointsData.save().catch((err) => console.log(err));
+            } else {
 
-                } else {
+                pData.points += 1;
+                await pData.save().catch((err) => console.log(err));
 
-                    pData.points += 1;
-                    await pData.save().catch((err) => console.log(err));
+            }
 
-                }
-
-            });
-
-            POINTS.findOne({
-
-                guildID: interaction.guild.id,
-                userID: lastPlayer.id
-
-            }, async (pErr, pData) => {
-
-                if (pErr) return console.log(pErr);
-
-                if (!pData) {
-
-                    const newPointsData = new POINTS({
-                        guildID: interaction.guild.id,
-                        userID: lastPlayer.id,
-                        name: lastPlayer.username,
-                        points: 1,
-                        lb: 'all'
-                    });
-
-                    await newPointsData.save().catch((err) => console.log(err));
-
-                } else {
-
-                    pData.points += 1;
-                    await pData.save().catch((err) => console.log(err));
-
-                }
-
-            });
-
-            await collected.first().channel.send(`**Correct!** The answer was **${currentAnswer}**. <:bITFCool:1022548621360635994>\n\nPlayers <@${firstPlayer.id}> and <@${lastPlayer.id}> have been awarded 1 point.`);
-
-            await lockChat(interaction);
-
-            setTimeout(async () => await playRound(interaction, data), 3000);
-
-        }
+        }).then(() => { console.log(`test ${interaction.channel.id}`) });
 
     });
 
