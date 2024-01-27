@@ -5,7 +5,9 @@ const {
     PermissionFlagsBits,
     ChannelType,
     AllowedMentionsTypes,
-    EmbedBuilder
+    EmbedBuilder,
+    PermissionsBitField,
+    OverwriteType
 } = require('discord.js');
 
 var roundsPlayed;
@@ -286,16 +288,18 @@ async function playRound(interaction, data) {
 
     }
 
-    const messageCollector = interaction.channel.createMessageCollector({ filter: collectorFilter, max: 1, time: 6000000 });
+    const messageCollector = interaction.channel.createMessageCollector({ filter: collectorFilter, max: 2, time: 6000000 });
+    const lockCollector = interaction.channel.createMessageCollector({ filter: collectorFilter, max: 1, time: 6000000 });
 
-    messageCollector.on('end', async (collected, collectorFilter) => {
+    messageCollector.on('end', async (collected) => {
 
-        const correctPlayer = collected.first().author;
+        const firstPlayer = collected.first().author;
+        const lastPlayer = collected.last().author;
 
         POINTS.findOne({
 
             guildID: interaction.guild.id,
-            userID: correctPlayer.id
+            userID: firstPlayer.id
 
         }, async (pErr, pData) => {
 
@@ -305,8 +309,8 @@ async function playRound(interaction, data) {
 
                 const newPointsData = new POINTS({
                     guildID: interaction.guild.id,
-                    userID: correctPlayer.id,
-                    name: correctPlayer.username,
+                    userID: firstPlayer.id,
+                    name: firstPlayer.username,
                     points: 1,
                     lb: 'all'
                 });
@@ -320,8 +324,59 @@ async function playRound(interaction, data) {
 
             }
 
-        }).then(() => { console.log(`test ${interaction.channel.id}`) });
+        });
 
+        POINTS.findOne({
+
+            guildID: interaction.guild.id,
+            userID: lastPlayer.id
+
+        }, async (pErr, pData) => {
+
+            if (pErr) return console.log(pErr);
+
+            if (!pData) {
+
+                const newPointsData = new POINTS({
+                    guildID: interaction.guild.id,
+                    userID: lastPlayer.id,
+                    name: lastPlayer.username,
+                    points: 1,
+                    lb: 'all'
+                });
+
+                await newPointsData.save().catch((err) => console.log(err));
+
+            } else {
+
+                pData.points += 1;
+                await pData.save().catch((err) => console.log(err));
+
+            }
+
+        });
+
+        await collected.first().channel.permissionsOverwrites.delete(firstPlayer.id);
+        await collected.first().channel.permissionsOverwrites.delete(lastPlayer.id);
+
+        await collected.first().channel.send(`**Correct!** The answer was **${currentAnswer}**. <:bITFCool:1022548621360635994>\n\nPlayers <@${firstPlayer.id}> and <@${lastPlayer.id}> have been awarded 1 point.`);
+
+        await lockChat(interaction);
+
+        setTimeout(async () => await playRound(interaction, data), 3000);
+
+    });
+
+    lockCollector.on('end', async (collected) => {
+        const lockPlayer = collected.first().author.id;
+
+        collected.first().channel.permissionOverwrites.set([
+            {
+                id: lockPlayer,
+                deny: [PermissionsBitField.Flags.SendMessages],
+                type: OverwriteType.Member
+            },
+        ])
     });
 
     roundsPlayed++;
