@@ -7,7 +7,7 @@ module.exports = async (Discord, oldMember, newMember) => {
     const OMCache = guild.members.cache.get(oldMember.id);
     const NMCache = guild.members.cache.get(newMember.id);
 
-    if (OMCache.bot || NMCache.bot) return;
+    if (newMember.user.bot || oldMember.user.bot) return;
 
     CONFIG.findOne({
 
