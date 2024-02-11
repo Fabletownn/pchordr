@@ -1,11 +1,11 @@
 const CONFIG = require('../../models/config.js');
 
-module.exports = async (Discord, client, oldMember, newMember) => {
-
+module.exports = async (Discord, oldMember, newMember) => {
     const guildID = newMember.guild.id;
+    const guild = newMember.guild;
 
-    const OMCache = client.users.cache.get(oldMember.id);
-    const NMCache = client.users.cache.get(newMember.id);
+    const OMCache = guild.members.cache.get(oldMember.id);
+    const NMCache = guild.members.cache.get(newMember.id);
 
     if (OMCache.bot || NMCache.bot) return;
 
@@ -17,6 +17,8 @@ module.exports = async (Discord, client, oldMember, newMember) => {
 
         if (err) return console.log(err);
         if (!data) return;
+        if (!data.supportersChannel) return console.log('No supporters channel!');
+        if (!data.supportersRole) return console.log('No supporters role!');
 
         const supportersChannelID = data.supportersChannel;
         const supporterRoleID = data.supportersRole;
@@ -29,7 +31,7 @@ module.exports = async (Discord, client, oldMember, newMember) => {
 
         if (!oldMember.roles.cache.has(boosterRoleID) && newMember.roles.cache.has(boosterRoleID)) {
 
-            client.channels.cache.get(supportersChannelID).send(`${newMember} has just supported I Talk on **Discord**. Welcome to <#652578641343152148>!\n\nYour access to this channel will not expire once your Boost expires. Thank you for the support. <:bITFGift:1022548639542951977>`);
+            guild.channels.cache.get(supportersChannelID).send(`${newMember} has just supported I Talk on **Discord**. Welcome to <#${supportersChannelID}>!\n\nYour access to this channel will not expire once your Boost expires. Thank you for the support. <:bITFGift:1022548639542951977>`);
 
             newMember.roles.add(supporterRoleID);
 
@@ -37,7 +39,7 @@ module.exports = async (Discord, client, oldMember, newMember) => {
 
         if (!oldMember.roles.cache.has(twitchRoleID) && newMember.roles.cache.has(twitchRoleID)) {
 
-            client.channels.cache.get(supportersChannelID).send(`${newMember} has just supported I Talk on **Twitch**. Welcome to <#652578641343152148>!\n\nYour access to this channel will not expire once your subscription expires. Thank you for the support. <:bITFBits:1022548606995136572>`);
+            guild.channels.cache.get(supportersChannelID).send(`${newMember} has just supported I Talk on **Twitch**. Welcome to <#${supportersChannelID}!\n\nYour access to this channel will not expire once your subscription expires. Thank you for the support. <:bITFBits:1022548606995136572>`);
 
             newMember.roles.add(supporterRoleID);
 
@@ -45,7 +47,7 @@ module.exports = async (Discord, client, oldMember, newMember) => {
 
         if (!oldMember.roles.cache.has(youtubeRoleID) && newMember.roles.cache.has(youtubeRoleID)) {
 
-            client.channels.cache.get(supportersChannelID).send(`${newMember} has just supported I Talk on **YouTube**. Welcome to <#652578641343152148>!\n\nYour access to this channel will not expire once your subscription expires. Thank you for the support. <:bITFVictory:1063265610303295619>`);
+            guild.channels.cache.get(supportersChannelID).send(`${newMember} has just supported I Talk on **YouTube**. Welcome to <#${supportersChannelID}>!\n\nYour access to this channel will not expire once your membership expires. Thank you for the support. <:bITFVictory:1063265610303295619>`);
 
             newMember.roles.add(supporterRoleID);
 
