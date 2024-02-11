@@ -1,6 +1,6 @@
 const CONFIG = require('../../models/config.js');
 
-module.exports = async (Discord, oldMember, newMember) => {
+module.exports = async (oldMember, newMember) => {
     const guildID = newMember.guild.id;
     const guild = newMember.guild;
 
@@ -14,10 +14,10 @@ module.exports = async (Discord, oldMember, newMember) => {
 
         if (err) return console.log(err);
         if (!data) return;
-        if (!data.supportersChannel) return console.log('No supporters channel!');
+        if (!data.supportersChat) return console.log('No supporters channel!');
         if (!data.supportersRole) return console.log('No supporters role!');
 
-        const supportersChannelID = data.supportersChannel;
+        const supportersChannelID = data.supportersChat;
         const supporterRoleID = data.supportersRole;
 
         const boosterRoleID = data.boosterRole;
