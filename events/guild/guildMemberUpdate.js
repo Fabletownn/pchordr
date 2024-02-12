@@ -7,7 +7,7 @@ module.exports = async (oldMember, newMember) => {
 
     CONFIG.findOne({
 
-        guildID: guild.id
+        guildID: '614193406838571085'
 
     }, (err, data) => {
 
