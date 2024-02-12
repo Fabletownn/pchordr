@@ -1,14 +1,13 @@
 const CONFIG = require('../../models/config.js');
 
 module.exports = async (oldMember, newMember) => {
-    const guildID = newMember.guild.id;
     const guild = newMember.guild;
 
-    if (newMember.user.bot) return;
+    //if (newMember.user.bot) return;
 
     CONFIG.findOne({
 
-        guildID: guildID
+        guildID: guild.id
 
     }, (err, data) => {
 
@@ -24,7 +23,7 @@ module.exports = async (oldMember, newMember) => {
         const twitchRoleID = data.twitchRole;
         const youtubeRoleID = data.ytRole;
 
-        if ((boosterRoleID === null) || (twitchRoleID === null) || (youtubeRoleID === null) || (supporterRoleID === null) || (supportersChannelID === null)) return console.log('B/T/Y/S/C is null')
+        if ((boosterRoleID === null) || (twitchRoleID === null) || (youtubeRoleID === null) || (supporterRoleID === null) || (supportersChannelID === null)) return console.log('B/T/Y/S/C is null');
 
         if (!oldMember.roles.cache.has(boosterRoleID) && newMember.roles.cache.has(boosterRoleID)) {
 
