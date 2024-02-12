@@ -1,14 +1,12 @@
 const CONFIG = require('../../models/config.js');
 
-module.exports = async (oldMember, newMember) => {
+module.exports = async (Discord, client, oldMember, newMember) => {
     const guild = newMember.guild;
 
     return console.log(newMember);
 
     if (guild === null) return console.log(`Null guild!`);
     if (newMember.user.bot) return console.log(`User bot!`);
-
-    console.log(`User bot! Bot: ${newMember.user.bot} Guild ID: ${guild.id} User ID: ${newMember.user.id}`)
 
     CONFIG.findOne({
 
