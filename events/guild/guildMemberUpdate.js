@@ -3,18 +3,19 @@ const CONFIG = require('../../models/config.js');
 module.exports = async (oldMember, newMember) => {
     const guild = newMember.guild;
 
-    //if (newMember.user.bot) return;
+    if (guild === null) return console.log('Null guild!');
+    if (newMember.user.bot) return console.log('User bot!');
 
     CONFIG.findOne({
 
-        guildID: '614193406838571085'
+        guildID: guild.id
 
     }, (err, data) => {
 
         if (err) return console.log(err);
         if (!data) return;
-        if (!data.supportersChat) return console.log('No supporters channel!');
-        if (!data.supportersRole) return console.log('No supporters role!');
+        if (!data.supportersChat) return;
+        if (!data.supportersRole) return;
 
         const supportersChannelID = data.supportersChat;
         const supporterRoleID = data.supportersRole;
