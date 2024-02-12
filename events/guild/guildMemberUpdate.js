@@ -6,6 +6,8 @@ module.exports = async (oldMember, newMember) => {
     if (guild === null) return console.log('Null guild!');
     if (newMember.user.bot) return console.log('User bot!');
 
+    console.log(`Bot: ${newMember.user.bot} Guild ID: ${guild.id} User ID: ${newMember.user.id}`)
+
     CONFIG.findOne({
 
         guildID: guild.id
