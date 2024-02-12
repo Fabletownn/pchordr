@@ -3,6 +3,8 @@ const CONFIG = require('../../models/config.js');
 module.exports = async (oldMember, newMember) => {
     const guild = newMember.guild;
 
+    return console.log(newMember);
+
     if (guild === null) return console.log(`Null guild!`);
     if (newMember.user.bot) return console.log(`User bot!`);
 
