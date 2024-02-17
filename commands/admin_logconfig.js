@@ -111,7 +111,7 @@ module.exports = {
 
                         if ((data) && (data.deletelogid === deletedChannel.id) && (data.deletewebhook === null || (data.deletewebhook !== null && fetchDeleteWebhooks.find((wh) => wh.id === data.deletewebhook.split(/\//)[5])))) return interaction.reply({ content: 'That channel and webhook is already in use.' });
 
-                        if (fetchDeleteWebhooks.find((wh) => wh.id === deleteWebhookID)) client.deleteWebhook(deleteWebhookID).then(() => deletedWebhook = true);
+                        if (fetchDeleteWebhooks.find((wh) => wh.id === deleteWebhookID)) interaction.client.deleteWebhook(deleteWebhookID).then(() => deletedWebhook = true);
                     }
 
                     await interaction.guild.channels.cache.get(deletedChannel.id).createWebhook({
@@ -123,9 +123,9 @@ module.exports = {
                             data.deletewebhook = dwh.url;
                             data.save().catch((err) => console.log(err));
                         }
-
-                        interaction.reply({ content: 'Deleted messages will now log to the channel <#' + deletedChannel.id + '>.\n\n' + (deletedWebhook ? 'The previous webhook has been deleted, and a new one ' : 'A new webhook ') + 'has been created for deleted logs in the <#' + deletedChannel.id + '> channel. This webhook will send deleted logs using the URL that was generated.' })
                     });
+
+                    interaction.reply({ content: 'Deleted messages will now log to the channel <#' + deletedChannel.id + '>.\n\n' + (deletedWebhook ? 'The previous webhook has been deleted, and a new one ' : 'A new webhook ') + 'has been created for deleted logs in the <#' + deletedChannel.id + '> channel. This webhook will send deleted logs using the URL that was generated.' });
 
                     break;
 
@@ -147,7 +147,7 @@ module.exports = {
 
                         if ((data) && (data.editlogid === editedChannel.id) && (data.editwebhook === null || (data.editwebhook !== null && fetchEditWebhooks.find((wh) => wh.id === data.editwebhook.split(/\//)[5])))) return interaction.reply({ content: 'That channel and webhook is already in use.' });
 
-                        if (fetchEditWebhooks.find((wh) => wh.id === editWebhookID)) client.deleteWebhook(editWebhookID).then(() => deletedEditedWebhook = true);
+                        if (fetchEditWebhooks.find((wh) => wh.id === editWebhookID)) interaction.client.deleteWebhook(editWebhookID).then(() => deletedEditedWebhook = true);
                     }
 
                     await interaction.guild.channels.cache.get(editedChannel.id).createWebhook({
@@ -159,9 +159,9 @@ module.exports = {
                             data.editwebhook = ewh.url;
                             data.save().catch((err) => console.log(err));
                         }
-
-                        interaction.reply({ content: 'Edited messages will now log to the channel <#' + editedChannel.id + '>.\n\n' + (deletedEditedWebhook ? 'The previous webhook has been deleted, and a new one ' : 'A new webhook ') + 'has been created for edited logs in the <#' + editedChannel.id + '> channel. This webhook will send edited logs using the URL that was generated.' })
                     });
+
+                    interaction.reply({ content: 'Edited messages will now log to the channel <#' + editedChannel.id + '>.\n\n' + (deletedEditedWebhook ? 'The previous webhook has been deleted, and a new one ' : 'A new webhook ') + 'has been created for edited logs in the <#' + editedChannel.id + '> channel. This webhook will send edited logs using the URL that was generated.' });
 
                     break;
 
