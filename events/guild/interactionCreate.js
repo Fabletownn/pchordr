@@ -260,7 +260,8 @@ module.exports = async (Discord, client, interaction) => {
                                 autopublish: false,
                                 vxtwitter: false,
                                 artdelete: false,
-                                greeting: false
+                                greeting: false,
+                                autogiveaway: false
                             });
 
                             newConfigData.save().catch((err) => console.log(err));
