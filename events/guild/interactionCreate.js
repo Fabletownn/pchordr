@@ -218,13 +218,11 @@ module.exports = async (Discord, client, interaction) => {
         }, async (err, data) => {
 
             if (err) return console.log(err);
-            if (!data) return;
 
             LCONFIG.findOne({
                 guildID: interaction.guild.id
             }, async (lerr, ldata) => {
                 if (lerr) return console.log(ler);
-                if (!ldata) return;
 
                 GTB.findOne({
 
@@ -239,8 +237,8 @@ module.exports = async (Discord, client, interaction) => {
 
                         case "setup-reset":
 
-                            await data.delete();
-                            await ldata.delete();
+                            if (data) await data.delete();
+                            if (ldata) await ldata.delete();
 
                             const newConfigData = new CONFIG({
                                 guildID: interaction.guild.id,
