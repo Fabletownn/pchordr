@@ -7,6 +7,9 @@ const {
 } = require("discord.js");
 const SCHEDULE = require('../../models/schedules.js');
 const cron = require('node-cron');
+const LCONFIG = require('../../models/logconfig.js');
+const DELETES = require('../../models/deletes.js');
+const EDITS = require('../../models/edits.js');
 
 module.exports = async (Discord, client) => {
 
@@ -21,6 +24,49 @@ module.exports = async (Discord, client) => {
         checkForScheduledMessages(client);
 
     });
+
+    setInterval(async () => {
+        LCONFIG.findOne({
+            guildID: '614193406838571085'
+        }, async (err, data) => {
+            if (err) return;
+            if (!data) return;
+            if (!data.deletelogid || !client.channels.cache.get(data.deletelogid)) return;
+            if (!data.deletewebhook || !data.editwebhook) return;
+
+            const deleteWebhookID = data.deletewebhook.split(/\//)[5];
+            const deleteWebhookToken = data.deletewebhook.split(/\//)[6];
+            const editWebhookID = data.editwebhook.split(/\//)[5];
+            const editWebhookToken = data.editwebhook.split(/\//)[6];
+
+            const fetchDeleteWebhooks = await client.channels.cache.get(data.deletelogid).fetchWebhooks();
+            const fetchedDeleteWebhook = fetchDeleteWebhooks.find((wh) => wh.id === deleteWebhookID);
+            const fetchEditWebhooks = await client.channels.cache.get(data.editlogid).fetchWebhooks();
+            const fetchedEditWebhook = fetchEditWebhooks.find((wh) => wh.id === editWebhookID);
+
+            if (!fetchedDeleteWebhook) return console.log('No delete webhook found.');
+            if (!fetchedEditWebhook) return console.log('No edit webhook found.');
+
+            const deleteWebhookClient = new WebhookClient({ id: deleteWebhookID, token: deleteWebhookToken });
+            const editWebhookClient = new WebhookClient({ id: editWebhookID, token: editWebhookToken });
+
+            DELETES.find({ guildID: '614193406838571085' }).then((deletes) => {
+                deletes.forEach((d) => {
+                    deleteWebhookClient.send({ embeds: d.embed })
+                        .catch((err) => { console.log('Error uploading delete log, deleting anyway:\n' + err) })
+                        .then(() => d.delete().catch((err) => console.log(err))); // NEEDS TESTING ON SOME MESSAGES DELETING WITHOUT BEING SENT
+                });
+            });
+
+            EDITS.find({ guildID: '614193406838571085' }).then((edits) => {
+                edits.forEach((d) => {
+                    editWebhookClient.send({ embeds: d.embed })
+                        .catch((err) => { console.log('Error uploading edit log, deleting anyway:\n' + err) })
+                        .then(() => d.delete().catch((err) => console.log(err))); // NEEDS TESTING ON SOME MESSAGES DELETING WITHOUT BEING SENT
+                });
+            });
+        });
+    }, (5000));
 
 }
 

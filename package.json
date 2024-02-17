@@ -66,6 +66,7 @@
     "object-inspect": "^1.12.2",
     "on-finished": "^2.4.1",
     "parseurl": "^1.3.3",
+    "pastebin-api": "^7.0.0",
     "path-to-regexp": "^0.1.7",
     "peek-readable": "^5.0.0",
     "proxy-addr": "^2.0.7",

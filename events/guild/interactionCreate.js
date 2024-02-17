@@ -1,4 +1,5 @@
 const CONFIG = require('../../models/config.js');
+const LCONFIG = require('../../models/logconfig.js');
 const GTB = require('../../models/gtb.js');
 const SCHEDULE = require('../../models/schedules.js');
 const CUSTOM = require('../../models/customs.js');
@@ -117,9 +118,9 @@ module.exports = async (Discord, client, interaction) => {
             var propertiesEdited = [];
 
             if (!customRole) {
-                
+
                 await client.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role with the name **${roleName}** but it could not be found`, allowedMentions: { parse: [] } });
-                
+
                 return interaction.reply({ content: `Could not find a role in the server with the name of **${roleName}**.`, ephemeral: true });
 
             }
@@ -127,7 +128,7 @@ module.exports = async (Discord, client, interaction) => {
             if (newRoleHex && !newRoleHex.match(/(^[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i)) {
 
                 await client.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role with the color **${newRoleHex}** but it was improper`, allowedMentions: { parse: [] } });
-                
+
                 return interaction.reply({ content: `The hex code given of **${newRoleHex}** is improper or cannot be used.`, ephemeral: true });
 
             }
@@ -144,7 +145,7 @@ module.exports = async (Discord, client, interaction) => {
                 if (!data) {
 
                     await client.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role **${roleName}** but it did not have ownership`, allowedMentions: { parse: [] } });
-                    
+
                     return interaction.reply({ content: `There is not yet a claimed owner for that role (**${roleName}**). If this is your custom role, ask a Moderator to set you as the owner.`, ephemeral: true });
 
                 }
@@ -152,7 +153,7 @@ module.exports = async (Discord, client, interaction) => {
                 if (data.roleOwner !== interaction.user.id) {
 
                     await client.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit the role of someone else (**${roleName}**) but did not have ownership`, allowedMentions: { parse: [] } });
-                    
+
                     return interaction.reply({ content: `Could not change the assets of your role (**${roleName}**). You are not the owner of that custom role!`, ephemeral: true });
 
                 }
@@ -197,7 +198,7 @@ module.exports = async (Discord, client, interaction) => {
                 if (!newRoleName && !newRoleHex) return interaction.reply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.`, ephemeral: true });
 
                 await interaction.reply({ content: `Edited the following assets of your custom role: ${propertiesEdited.join(', ')}.`, ephemeral: true });
-                
+
                 await client.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) edited a role of theirs **${roleName}** with the following assets: ${propertiesEdited.join(', ')}.`, allowedMentions: { parse: [] } });
 
                 propertiesEdited = [];
@@ -219,110 +220,130 @@ module.exports = async (Discord, client, interaction) => {
             if (err) return console.log(err);
             if (!data) return;
 
-            GTB.findOne({
-
+            LCONFIG.findOne({
                 guildID: interaction.guild.id
+            }, async (lerr, ldata) => {
+                if (lerr) return console.log(ler);
+                if (!ldata) return;
 
-            }, async (gtbErr, gtbData) => {
+                GTB.findOne({
 
-                if (gtbErr) return console.log(gtbErr);
-                if (!gtbData) return;
+                    guildID: interaction.guild.id
 
-                switch (interaction.customId) {
+                }, async (gtbErr, gtbData) => {
 
-                    case "setup-reset":
+                    if (gtbErr) return console.log(gtbErr);
+                    if (!gtbData) return;
 
-                        await data.delete();
+                    switch (interaction.customId) {
 
-                        const newConfigData = new CONFIG({
-                            guildID: interaction.guild.id,
-                            generalChat: null,
-                            modChat: null,
-                            serverUpdatesChat: null,
-                            pollsChat: null,
-                            artChat: null,
-                            gpChat: null,
-                            supportersChat: null,
-                            gtbChat: null,
-                            adminRole: null,
-                            modRole: null,
-                            supportersRole: null,
-                            boosterRole: null,
-                            ytRole: null,
-                            twitchRole: null,
-                            gtbRole: null,
-                            autopublish: false,
-                            vxtwitter: false,
-                            artdelete: false,
-                            greeting: false
-                        });
+                        case "setup-reset":
 
-                        newConfigData.save().catch((err) => console.log(err));
+                            await data.delete();
+                            await ldata.delete();
 
-                        await interaction.update({ content: 'Set configuration back to the default settings. Use the `/config-edit` command to edit their values.', components: [] });
+                            const newConfigData = new CONFIG({
+                                guildID: interaction.guild.id,
+                                generalChat: null,
+                                modChat: null,
+                                serverUpdatesChat: null,
+                                pollsChat: null,
+                                artChat: null,
+                                gpChat: null,
+                                supportersChat: null,
+                                gtbChat: null,
+                                adminRole: null,
+                                modRole: null,
+                                supportersRole: null,
+                                boosterRole: null,
+                                ytRole: null,
+                                twitchRole: null,
+                                gtbRole: null,
+                                autopublish: false,
+                                vxtwitter: false,
+                                artdelete: false,
+                                greeting: false
+                            });
 
-                        break;
+                            newConfigData.save().catch((err) => console.log(err));
 
-                    case "setup-cancel":
+                            const newLogData = new LCONFIG({
+                                guildID: message.guild.id,
+                                deletelogid: "",
+                                editlogid: "",
+                                ignoredchannels: [],
+                                ignoredcategories: [],
+                                deletewebhook: "",
+                                editwebhook: ""
+                            });
 
-                        await interaction.update({
-                            content: 'Configuration reset cancelled.',
-                            components: []
-                        });
+                            await newLogData.save().catch((err) => console.log(err));
 
-                        break;
+                            await interaction.update({ content: 'Set configuration back to the default settings. Use the `/config-edit` and `/log-config-edit` commands to edit their values.', components: [] });
 
-                    case "gtb-reset":
+                            break;
 
-                        await gtbData.delete();
+                        case "setup-cancel":
 
-                        const newGTBData = new GTB({
-                            guildID: interaction.guild.id,
-                            round1: [],
-                            round2: [],
-                            round3: [],
-                            round4: [],
-                            round5: [],
-                            round6: [],
-                            round7: [],
-                            round8: [],
-                            round9: [],
-                            round10: [],
-                            round11: [],
-                            round12: [],
-                            round13: [],
-                            round14: [],
-                            round15: [],
-                            round16: [],
-                            round17: [],
-                            round18: [],
-                            round19: [],
-                            round20: []
-                        });
+                            await interaction.update({
+                                content: 'Configuration reset cancelled.',
+                                components: []
+                            });
 
-                        newGTBData.save().catch((err) => console.log(err));
+                            break;
 
-                        await interaction.update({ content: 'Reset all Guess the Blank images and answers. Use the `/gtb-add` command to re-add their values.', components: [] });
+                        case "gtb-reset":
 
-                        break;
+                            await gtbData.delete();
 
-                    case "gtb-reset-cancel":
+                            const newGTBData = new GTB({
+                                guildID: interaction.guild.id,
+                                round1: [],
+                                round2: [],
+                                round3: [],
+                                round4: [],
+                                round5: [],
+                                round6: [],
+                                round7: [],
+                                round8: [],
+                                round9: [],
+                                round10: [],
+                                round11: [],
+                                round12: [],
+                                round13: [],
+                                round14: [],
+                                round15: [],
+                                round16: [],
+                                round17: [],
+                                round18: [],
+                                round19: [],
+                                round20: []
+                            });
 
-                        await interaction.update({
-                            content: 'Guess the Blank data reset cancelled.',
-                            components: []
-                        });
+                            newGTBData.save().catch((err) => console.log(err));
 
-                        break;
+                            await interaction.update({ content: 'Reset all Guess the Blank images and answers. Use the `/gtb-add` command to re-add their values.', components: [] });
 
-                    default:
+                            break;
 
-                        break;
+                        case "gtb-reset-cancel":
 
-                }
+                            await interaction.update({
+                                content: 'Guess the Blank data reset cancelled.',
+                                components: []
+                            });
+
+                            break;
+
+                        default:
+
+                            break;
+
+                    }
+
+                });
 
             });
-
         });
 
     }
