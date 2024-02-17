@@ -266,7 +266,7 @@ module.exports = async (Discord, client, interaction) => {
                             newConfigData.save().catch((err) => console.log(err));
 
                             const newLogData = new LCONFIG({
-                                guildID: message.guild.id,
+                                guildID: interaction.guild.id,
                                 deletelogid: "",
                                 editlogid: "",
                                 ignoredchannels: [],
