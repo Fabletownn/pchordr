@@ -3,7 +3,8 @@ const {
     ChannelType,
     ActivityType,
     EmbedBuilder,
-    AttachmentBuilder
+    AttachmentBuilder,
+    WebhookClient
 } = require("discord.js");
 const SCHEDULE = require('../../models/schedules.js');
 const cron = require('node-cron');

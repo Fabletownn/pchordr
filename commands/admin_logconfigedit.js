@@ -1,11 +1,5 @@
 const LCONFIG = require('../models/logconfig.js');
-const {
-    Client,
-    SlashCommandBuilder,
-    PermissionFlagsBits,
-    ChannelType,
-    WebhookClient
-} = require('discord.js');
+const { Client, WebhookClient, SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
