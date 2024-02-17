@@ -1,8 +1,7 @@
 const { Client, ChannelType, EmbedBuilder, WebhookClient } = require('discord.js');
-const PasteClient = require('pastebin-api').default;
-const pastebinClient = new PasteClient(process.env.PASTEBIN_API_DEVKEY);
+const { PasteClient, ExpireDate, Publicity } = require('pastebin-api');
+const pastebinClient = new PasteClient("test");
 const LCONFIG = require('../../models/logconfig.js');
-const { ExpireDate, Publicity } = require('pastebin-api');
 
 module.exports = async (Discord, client, messages, channel) => {
     var bulkDeleteInformation = [];
