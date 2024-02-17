@@ -73,6 +73,7 @@ module.exports = {
                     { name: `VXTwitter`, value: vxTwitterSetting, inline: true },
                     { name: `Non-Art Deletion`, value: artSetting, inline: true },
                     { name: `Greeting Reaction`, value: greetingSetting, inline: true },
+                    { name: `\u200b`, value: `\u200b`, inline: true },
                     { name: `Giveaway Winner Trigger`, value: giveawayWinnerSetting, inline: true }
                 );
 

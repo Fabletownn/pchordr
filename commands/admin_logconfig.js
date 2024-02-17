@@ -48,7 +48,7 @@ module.exports = {
 
             switch (configChoice) {
                 case "ignorecatchan":
-                    const argiChannelOrParentID = configChoice.replace(/[<>#]/g, '');
+                    const argiChannelOrParentID = configVal.replace(/[<>#]/g, '');
                     const ignoredChannelOrCategory = interaction.guild.channels.cache.get(argiChannelOrParentID);
 
                     if (!ignoredChannelOrCategory) return interaction.reply({ content: 'Invalid channel or category (doesn\'t exist or is invalid).' });
@@ -68,7 +68,7 @@ module.exports = {
                     break;
 
                 case "unignorecatchan":
-                    const arguiChannelOrParentID = configChoice.replace(/[<>#]/g, '');
+                    const arguiChannelOrParentID = configVal.replace(/[<>#]/g, '');
                     const unignoredChannelOrCategory = interaction.guild.channels.cache.get(arguiChannelOrParentID);
 
                     if (!unignoredChannelOrCategory) return interaction.reply({ content: 'The channel provided doesn\'t exist or is invalid.' });
@@ -121,8 +121,10 @@ module.exports = {
                         if (data) {
                             data.deletelogid = deletedChannel.id;
                             data.deletewebhook = dwh.url;
-                            data.save().catch((err) => console.log(err)).then(() => interaction.reply({ content: 'Deleted messages will now log to the channel <#' + deletedChannel.id + '>.\n\n' + (deletedWebhook ? 'The previous webhook has been deleted, and a new one ' : 'A new webhook ') + 'has been created for deleted logs in the <#' + deletedChannel.id + '> channel. This webhook will send deleted logs using the URL that was generated.' }));
+                            data.save().catch((err) => console.log(err));
                         }
+
+                        interaction.reply({ content: 'Deleted messages will now log to the channel <#' + deletedChannel.id + '>.\n\n' + (deletedWebhook ? 'The previous webhook has been deleted, and a new one ' : 'A new webhook ') + 'has been created for deleted logs in the <#' + deletedChannel.id + '> channel. This webhook will send deleted logs using the URL that was generated.' })
                     });
 
                     break;
@@ -155,8 +157,10 @@ module.exports = {
                         if (data) {
                             data.editlogid = editedChannel.id;
                             data.editwebhook = ewh.url;
-                            data.save().catch((err) => console.log(err)).then(() => interaction.reply({ content: 'Edited messages will now log to the channel <#' + editedChannel.id + '>.\n\n' + (deletedEditedWebhook ? 'The previous webhook has been deleted, and a new one ' : 'A new webhook ') + 'has been created for edited logs in the <#' + editedChannel.id + '> channel. This webhook will send edited logs using the URL that was generated.' }));
+                            data.save().catch((err) => console.log(err));
                         }
+
+                        interaction.reply({ content: 'Edited messages will now log to the channel <#' + editedChannel.id + '>.\n\n' + (deletedEditedWebhook ? 'The previous webhook has been deleted, and a new one ' : 'A new webhook ') + 'has been created for edited logs in the <#' + editedChannel.id + '> channel. This webhook will send edited logs using the URL that was generated.' })
                     });
 
                     break;
