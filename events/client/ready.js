@@ -32,28 +32,22 @@ module.exports = async (Discord, client) => {
         }, async (err, data) => {
             if (err) return;
             if (!data) return;
-            if (!data.deletelogid || !client.channels.cache.get(data.deletelogid)) return;
-            if (!data.deletewebhook || !data.editwebhook) return;
+            if (!data.msglogid || !client.channels.cache.get(data.msglogid)) return;
+            if (!data.logwebhook) return;
 
-            const deleteWebhookID = data.deletewebhook.split(/\//)[5];
-            const deleteWebhookToken = data.deletewebhook.split(/\//)[6];
-            const editWebhookID = data.editwebhook.split(/\//)[5];
-            const editWebhookToken = data.editwebhook.split(/\//)[6];
+            const logWebhookID = data.deletewebhook.split(/\//)[5];
+            const logWebhookToken = data.deletewebhook.split(/\//)[6];
 
-            const fetchDeleteWebhooks = await client.channels.cache.get(data.deletelogid).fetchWebhooks();
-            const fetchedDeleteWebhook = fetchDeleteWebhooks.find((wh) => wh.id === deleteWebhookID);
-            const fetchEditWebhooks = await client.channels.cache.get(data.editlogid).fetchWebhooks();
-            const fetchedEditWebhook = fetchEditWebhooks.find((wh) => wh.id === editWebhookID);
+            const fetchLogWebhooks = await interaction.client.channels.cache.get(data.msglogid).fetchWebhooks();
+            const fetchedLogWebhook = fetchLogWebhooks.find((wh) => wh.id === logWebhookID);
 
-            if (!fetchedDeleteWebhook) return console.log('No delete webhook found.');
-            if (!fetchedEditWebhook) return console.log('No edit webhook found.');
+            if (!fetchedLogWebhook) return console.log('No webhook found.');
 
-            const deleteWebhookClient = new WebhookClient({ id: deleteWebhookID, token: deleteWebhookToken });
-            const editWebhookClient = new WebhookClient({ id: editWebhookID, token: editWebhookToken });
+            const msgWebhookClient = new WebhookClient({ id: logWebhookID, token: logWebhookToken });
 
             DELETES.find({ guildID: '614193406838571085' }).then((deletes) => {
                 deletes.forEach((d) => {
-                    deleteWebhookClient.send({ embeds: d.embed })
+                    msgWebhookClient.send({ embeds: d.embed })
                         .catch((err) => { console.log('Error uploading delete log, deleting anyway:\n' + err) })
                         .then(() => d.delete().catch((err) => console.log(err))); // NEEDS TESTING ON SOME MESSAGES DELETING WITHOUT BEING SENT
                 });
@@ -61,7 +55,7 @@ module.exports = async (Discord, client) => {
 
             EDITS.find({ guildID: '614193406838571085' }).then((edits) => {
                 edits.forEach((d) => {
-                    editWebhookClient.send({ embeds: d.embed })
+                    msgWebhookClient.send({ embeds: d.embed })
                         .catch((err) => { console.log('Error uploading edit log, deleting anyway:\n' + err) })
                         .then(() => d.delete().catch((err) => console.log(err))); // NEEDS TESTING ON SOME MESSAGES DELETING WITHOUT BEING SENT
                 });

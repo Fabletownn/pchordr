@@ -116,7 +116,7 @@ module.exports = {
                         }
                     });
 
-                    interaction.reply({ content: 'Message logs will now send to the channel <#' + logChannel.id + '>.\n\n' + (deletedWebhook ? 'The previous webhook has been deleted, and a new one ' : 'A new webhook ') + 'has been created for message logs in the <#' + logChannel.id + '> channel. This webhook will send message logs using the URL that was generated.' });
+                    await interaction.reply({ content: 'Message logs will now send to the channel <#' + logChannel.id + '>.\n\n' + (deletedWebhook ? 'The previous webhook has been deleted, and a new one ' : 'A new webhook ') + 'has been created for message logs in the <#' + logChannel.id + '> channel. This webhook will send message logs using the URL that was generated.' });
 
                     break;
 
