@@ -108,7 +108,7 @@ module.exports = {
                     await interaction.guild.channels.cache.get(logChannel.id).createWebhook({
                         name: 'Power Chord Message Logs',
                         avatar: interaction.client.user.displayAvatarURL({ size: 512 })
-                    }).then((mwh) => {
+                    }).then(async (mwh) => {
                         if (data) {
                             data.msglogid = logChannel.id;
                             data.logwebhook = mwh.url;
