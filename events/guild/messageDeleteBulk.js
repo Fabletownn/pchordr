@@ -1,5 +1,6 @@
 const { Client, ChannelType, EmbedBuilder, WebhookClient } = require('discord.js');
-const PasteClient = require('pastebin-api').default;
+const { PasteClient, ExpireDate, Publicity } = require('pastebin-api');
+const pastebinClient = new PasteClient({ apiKey: process.env.PBKEY });
 const LCONFIG = require('../../models/logconfig.js');
 
 module.exports = async (Discord, client, messages, channel) => {
@@ -45,15 +46,13 @@ module.exports = async (Discord, client, messages, channel) => {
             bulkDeleteInformation.push(addString);
         });
 
-        const pastebinClient = new PasteClient({ apiKey: process.env.PBKEY });
-
         const pasteURL = await pastebinClient.createPaste({
             code: `If a deleted message's author was a bot, the message is not cached by the bot, or similar, some messages may not be logged. Out of ${messages.size} deleted messages, ${bulkDeleteInformation.length} are logged.\n`
                 + `I Talk Server Message Bulk Delete Log @ ${currentDate} UTC:\n----------------------------------------------------------------------\n${bulkDeleteInformation.join('\n')}`,
-            expireDate: "1W",
+            expireDate: ExpireDate.OneWeek,
             format: "javascript",
             name: "Bulk Delete Log",
-            publicity: "1W",
+            publicity: Publicity.Unlisted,
         });
 
         if (pasteURL === null) return console.log('null link')
