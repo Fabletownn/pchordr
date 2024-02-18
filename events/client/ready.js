@@ -31,20 +31,17 @@ module.exports = async (Discord, client) => {
             guildID: '614193406838571085'
         }, async (err, data) => {
             if (err) return;
-            if (!data) return;
-            if (!data.msglogid || !client.channels.cache.get(data.msglogid)) return;
-            if (!data.logwebhook) return;
+            if (!data) return console.log('No data!!');
+            if (!data.msglogid || !client.channels.cache.get(data.msglogid)) return console.log('No log channel!');
+            if (!data.logwebhook) return console.log('No log webhook!');
 
             const logWebhookID = data.logwebhook.split(/\//)[5];
             const logWebhookToken = data.logwebhook.split(/\//)[6];
 
-            console.log(data.logwebhook);
-            console.log(logWebhookID);
-
             const fetchLogWebhooks = await client.channels.cache.get(data.msglogid).fetchWebhooks();
             const fetchedLogWebhook = fetchLogWebhooks.find((wh) => wh.id === logWebhookID);
 
-            //if (!fetchedLogWebhook) return console.log('No webhook found.');
+            if (!fetchedLogWebhook) return console.log('No webhook found.');
 
             const msgWebhookClient = new WebhookClient({ id: logWebhookID, token: logWebhookToken });
 
