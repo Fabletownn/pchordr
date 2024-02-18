@@ -1,5 +1,5 @@
-import { PasteClient, Publicity, ExpireDate } from "pastebin-api";
 const { Client, ChannelType, EmbedBuilder, WebhookClient } = require('discord.js');
+const { PasteClient, Publicity, ExpireDate } = require('pastebin-api').default;
 const LCONFIG = require('../../models/logconfig.js');
 
 module.exports = async (Discord, client, messages, channel) => {
