@@ -31,7 +31,7 @@ module.exports = {
                 .setRequired(true)
         ),
 
-    async execute(interaction) {
+    async execute(client, interaction) {
         LCONFIG.findOne({
             guildID: interaction.guild.id,
         }, async (err, data) => {
@@ -106,7 +106,7 @@ module.exports = {
 
                         if ((data) && (data.deletelogid === deletedChannel.id) && (data.deletewebhook === null || (data.deletewebhook !== null && fetchDeleteWebhooks.find((wh) => wh.id === data.deletewebhook.split(/\//)[5])))) return interaction.reply({ content: 'That channel and webhook is already in use.' });
 
-                        if (fetchDeleteWebhooks.find((wh) => wh.id === deleteWebhookID)) interaction.client.deleteWebhook(deleteWebhookID).then(() => deletedWebhook = true);
+                        if (fetchDeleteWebhooks.find((wh) => wh.id === deleteWebhookID)) client.deleteWebhook(deleteWebhookID).then(() => deletedWebhook = true);
                     }
 
                     await interaction.guild.channels.cache.get(deletedChannel.id).createWebhook({
@@ -142,7 +142,7 @@ module.exports = {
 
                         if ((data) && (data.editlogid === editedChannel.id) && (data.editwebhook === null || (data.editwebhook !== null && fetchEditWebhooks.find((wh) => wh.id === data.editwebhook.split(/\//)[5])))) return interaction.reply({ content: 'That channel and webhook is already in use.' });
 
-                        if (fetchEditWebhooks.find((wh) => wh.id === editWebhookID)) interaction.client.deleteWebhook(editWebhookID).then(() => deletedEditedWebhook = true);
+                        if (fetchEditWebhooks.find((wh) => wh.id === editWebhookID)) client.deleteWebhook(editWebhookID).then(() => deletedEditedWebhook = true);
                     }
 
                     await interaction.guild.channels.cache.get(editedChannel.id).createWebhook({

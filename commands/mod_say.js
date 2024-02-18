@@ -18,7 +18,7 @@ module.exports = {
         )
         .addStringOption((option) =>
             option.setName('content')
-                .setDescription('What do you want the bot to send?')
+                .setDescription('What do you want the bot to send? (do "\\n" for new line)')
                 .setRequired(true)
         )
         .addAttachmentOption((option) =>
@@ -30,7 +30,7 @@ module.exports = {
     async execute(interaction) {
 
         const channel = interaction.options.getChannel('channel');
-        const message = interaction.options.get('content').value.replace(/{indent}\s|{indent}|\s{indent}\s|\s{indent}/g, `\n`);
+        const message = interaction.options.get('content').value.replace("\\n", `\n`);
 
         const attachment = interaction.options.getAttachment('attachment');
 
