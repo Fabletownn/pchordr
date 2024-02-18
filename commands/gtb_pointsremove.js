@@ -9,7 +9,7 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('gtb-points-remove')
+        .setName('gtb points remove')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .setDescription('Removes points for Guess The Blank from a server member')
         .setDMPermission(false)

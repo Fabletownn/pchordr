@@ -6,7 +6,7 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('track-stop')
+        .setName('track stop')
         .setDescription('Stops a message tracker on a user')
         .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
         .addUserOption((option) =>

@@ -6,7 +6,7 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('vc-move')
+        .setName('vc move')
         .setDescription('Moves all server members from a voice channel to another')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .setDMPermission(false)

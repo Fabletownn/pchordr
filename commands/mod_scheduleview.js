@@ -10,7 +10,7 @@ const SCHEDULE = require('../models/schedules.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('schedule-view')
+        .setName('schedule view')
         .setDescription('Showcases all current scheduled messages')
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),

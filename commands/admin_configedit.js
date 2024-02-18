@@ -7,7 +7,7 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('config-edit')
+        .setName('config edit')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .setDescription('Edits configuration values of specific bot features')
         .setDMPermission(false)

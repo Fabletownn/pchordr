@@ -5,7 +5,7 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('event-end')
+        .setName('event end')
         .setDescription('Ends all ongoing Server Events, if any')
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),

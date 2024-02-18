@@ -6,7 +6,7 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('vc-disconnect')
+        .setName('vc disconnect')
         .setDescription('Disconnects all server members from a specified voice channel')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .setDMPermission(false)
