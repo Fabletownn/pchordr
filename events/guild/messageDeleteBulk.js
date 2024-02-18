@@ -1,6 +1,5 @@
 const { Client, ChannelType, EmbedBuilder, WebhookClient } = require('discord.js');
 const { PasteClient, ExpireDate, Publicity } = require('pastebin-api');
-const pastebinClient = new PasteClient({ apiKey: process.env.PBKEY });
 const LCONFIG = require('../../models/logconfig.js');
 
 module.exports = async (Discord, client, messages, channel) => {
@@ -45,6 +44,8 @@ module.exports = async (Discord, client, messages, channel) => {
             let addString = `${authorTag} (${authorDisplayName}) [${authorID}] | (#${channelName}): ${deleted.content > 2000 ? `${deleted.content.slice(0, 2000)}...` : deleted.content}`;
             bulkDeleteInformation.push(addString);
         });
+
+        const pastebinClient = new PasteClient(process.env.PBKEY);
 
         const pasteURL = await pastebinClient.createPaste({
             code: `If a deleted message's author was a bot, the message is not cached by the bot, or similar, some messages may not be logged. Out of ${messages.size} deleted messages, ${bulkDeleteInformation.length} are logged.\n`
