@@ -39,8 +39,8 @@ module.exports = {
 
             const viewEmbed = new EmbedBuilder()
                 .setAuthor({
-                    name: `${interaction.author.username}${interaction.author.discriminator == 0 ? "" : `#${interaction.author.discriminator}`}`,
-                    iconURL: interaction.author.displayAvatarURL({
+                    name: `${interaction.user.username}${interaction.user.discriminator == 0 ? "" : `#${interaction.user.discriminator}`}`,
+                    iconURL: interaction.user.displayAvatarURL({
                         dynamic: true
                     })
                 })

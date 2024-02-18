@@ -39,22 +39,24 @@ module.exports = {
             const configChoice = interaction.options.get('config').value;
             const configVal = interaction.options.getChannel('channel').id;
 
+            interaction.deferReply();
+
             switch (configChoice) {
                 case "ignorecatchan":
                     const ignoredChannelOrCategory = interaction.guild.channels.cache.get(configVal);
 
-                    if (!ignoredChannelOrCategory) return interaction.reply({ content: 'Invalid channel or category (doesn\'t exist or is invalid).' });
+                    if (!ignoredChannelOrCategory) return interaction.editReply({ content: 'Invalid channel or category (doesn\'t exist or is invalid).' });
 
                     if (ignoredChannelOrCategory.type === ChannelType.GuildCategory) {
-                        if (data.ignoredcategories.includes(ignoredChannelOrCategory.id)) return interaction.reply({ content: 'That category is already being ignored.' });
+                        if (data.ignoredcategories.includes(ignoredChannelOrCategory.id)) return interaction.editReply({ content: 'That category is already being ignored.' });
 
                         data.ignoredcategories.push(ignoredChannelOrCategory.id);
-                        data.save().catch((err) => console.log(err)).then(() => interaction.reply({ content: 'Set the `' + ignoredChannelOrCategory.name + '` category to be ignored in message logs.' }));
+                        data.save().catch((err) => console.log(err)).then(() => interaction.editReply({ content: 'Set the `' + ignoredChannelOrCategory.name + '` category to be ignored in message logs.' }));
                     } else {
-                        if (data.ignoredchannels.includes(ignoredChannelOrCategory.id)) return interaction.reply({ content: 'That channel is already being ignored.' });
+                        if (data.ignoredchannels.includes(ignoredChannelOrCategory.id)) return interaction.editReply({ content: 'That channel is already being ignored.' });
 
                         data.ignoredchannels.push(ignoredChannelOrCategory.id);
-                        data.save().catch((err) => console.log(err)).then(() => interaction.reply({ content: 'Set the <#' + ignoredChannelOrCategory.id + '> channel to be ignored in message logs.' }));
+                        data.save().catch((err) => console.log(err)).then(() => interaction.editReply({ content: 'Set the <#' + ignoredChannelOrCategory.id + '> channel to be ignored in message logs.' }));
                     }
 
                     break;
@@ -62,24 +64,24 @@ module.exports = {
                 case "unignorecatchan":
                     const unignoredChannelOrCategory = interaction.guild.channels.cache.get(configVal);
 
-                    if (!unignoredChannelOrCategory) return interaction.reply({ content: 'The channel provided doesn\'t exist or is invalid.' });
+                    if (!unignoredChannelOrCategory) return interaction.editReply({ content: 'The channel provided doesn\'t exist or is invalid.' });
 
                     if (unignoredChannelOrCategory.type === ChannelType.GuildCategory) {
-                        if (!data.ignoredcategories.includes(unignoredChannelOrCategory.id)) return interaction.reply({ content: 'That category is not being ignored.' });
+                        if (!data.ignoredcategories.includes(unignoredChannelOrCategory.id)) return interaction.editReply({ content: 'That category is not being ignored.' });
 
                         const ignoredIndex = data.ignoredcategories.indexOf(unignoredChannelOrCategory.id);
-                        if (!data.ignoredcategories[ignoredIndex]) return interaction.reply({ content: 'That channel is not being ignored.' });
+                        if (!data.ignoredcategories[ignoredIndex]) return interaction.editReply({ content: 'That channel is not being ignored.' });
 
                         data.ignoredcategories.splice(ignoredIndex, 1);
-                        data.save().catch((err) => console.log(err)).then(() => interaction.reply({ content: 'Removed the `' + unignoredChannelOrCategory.name + '` category ignorance in message logs.' }));
+                        data.save().catch((err) => console.log(err)).then(() => interaction.editReply({ content: 'Removed the `' + unignoredChannelOrCategory.name + '` category ignorance in message logs.' }));
                     } else {
-                        if (!data.ignoredchannels.includes(unignoredChannelOrCategory.id)) return interaction.reply({ content: 'That channel is not being ignored.' });
+                        if (!data.ignoredchannels.includes(unignoredChannelOrCategory.id)) return interaction.editReply({ content: 'That channel is not being ignored.' });
 
                         const ignoredIndex = data.ignoredchannels.indexOf(unignoredChannelOrCategory.id);
-                        if (!data.ignoredchannels[ignoredIndex]) return interaction.reply({ content: 'That channel is not being ignored.' });
+                        if (!data.ignoredchannels[ignoredIndex]) return interaction.editReply({ content: 'That channel is not being ignored.' });
 
                         data.ignoredchannels.splice(ignoredIndex, 1);
-                        data.save().catch((err) => console.log(err)).then(() => interaction.reply({ content: 'Removed the <#' + unignoredChannelOrCategory.id + '> channel ignorance in message logs.' }));
+                        data.save().catch((err) => console.log(err)).then(() => interaction.editReply({ content: 'Removed the <#' + unignoredChannelOrCategory.id + '> channel ignorance in message logs.' }));
                     }
 
                     break;
@@ -94,13 +96,13 @@ module.exports = {
                     if (data.msglogid) oldMsgChannel = data.msglogid;
                     if (data.logwebhook) oldMsgWebhook = data.logwebhook;
 
-                    if ((!logChannel) || (logChannel && logChannel.type !== ChannelType.GuildText)) return interaction.reply({ content: 'The channel provided doesn\'t exist or is not text based.' });
+                    if ((!logChannel) || (logChannel && logChannel.type !== ChannelType.GuildText)) return interaction.editReply({ content: 'The channel provided doesn\'t exist or is not text based.' });
 
                     if (data.msglogid && data.logwebhook) {
                         const fetchMsgWebhooks = await interaction.guild.channels.cache.get(oldMsgChannel).fetchWebhooks();
                         const botWebhooks = fetchMsgWebhooks.filter((webhook) => webhook.owner.id === interaction.client.user.id && webhook.name.startsWith("Power Chord"));
 
-                        if ((data) && (data.msglogid === logChannel.id) && (data.logwebhook === null || (data.logwebhook !== null && fetchMsgWebhooks.find((wh) => wh.id === data.logwebhook.split(/\//)[5])))) return interaction.reply({ content: 'That channel and webhook is already in use.' });
+                        if ((data) && (data.msglogid === logChannel.id) && (data.logwebhook === null || (data.logwebhook !== null && fetchMsgWebhooks.find((wh) => wh.id === data.logwebhook.split(/\//)[5])))) return interaction.editReply({ content: 'That channel and webhook is already in use.' });
 
                         for (let webhook of botWebhooks) await webhook.delete().then(() => deletedWebhook = true);
                     }
@@ -115,7 +117,7 @@ module.exports = {
                             data.save().catch((err) => console.log(err));
                         }
 
-                        await interaction.reply({ content: 'Message logs will now send to the channel <#' + logChannel.id + '>.\n\n' + (deletedWebhook ? 'The previous webhook has been deleted, and a new one ' : 'A new webhook ') + 'has been created for message logs in the <#' + logChannel.id + '> channel. This webhook will send message logs using the URL that was generated.' });
+                        await interaction.editReply({ content: 'Message logs will now send to the channel <#' + logChannel.id + '>.\n\n' + (deletedWebhook ? 'The previous webhook has been deleted, and a new one ' : 'A new webhook ') + 'has been created for message logs in the <#' + logChannel.id + '> channel. This webhook will send message logs using the URL that was generated.' });
                     });
 
                     break;
