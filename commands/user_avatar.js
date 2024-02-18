@@ -14,11 +14,9 @@ module.exports = {
         ),
 
     async execute(interaction) {
-
-        const user = interaction.options.getMember('user');
+        const user = interaction.options.getMember('member');
 
         if (user) {
-
             if (!interaction.guild.members.cache.get(user.id)) return interaction.reply({ content: `Failed to fetch that member's profile picture, as they aren't in the server. <:bITFSweat:1022548683176284281>`, ephemeral: true });
 
             const avatarEmbed1 = new EmbedBuilder()
@@ -27,10 +25,9 @@ module.exports = {
                 .setImage(user.displayAvatarURL({
                     dynamic: true,
                     size: 1024
-                }))
+                }));
 
             return interaction.reply({ content: null, embeds: [avatarEmbed1] });
-
         }
 
         const avatarEmbed2 = new EmbedBuilder()
@@ -39,7 +36,7 @@ module.exports = {
             .setImage(interaction.user.displayAvatarURL({
                 dynamic: true,
                 size: 1024
-            }))
+            }));
 
         return interaction.reply({ content: null, embeds: [avatarEmbed2] });
 
