@@ -44,7 +44,7 @@ module.exports = async (Discord, client) => {
             const fetchLogWebhooks = await client.channels.cache.get(data.msglogid).fetchWebhooks();
             const fetchedLogWebhook = fetchLogWebhooks.find((wh) => wh.id === logWebhookID);
 
-            if (!fetchedLogWebhook) return console.log('No webhook found.');
+            //if (!fetchedLogWebhook) return console.log('No webhook found.');
 
             const msgWebhookClient = new WebhookClient({ id: logWebhookID, token: logWebhookToken });
 
