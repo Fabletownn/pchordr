@@ -58,12 +58,10 @@ module.exports = {
 
                     const newLogData = new LCONFIG({
                         guildID: message.guild.id,
-                        deletelogid: "",
-                        editlogid: "",
+                        msglogid: "",
                         ignoredchannels: [],
                         ignoredcategories: [],
-                        deletewebhook: "",
-                        editwebhook: ""
+                        logwebhook: "",
                     });
 
                     await newLogData.save().catch((err) => console.log(err));

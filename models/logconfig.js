@@ -2,12 +2,10 @@ const mongoose = require('mongoose');
 
 const logConfigSchema = mongoose.Schema({
     guildID: String,
-    deletelogid: String,
-    editlogid: String,
+    msglogid: String,
     ignoredchannels: Array,
     ignoredcategories: Array,
-    deletewebhook: String,
-    editwebhook: String
+    logwebhook: String,
 });
 
 module.exports = mongoose.model('logconfig', logConfigSchema);

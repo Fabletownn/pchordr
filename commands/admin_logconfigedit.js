@@ -17,18 +17,16 @@ module.exports = {
                     name: 'Unignore Category or Channel',
                     value: 'unignorecatchan'
                 }, {
-                    name: 'Update Delete Log Channel ID',
-                    value: 'updatedeletes'
-                }, {
-                    name: 'Update Edit Log Channel ID',
-                    value: 'updateedits'
+                    name: 'Update Message Log Channel ID',
+                    value: 'updatemsg'
                 })
                 .setRequired(true)
         )
-        .addStringOption((option) =>
-            option.setName('value')
-                .setDescription('What do you wish to change the config value to? (e.g. on/off or ID)')
-                .setRequired(true)
+        .addChannelOption((option) =>
+            option.setName('channel')
+                .addChannelTypes(ChannelType.GuildCategory | ChannelType.GuildText | ChannelType.GuildVoice | ChannelType.GuildAnnouncement | ChannelType.GuildForum)
+                .setDescription('What channel (or category when applicable) would you like to change the configuration value to?'
+                .setRequired(true))
         ),
 
     async execute(interaction) {
@@ -39,12 +37,11 @@ module.exports = {
             if (!data) return interaction.reply({ content: 'Could not configurate values since data hasn\'t been set up yet. Use the `/config-setup` command to get started. <:bITFSweat:1022548683176284281>' });
 
             const configChoice = interaction.options.get('config').value;
-            const configVal = interaction.options.getString('value').toLowerCase();
+            const configVal = interaction.options.getChannel('channel').id;
 
             switch (configChoice) {
                 case "ignorecatchan":
-                    const argiChannelOrParentID = configVal.replace(/[<>#]/g, '');
-                    const ignoredChannelOrCategory = interaction.guild.channels.cache.get(argiChannelOrParentID);
+                    const ignoredChannelOrCategory = interaction.guild.channels.cache.get(configVal);
 
                     if (!ignoredChannelOrCategory) return interaction.reply({ content: 'Invalid channel or category (doesn\'t exist or is invalid).' });
 
@@ -63,8 +60,7 @@ module.exports = {
                     break;
 
                 case "unignorecatchan":
-                    const arguiChannelOrParentID = configVal.replace(/[<>#]/g, '');
-                    const unignoredChannelOrCategory = interaction.guild.channels.cache.get(arguiChannelOrParentID);
+                    const unignoredChannelOrCategory = interaction.guild.channels.cache.get(configVal);
 
                     if (!unignoredChannelOrCategory) return interaction.reply({ content: 'The channel provided doesn\'t exist or is invalid.' });
 
@@ -88,75 +84,39 @@ module.exports = {
 
                     break;
 
-                case "updatedeletes":
-                    const deletedChannel = interaction.guild.channels.cache.get(configVal);
+                case "updatemsg":
+                    const logChannel = interaction.guild.channels.cache.get(configVal);
 
-                    let oldDeletedChannel;
-                    let oldDeletedWebhook;
+                    let oldMsgChannel;
+                    let oldMsgWebhook;
                     let deletedWebhook = false;
 
-                    if (data.deletelogid) oldDeletedChannel = data.deletelogid;
-                    if (data.deletewebhook) oldDeletedWebhook = data.deletewebhook;
+                    if (data.msglogid) oldMsgChannel = data.msglogid;
+                    if (data.logwebhook) oldMsgWebhook = data.logwebhook;
 
-                    if ((!deletedChannel) || (deletedChannel && deletedChannel.type !== ChannelType.GuildText)) return interaction.reply({ content: 'The channel provided doesn\'t exist or is not text based.' });
+                    if ((!logChannel) || (logChannel && logChannel.type !== ChannelType.GuildText)) return interaction.reply({ content: 'The channel provided doesn\'t exist or is not text based.' });
 
-                    if (data.deletelogid && data.deletewebhook) {
-                        const fetchDeleteWebhooks = await interaction.guild.channels.cache.get(oldDeletedChannel).fetchWebhooks();
-                        const deleteWebhookID = oldDeletedWebhook.split(/\//)[5];
+                    if (data.msglogid && data.logwebhook) {
+                        const fetchMsgWebhooks = await interaction.guild.channels.cache.get(oldMsgChannel).fetchWebhooks();
+                        const botWebhooks = fetchMsgWebhooks.filter((webhook) => webhook.owner.id === interaction.client.user.id && webhook.name.startsWith("Power Chord"));
 
-                        if ((data) && (data.deletelogid === deletedChannel.id) && (data.deletewebhook === null || (data.deletewebhook !== null && fetchDeleteWebhooks.find((wh) => wh.id === data.deletewebhook.split(/\//)[5])))) return interaction.reply({ content: 'That channel and webhook is already in use.' });
+                        if ((data) && (data.msglogid === logChannel.id) && (data.logwebhook === null || (data.logwebhook !== null && fetchMsgWebhooks.find((wh) => wh.id === data.logwebhook.split(/\//)[5])))) return interaction.reply({ content: 'That channel and webhook is already in use.' });
 
-                        if (fetchDeleteWebhooks.find((wh) => wh.id === deleteWebhookID)) this.client.deleteWebhook(deleteWebhookID).then(() => deletedWebhook = true);
+                        for (let webhook of botWebhooks) await webhook.delete().then(() => deletedWebhook = true);
                     }
 
-                    await interaction.guild.channels.cache.get(deletedChannel.id).createWebhook({
-                        name: 'Power Chord Delete Logs',
+                    await interaction.guild.channels.cache.get(logChannel.id).createWebhook({
+                        name: 'Power Chord Message Logs',
                         avatar: interaction.client.user.displayAvatarURL({ size: 512 })
-                    }).then((dwh) => {
+                    }).then((mwh) => {
                         if (data) {
-                            data.deletelogid = deletedChannel.id;
-                            data.deletewebhook = dwh.url;
+                            data.msglogid = logChannel.id;
+                            data.logwebhook = mwh.url;
                             data.save().catch((err) => console.log(err));
                         }
                     });
 
-                    interaction.reply({ content: 'Deleted messages will now log to the channel <#' + deletedChannel.id + '>.\n\n' + (deletedWebhook ? 'The previous webhook has been deleted, and a new one ' : 'A new webhook ') + 'has been created for deleted logs in the <#' + deletedChannel.id + '> channel. This webhook will send deleted logs using the URL that was generated.' });
-
-                    break;
-
-                case "updateedits":
-                    const editedChannel = interaction.guild.channels.cache.get(configVal);
-
-                    let oldEditedChannel;
-                    let oldEditedWebhook;
-                    let deletedEditedWebhook = false;
-
-                    if (data.editlogid) oldEditedChannel = data.editlogid;
-                    if (data.editwebhook) oldEditedWebhook = data.editwebhook;
-
-                    if ((!editedChannel) || (editedChannel && editedChannel.type !== ChannelType.GuildText)) return interaction.reply({ content: 'The channel provided doesn\'t exist or is not text based.' });
-
-                    if (data.editlogid && data.editwebhook) {
-                        const fetchEditWebhooks = await interaction.guild.channels.cache.get(oldEditedChannel).fetchWebhooks();
-                        const editWebhookID = oldEditedWebhook.split(/\//)[5];
-
-                        if ((data) && (data.editlogid === editedChannel.id) && (data.editwebhook === null || (data.editwebhook !== null && fetchEditWebhooks.find((wh) => wh.id === data.editwebhook.split(/\//)[5])))) return interaction.reply({ content: 'That channel and webhook is already in use.' });
-
-                        if (fetchEditWebhooks.find((wh) => wh.id === editWebhookID)) this.client.deleteWebhook(editWebhookID).then(() => deletedEditedWebhook = true);
-                    }
-
-                    await interaction.guild.channels.cache.get(editedChannel.id).createWebhook({
-                        name: 'Power Chord Edit Logs',
-                        avatar: interaction.client.user.displayAvatarURL({ size: 512 })
-                    }).then((ewh) => {
-                        if (data) {
-                            data.editlogid = editedChannel.id;
-                            data.editwebhook = ewh.url;
-                            data.save().catch((err) => console.log(err));
-                        }
-                    });
-
-                    interaction.reply({ content: 'Edited messages will now log to the channel <#' + editedChannel.id + '>.\n\n' + (deletedEditedWebhook ? 'The previous webhook has been deleted, and a new one ' : 'A new webhook ') + 'has been created for edited logs in the <#' + editedChannel.id + '> channel. This webhook will send edited logs using the URL that was generated.' });
+                    interaction.reply({ content: 'Message logs will now send to the channel <#' + logChannel.id + '>.\n\n' + (deletedWebhook ? 'The previous webhook has been deleted, and a new one ' : 'A new webhook ') + 'has been created for message logs in the <#' + logChannel.id + '> channel. This webhook will send message logs using the URL that was generated.' });
 
                     break;
 
@@ -164,9 +124,6 @@ module.exports = {
                     break;
 
             }
-
         });
-
     },
-
 };

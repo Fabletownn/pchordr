@@ -21,7 +21,7 @@ module.exports = {
             if (err) return interaction.reply({ content: 'An unknown issue came up and I could not view configurations. <:bITFSweat:1022548683176284281>', ephemeral: true });
             if (!data) return interaction.reply({ content: 'Could not view configuration values since data hasn\'t been set up yet. Use the `/config-setup` command to get started. <:bITFSweat:1022548683176284281>' });
 
-            if (data.deletelogid === "" || data.editlogid === "" || data.deletewebhook === "" || data.editwebhook === "") return interaction.reply({ content: 'There is no data applied to the server! Use the `log` command to get started on configuration.' });
+            if (data.msglogid === "" || data.logwebhook === "") return interaction.reply({ content: 'There is no data applied to the server! Use the `/log-config-edit` command to get started on configuration.' });
 
             let ignoredCategoryList = [], ignoredChannelList = [];
 
@@ -32,13 +32,10 @@ module.exports = {
                 ignoredChannelList.push(`<#${data.ignoredchannels[i]}>`);
             }
 
-            const deleteWebhookID = data.deletewebhook.split(/\//)[5];
-            const editWebhookID = data.editwebhook.split(/\//)[5];
+            const logWebhookID = data.logwebhook.split(/\//)[5];
 
-            const fetchDeleteWebhooks = await client.channels.cache.get(data.deletelogid).fetchWebhooks();
-            const fetchedDeleteWebhook = fetchDeleteWebhooks.find((wh) => wh.id === deleteWebhookID);
-            const fetchEditWebhooks = await client.channels.cache.get(data.editlogid).fetchWebhooks();
-            const fetchedEditWebhook = fetchEditWebhooks.find((wh) => wh.id === editWebhookID);
+            const fetchLogWebhooks = await interaction.client.channels.cache.get(data.msglogid).fetchWebhooks();
+            const fetchedLogWebhook = fetchLogWebhooks.find((wh) => wh.id === logWebhookID);
 
             const viewEmbed = new EmbedBuilder()
                 .setAuthor({
@@ -49,11 +46,10 @@ module.exports = {
                 })
                 .setDescription(`Use the \`log delete|edit|ignore|unignore\` commands to edit configurations.\n\u200b`)
                 .addFields(
-                    { name: 'Edited Logs', value: `<#${data.editlogid || '???'}> (${fetchedEditWebhook ? fetchedEditWebhook.name : '???'})`, inline: true },
-                    { name: '\u200b', value: '\u200b', inline: true },
-                    { name: 'Deleted Logs', value: `<#${data.deletelogid || '???'}> (${fetchedDeleteWebhook ? fetchedDeleteWebhook.name : '???'})`, inline: true },
-                    { name: 'Ignored Categories', value: ignoredCategoryList.join(', ') ? ignoredCategoryList.join(', ') : 'None', inline: false },
-                    { name: 'Ignored Channels', value: ignoredChannelList.join(', ') ? ignoredChannelList.join(', ') : 'None', inline: false },
+                    { name: 'Message Logs', value: `<#${data.msglogid || '???'}> (${fetchedLogWebhook ? fetchedLogWebhook.name : '???'})`, inline: false },
+                    { name: '\u200b', value: '\u200b', inline: false },
+                    { name: 'Ignored Categories', value: ignoredCategoryList.join(', ') ? ignoredCategoryList.join(', ') : 'None', inline: true },
+                    { name: 'Ignored Channels', value: ignoredChannelList.join(', ') ? ignoredChannelList.join(', ') : 'None', inline: true },
                 )
                 .setColor('#3838FC')
 
