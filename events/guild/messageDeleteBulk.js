@@ -54,6 +54,7 @@ module.exports = async (Discord, client, messages, channel) => {
             format: "javascript",
             name: "Bulk Delete Log",
             publicity: Publicity.Unlisted,
+            apiUserKey: process.env.PBKEY
         });
 
         if (pasteURL === null) return console.log('null link')
