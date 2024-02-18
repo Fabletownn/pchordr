@@ -104,7 +104,7 @@ module.exports = {
 
                         if ((data) && (data.msglogid === logChannel.id) && (data.logwebhook === null || (data.logwebhook !== null && fetchMsgWebhooks.find((wh) => wh.id === data.logwebhook.split(/\//)[5])))) return interaction.editReply({ content: 'That channel and webhook is already in use.' });
 
-                        for (let webhook of botWebhooks) await webhook.delete().then(() => deletedWebhook = true);
+                        for (const webhook of botWebhooks.values()) await webhook.delete().then(() => deletedWebhook = true);
                     }
 
                     await interaction.guild.channels.cache.get(logChannel.id).createWebhook({
