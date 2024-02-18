@@ -35,8 +35,8 @@ module.exports = async (Discord, client) => {
             if (!data.msglogid || !client.channels.cache.get(data.msglogid)) return;
             if (!data.logwebhook) return;
 
-            const logWebhookID = data.deletewebhook.split(/\//)[5];
-            const logWebhookToken = data.deletewebhook.split(/\//)[6];
+            const logWebhookID = data.logwebhook.split(/\//)[5];
+            const logWebhookToken = data.logwebhook.split(/\//)[6];
 
             const fetchLogWebhooks = await interaction.client.channels.cache.get(data.msglogid).fetchWebhooks();
             const fetchedLogWebhook = fetchLogWebhooks.find((wh) => wh.id === logWebhookID);
