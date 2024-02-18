@@ -45,7 +45,7 @@ module.exports = async (Discord, client, messages, channel) => {
             bulkDeleteInformation.push(addString);
         });
 
-        const pastebinClient = new PasteClient({ apiKey: process.env.PBKEY });
+        const pastebinClient = new PasteClient({ apiKey: process.env.PBKEY.toString() });
 
         const pasteURL = await pastebinClient.createPaste({
             code: `If a deleted message's author was a bot, the message is not cached by the bot, or similar, some messages may not be logged. Out of ${messages.size} deleted messages, ${bulkDeleteInformation.length} are logged.\n`
