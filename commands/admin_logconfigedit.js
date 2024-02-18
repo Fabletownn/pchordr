@@ -39,7 +39,7 @@ module.exports = {
             const configChoice = interaction.options.get('config').value;
             const configVal = interaction.options.getChannel('channel').id;
 
-            interaction.deferReply();
+            await interaction.deferReply();
 
             switch (configChoice) {
                 case "ignorecatchan":

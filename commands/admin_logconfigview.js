@@ -44,7 +44,7 @@ module.exports = {
                         dynamic: true
                     })
                 })
-                .setDescription(`Use the \`/log-config-edit\` command to edit configurations.\n\u200b`)
+                .setDescription(`Use the \`/log-config-edit\` command to edit configurations.`)
                 .addFields(
                     { name: 'Message Logs', value: `<#${data.msglogid || '???'}> (${fetchedLogWebhook ? fetchedLogWebhook.name : '???'})`, inline: false },
                     { name: 'Ignored Categories', value: ignoredCategoryList.join(', ') ? ignoredCategoryList.join(', ') : 'None', inline: true },

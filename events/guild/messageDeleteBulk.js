@@ -13,16 +13,15 @@ module.exports = async (Discord, client, messages, channel) => {
     }, async (err, data) => {
         if (err) return console.log(err);
         if (!data) return;
-        if (!(guild.channels.cache.get(data.deletelogid))) return;
-        if (!(guild.channels.cache.get(data.editlogid))) return;
+        if (!(guild.channels.cache.get(data.msglogid))) return;
         if (data.ignoredchannels == null) return;
         if (data.ignoredcategories == null) return;
-        if (data.deletewebhook == null) return;
+        if (data.logwebhook == null) return;
 
-        const deleteWebhookID = data.deletewebhook.split(/\//)[5];
-        const deleteWebhookToken = data.deletewebhook.split(/\//)[6];
+        const deleteWebhookID = data.logwebhook.split(/\//)[5];
+        const deleteWebhookToken = data.logwebhook.split(/\//)[6];
         
-        const fetchDeleteWebhooks = await client.channels.cache.get(data.deletelogid).fetchWebhooks();
+        const fetchDeleteWebhooks = await client.channels.cache.get(data.msglogid).fetchWebhooks();
         const fetchedDeleteWebhook = fetchDeleteWebhooks.find((wh) => wh.id === deleteWebhookID);
 
         if (!fetchedDeleteWebhook) return console.log('No delete webhook found.');

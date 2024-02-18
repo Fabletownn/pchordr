@@ -12,11 +12,10 @@ module.exports = async (Discord, client, message) => {
         if (err) return console.log(err);
         if (!data) return;
 
-        if (!(message.guild.channels.cache.get(data.deletelogid))) return;
-        if (!(message.guild.channels.cache.get(data.editlogid))) return;
+        if (!(message.guild.channels.cache.get(data.msglogid))) return;
         if (data.ignoredchannels == null) return;
         if (data.ignoredcategories == null) return;
-        if (data.deletewebhook == null) return;
+        if (data.logwebhook == null) return;
 
         if (data.ignoredchannels.some((ignored_channel) => message.channel.id === ignored_channel)) return;
         if (data.ignoredcategories.some((ignored_cat) => message.channel.parent.id === ignored_cat)) return;
