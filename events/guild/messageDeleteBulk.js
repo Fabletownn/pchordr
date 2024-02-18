@@ -1,5 +1,5 @@
 const { Client, ChannelType, EmbedBuilder, WebhookClient } = require('discord.js');
-const { PasteClient, Publicity, ExpireDate } = require('pastebin-api').default;
+const PasteClient = require('pastebin-api').default;
 const LCONFIG = require('../../models/logconfig.js');
 
 module.exports = async (Discord, client, messages, channel) => {
@@ -53,7 +53,7 @@ module.exports = async (Discord, client, messages, channel) => {
             expireDate: ExpireDate.OneWeek,
             format: "javascript",
             name: "Bulk Delete Log",
-            publicity: Publicity.Unlisted
+            publicity: Publicity.Unlisted,
         });
 
         if (pasteURL === null) return console.log('null link')
