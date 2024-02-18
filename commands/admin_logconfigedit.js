@@ -24,7 +24,7 @@ module.exports = {
         )
         .addChannelOption((option) =>
             option.setName('channel')
-                .addChannelTypes(ChannelType.GuildCategory | ChannelType.GuildText | ChannelType.GuildVoice | ChannelType.GuildAnnouncement | ChannelType.GuildForum)
+                .addChannelTypes([ ChannelType.GuildCategory | ChannelType.GuildText | ChannelType.GuildVoice | ChannelType.GuildAnnouncement | ChannelType.GuildForum ])
                 .setDescription('What channel (or category when applicable) would you like to change the configuration value to?')
                 .setRequired(true)
         ),
