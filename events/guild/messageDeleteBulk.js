@@ -50,10 +50,10 @@ module.exports = async (Discord, client, messages, channel) => {
         const pasteURL = await pastebinClient.createPaste({
             code: `If a deleted message's author was a bot, the message is not cached by the bot, or similar, some messages may not be logged. Out of ${messages.size} deleted messages, ${bulkDeleteInformation.length} are logged.\n`
                 + `I Talk Server Message Bulk Delete Log @ ${currentDate} UTC:\n----------------------------------------------------------------------\n${bulkDeleteInformation.join('\n')}`,
-            expireDate: ExpireDate.OneWeek,
+            expireDate: "1W",
             format: "javascript",
             name: "Bulk Delete Log",
-            publicity: Publicity.Unlisted,
+            publicity: "1W",
         });
 
         if (pasteURL === null) return console.log('null link')
