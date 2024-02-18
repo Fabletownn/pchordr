@@ -44,10 +44,9 @@ module.exports = {
                         dynamic: true
                     })
                 })
-                .setDescription(`Use the \`log delete|edit|ignore|unignore\` commands to edit configurations.\n\u200b`)
+                .setDescription(`Use the \`/log-config-edit\` command to edit configurations.\n\u200b`)
                 .addFields(
                     { name: 'Message Logs', value: `<#${data.msglogid || '???'}> (${fetchedLogWebhook ? fetchedLogWebhook.name : '???'})`, inline: false },
-                    { name: '\u200b', value: '\u200b', inline: false },
                     { name: 'Ignored Categories', value: ignoredCategoryList.join(', ') ? ignoredCategoryList.join(', ') : 'None', inline: true },
                     { name: 'Ignored Channels', value: ignoredChannelList.join(', ') ? ignoredChannelList.join(', ') : 'None', inline: true },
                 )

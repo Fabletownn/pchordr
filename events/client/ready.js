@@ -38,6 +38,9 @@ module.exports = async (Discord, client) => {
             const logWebhookID = data.logwebhook.split(/\//)[5];
             const logWebhookToken = data.logwebhook.split(/\//)[6];
 
+            console.log(data.logwebhook);
+            console.log(logWebhookID);
+
             const fetchLogWebhooks = await client.channels.cache.get(data.msglogid).fetchWebhooks();
             const fetchedLogWebhook = fetchLogWebhooks.find((wh) => wh.id === logWebhookID);
 
