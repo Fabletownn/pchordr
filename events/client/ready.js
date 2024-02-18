@@ -13,7 +13,6 @@ const DELETES = require('../../models/deletes.js');
 const EDITS = require('../../models/edits.js');
 
 module.exports = async (Discord, client) => {
-
     console.log(`${client.user.username} (Rewrite V3) is successfully up and running in ${client.guilds.cache.size} guilds.\n\n`);
 
     client.user.setPresence({ activities: [{ name: `I Talk's Podcast!`, type: ActivityType.Streaming, url: 'https://twitch.tv/italk69' }] });
