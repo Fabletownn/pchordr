@@ -6,7 +6,7 @@ const SCHEDULE = require('../models/schedules.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('schedule remove')
+        .setName('schedule-remove')
         .setDescription('Removes a scheduled message from being posted')
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)

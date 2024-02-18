@@ -9,7 +9,7 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('config view')
+        .setName('config-view')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .setDescription('Views the server\'s configuration settings')
         .setDMPermission(false),

@@ -44,7 +44,7 @@ module.exports = {
 
             await interaction.editReply({
 
-                content: `An error occurred : \`${e.message}\``,
+                content: `An error occurred: \`${e.message}\``,
 
             });
 

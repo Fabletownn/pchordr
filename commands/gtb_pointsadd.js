@@ -9,7 +9,7 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('gtb points add')
+        .setName('gtb-points-add')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .setDescription('Adds points for Guess The Blank to a server member')
         .setDMPermission(false)

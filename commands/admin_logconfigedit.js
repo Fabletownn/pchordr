@@ -3,7 +3,7 @@ const { Client, WebhookClient, SlashCommandBuilder, PermissionFlagsBits, Channel
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('log config edit')
+        .setName('log-config-edit')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .setDescription('Edits configuration values of message logging features')
         .setDMPermission(false)

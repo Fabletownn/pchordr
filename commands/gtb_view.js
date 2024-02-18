@@ -9,7 +9,7 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('gtb view')
+        .setName('gtb-view')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .setDescription('Views Guess the Blank\'s answer settings')
         .setDMPermission(false),

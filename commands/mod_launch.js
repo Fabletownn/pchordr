@@ -5,7 +5,7 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('event launch')
+        .setName('event-launch')
         .setDescription('Unlocks specific channels and parts of the server for Server Events')
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)

@@ -9,7 +9,7 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('gtb setup')
+        .setName('gtb-setup')
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .setDescription('Sets up initial data for Guess the Blank or resets it')
         .setDMPermission(false),

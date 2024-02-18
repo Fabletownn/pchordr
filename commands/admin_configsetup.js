@@ -10,7 +10,7 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('config setup')
+        .setName('config-setup')
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .setDescription('Sets up initial data for the server or resets it')
         .setDMPermission(false),

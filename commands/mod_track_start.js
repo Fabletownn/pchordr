@@ -7,7 +7,7 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('track start')
+        .setName('track-start')
         .setDescription('Begins a tracker to keep an eye on a member and logs their every X messages')
         .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
         .setDMPermission(false)

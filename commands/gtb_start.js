@@ -14,7 +14,7 @@ var roundsPlayed;
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('gtb start')
+        .setName('gtb-start')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .setDescription('Starts a Guess the Blank game')
         .setDMPermission(false),
