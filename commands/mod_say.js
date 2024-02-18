@@ -30,7 +30,7 @@ module.exports = {
     async execute(interaction) {
 
         const channel = interaction.options.getChannel('channel');
-        const message = interaction.options.get('content').value.replace("\\n", `\n`);
+        const message = interaction.options.get('content').value.replace(/\\n/g, `\n`);
 
         const attachment = interaction.options.getAttachment('attachment');
 
