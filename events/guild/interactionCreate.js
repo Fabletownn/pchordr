@@ -257,7 +257,7 @@ module.exports = async (Discord, client, interaction) => {
                     }, async (aerr, adata) => {
                         if (aerr) return console.log(aerr);
 
-                        var adUserID;
+                        var adUserID = "";
 
                         switch (interaction.customId) {
 
@@ -405,36 +405,44 @@ module.exports = async (Discord, client, interaction) => {
                                             .setStyle(ButtonStyle.Danger),
                                     );
 
-                                await interaction.reply({ content: 'This will ban <@' + adata.userID + ' > (' + adata.userID + ') from the appeals server. Are you sure?', components: [optionButtons2], ephemeral: true });
+                                await interaction.reply({ content: 'This will ban <@' + adata.userID + '> (' + adata.userID + ') from the appeals server. Are you sure?', components: [optionButtons2], ephemeral: true });
 
                                 adUserID = adata.userID;
 
                                 break;
 
                             case "appeal-accept-sure":
-                                interaction.guild.members.unban(adUserID).then(() => interaction.client.channels.cache.get('1208961703002378341').send(`<@${adUserID}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.`));
+                                try {
+                                    await interaction.guild.members.unban(adUserID);
+                                    await interaction.client.channels.cache.get('1208961703002378341').send({ content: `<@${adUserID}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.` });
+                                    await interaction.reply({ content: 'Successfully unbanned and notified the user! <:bITFVictory:1063265610303295619>' });
+                                } catch (err) {
+                                    await interaction.reply({ content: 'Failed to unban that user as they are not banned. <:bITFCry:1022548623243886593>' });
+                                }
 
                                 adUserID = "";
 
                                 break;
 
                             case "appeal-deny-sure":
-                                interaction.client.users.cache.get(adUserID).send(`:wrench: **I Talk Server Ban Appeals**\n\nAfter consideration, your I Talk Server ban appeal has been denied and you can no longer appeal.`).catch((err) => { return });
-                                interaction.client.guilds.cache.get('685876599199236173').members.fetch(adUserID).ban({ reason: 'After consideration, your I Talk Server ban appeal has been denied.' });
+                                await interaction.client.users.cache.get(adUserID).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nAfter consideration, your I Talk Server ban appeal has been denied and you can no longer appeal.` }).catch((err) => { return });
+                                await interaction.client.guilds.cache.get('685876599199236173').members.fetch(adUserID).ban({ reason: 'After consideration, your I Talk Server ban appeal has been denied.' });
+
+                                await interaction.reply({ content: 'Successfully banned the user and denied their appeal! <:bITFVictory:1063265610303295619>'});
 
                                 adUserID = "";
 
                                 break;
 
                             case "appeal-accept-cancel":
-                                interaction.editReply({ content: 'Approval cancelled.', components: [], ephemeral: true });
+                                interaction.reply({ content: 'The user has not been unbanned as "No" was selected.', components: [], ephemeral: true });
 
                                 adUserID = "";
 
                                 break;
 
                             case "appeal-deny-cancel":
-                                interaction.editReply({ content: 'Denial cancelled.', components: [], ephemeral: true });
+                                interaction.editReply({ content: 'The user has not been banned as "No" was selected.', components: [], ephemeral: true });
 
                                 adUserID = "";
 
