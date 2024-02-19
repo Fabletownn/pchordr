@@ -424,7 +424,7 @@ module.exports = async (Discord, client, interaction) => {
                                     }, async (err, apdata) => {
                                         if (err) return console.log(err);
                                         if (apdata) {
-                                            const appealMessage = interaction.client.channels.cache.get('1198024034437320774').messages.fetch(apdata.msgID);
+                                            const appealMessage = await interaction.client.channels.cache.get('1198024034437320774').messages.fetch(apdata.msgID);
 
                                             if (appealMessage) {
                                                 const appealEmbed = appealMessage.embeds[0];
@@ -457,7 +457,7 @@ module.exports = async (Discord, client, interaction) => {
                                         if (err) return console.log(err);
 
                                         if (apdata) {
-                                            const appealMessage = interaction.client.channels.cache.get('1198024034437320774').messages.fetch(apdata.msgID);
+                                            const appealMessage = await interaction.client.channels.cache.get('1198024034437320774').messages.fetch(apdata.msgID);
 
                                             if (appealMessage) {
                                                 const appealEmbed = appealMessage.embeds[0];

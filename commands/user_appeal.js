@@ -27,7 +27,6 @@ module.exports = {
                         .setPlaceholder('Why were you banned? Why should you be unbanned? etc.')
                         .setStyle(TextInputStyle.Paragraph)
                         .setRequired(true)
-                        .setMinLength(50)
                         .setMaxLength(2000)
                 ),
                 new ActionRowBuilder().addComponents(

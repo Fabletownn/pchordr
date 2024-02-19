@@ -24,7 +24,7 @@ module.exports = {
         )
         .addStringOption((option) =>
             option.setName('description')
-                .setDescription('What would you like the description to be?')
+                .setDescription('What would you like the description to be? (use \\n for a new line)')
                 .setRequired(true)
         )
         .addStringOption((option) =>
@@ -54,7 +54,7 @@ module.exports = {
 
         const channel = interaction.options.getChannel('channel');
         const title = interaction.options.getString('title');
-        const description = interaction.options.getString('description');
+        const description = interaction.options.getString('description').replace(/\\n/g, '\n');
         const footer = interaction.options.getString('footer');
         const color = interaction.options.getString('color');
         const attachment = interaction.options.getAttachment('attachment');
