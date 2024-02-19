@@ -25,9 +25,9 @@ rest.put(Routes.applicationCommands(process.env.CLIENTID), {
 }).then(() => console.log('Successfully unregistered global application commands.')).catch(console.error);
 
 rest.put(Routes.applicationGuildCommands(process.env.CLIENTID, process.env.GUILDID), {
-    body: commands
-}).then(() => console.log('Successfully registered application commands to the main server.')).catch(console.error);
+    body: []
+}).then(() => console.log('Successfully unregistered application commands to the main server.')).catch(console.error); // TEMP
 
 rest.put(Routes.applicationGuildCommands(process.env.CLIENTID, '685876599199236173'), {
-    body: commands
-}).then(() => console.log('Successfully registered application commands to the appeals server.')).catch(console.error);
+    body: []
+}).then(() => console.log('Successfully unregistered application commands to the appeals server.')).catch(console.error); // TEMP
