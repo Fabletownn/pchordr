@@ -239,6 +239,8 @@ module.exports = async (Discord, client, interaction) => {
 
     if (interaction.isButton()) {
 
+        let adUserID;
+
         CONFIG.findOne({
 
             guildID: interaction.guild.id
@@ -265,8 +267,6 @@ module.exports = async (Discord, client, interaction) => {
                         msgID: interaction.message.id
                     }, async (aerr, adata) => {
                         if (aerr) return console.log(aerr);
-
-                        let adUserID;
 
                         switch (interaction.customId) {
 
