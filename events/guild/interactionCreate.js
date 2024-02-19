@@ -110,9 +110,9 @@ module.exports = async (Discord, client, interaction) => {
             });
 
         } else if (interaction.customId === 'appeal-modal') {
-            let appealMessage = interaction.fields.getTextInputValue('appeal-msg');
-            let appealNotes = interaction.fields.getTextInputValue('appeal-notes');
-            let appealAttachment = interaction.fields.getTextInputValue('appeal-attachments');
+            let appealMessage = interaction.fields.getTextInputValue('appeal-msg') || '???';
+            let appealNotes = interaction.fields.getTextInputValue('appeal-notes') || '???';
+            let appealAttachment = interaction.fields.getTextInputValue('appeal-attachments') || '???';
             let banReason;
 
             interaction.client.guilds.cache.get('614193406838571085').bans.fetch(interaction.user.id).then((ban) => banReason = ban.reason).catch((err) => banReason = 'None');
@@ -127,8 +127,8 @@ module.exports = async (Discord, client, interaction) => {
                 const appealEmbed = new EmbedBuilder()
                     .setAuthor({ name: `${interaction.user.username}#${interaction.user.username} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
                     .addFields([
-                        { name: 'Appeal Message', value: appealMessage, inline: false },
-                        { name: 'Ban Reason', value: banReason },
+                        { name: 'Appeal Message', value: appealMessage || 'None', inline: false },
+                        { name: 'Ban Reason', value: banReason || 'None' },
                         { name: 'Additional Notes', value: appealNotes || 'None', inline: false },
                         { name: 'Additional Files', value: appealAttachment || 'None', inline: false }
                     ])
