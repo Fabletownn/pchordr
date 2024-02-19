@@ -250,7 +250,7 @@ module.exports = async (Discord, client, interaction) => {
             LCONFIG.findOne({
                 guildID: interaction.guild.id
             }, async (lerr, ldata) => {
-                if (lerr) return console.log(ler);
+                if (lerr) return console.log(lerr);
 
                 GTB.findOne({
 
@@ -266,7 +266,7 @@ module.exports = async (Discord, client, interaction) => {
                     }, async (aerr, adata) => {
                         if (aerr) return console.log(aerr);
 
-                        var adUserID;
+                        let adUserID;
 
                         switch (interaction.customId) {
 
