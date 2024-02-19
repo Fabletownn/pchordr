@@ -122,7 +122,7 @@ module.exports = async (Discord, client, interaction) => {
                 userID: interaction.user.id
             }, async (err, data) => {
                 if (err) return console.log(err);
-                if (data) return interaction.reply({ content: 'You already have an appeal open! <:bITFWave:1022548691988512778>\n\nWe review appeals every mod meeting and as such, it may take a while for them to be processed and reviewed.\n\nIf you have additional context, evidence, or information you would like to add to the report, message <@99299332494200832> for now.', ephemeral: true });
+                if (data) return interaction.reply({ content: 'You already have an appeal open! <:bITFWave:1022548691988512778>\n\nWe review appeals every mod meeting and as such, it may take a while for them to be processed and reviewed.\n\nIf you have additional context, evidence, or information you would like to add to the appeal, message <@99299332494200832> for now.', ephemeral: true });
 
                 const appealEmbed = new EmbedBuilder()
                     .setAuthor({ name: `${interaction.user.username}#${interaction.user.discriminator} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
