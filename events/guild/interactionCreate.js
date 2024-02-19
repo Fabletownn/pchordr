@@ -135,7 +135,7 @@ module.exports = async (Discord, client, interaction) => {
                     .setColor('#FEBA00')
                     .setFooter({ text: `Appeal Pending  •  User ID: ${interaction.user.id}` })
                     .setTimestamp()
-                
+
                 const appealEmbedOL = new EmbedBuilder()
                     .setAuthor({ name: `${interaction.user.username}#${interaction.user.discriminator} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
                     .addFields([
@@ -416,40 +416,57 @@ module.exports = async (Discord, client, interaction) => {
                                     await interaction.guild.members.unban(adUserID);
                                     await interaction.client.channels.cache.get('1208961703002378341').send({ content: `<@${adUserID}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.` });
                                     await interaction.reply({ content: 'Successfully unbanned and notified the user! <:bITFVictory:1063265610303295619>' });
-                                } catch (err) {
-                                    await interaction.reply({ content: 'Failed to unban that user as they are not banned. <:bITFCry:1022548623243886593>', ephemeral: true });
-                                }
 
-                                adUserID = "";
+                                    APPEALS.findOne({
+                                        userID: adUserID
+                                    }, async (err, apdata) => {
+                                        if (err) return console.log(err);
+                                        if (apdata) {
+                                            await interaction.client.channels.cache.get('1198024034437320774').messages.fetch(apdata.msgID).edit({ content: '(ACCEPTED)' });
+                                            await apdata.delete();
+                                        }
+                                    });
+                                } catch (err) {
+                                    await interaction.reply({ content: 'Ran into an issue trying to unban or accept that appeal, are you sure they are banned? <:bITFCry:1022548623243886593>\n```' + err + '```', ephemeral: true });
+                                }
 
                                 break;
 
                             case "appeal-deny-sure":
-                                await interaction.client.users.cache.get(adUserID).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nAfter consideration, your I Talk Server ban appeal has been denied and you can no longer appeal.` }).catch((err) => { return });
-                                await interaction.client.guilds.cache.get('685876599199236173').members.fetch(adUserID).ban({ reason: 'After consideration, your I Talk Server ban appeal has been denied.' });
+                                try {
+                                    await interaction.client.users.cache.get(adUserID).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nAfter consideration, your I Talk Server ban appeal has been denied and you can no longer appeal.` }).catch((err) => { return });
+                                    await interaction.client.guilds.cache.get('685876599199236173').members.fetch(adUserID).ban({ reason: 'After consideration, your I Talk Server ban appeal has been denied.' });
 
-                                await interaction.reply({ content: 'Successfully banned the user and denied their appeal! <:bITFVictory:1063265610303295619>', ephemeral: true });
+                                    APPEALS.findOne({
+                                        userID: adUserID
+                                    }, async (err, apdata) => {
+                                        if (err) return console.log(err);
+                                        if (apdata) {
+                                            await interaction.client.channels.cache.get('1198024034437320774').messages.fetch(apdata.msgID).edit({ content: '(DENIED)' });
+                                            await apdata.delete();
+                                        }
+                                    });
 
-                                adUserID = "";
+                                    await interaction.reply({ content: 'Successfully banned the user and denied their appeal! <:bITFVictory:1063265610303295619>', ephemeral: true });
+                                } catch (err) {
+                                    await interaction.reply({ content: 'Ran into an issue trying to deny that appeal! <:bITFCry:1022548623243886593>\n```' + err + '```', ephemeral: true });
+                                }
 
                                 break;
 
                             case "appeal-accept-cancel":
-                                interaction.reply({ content: 'The user has not been unbanned as "No" was selected.', components: [], ephemeral: true });
-
-                                adUserID = "";
+                                await interaction.message.delete();
+                                await interaction.reply({ content: 'The user will not be unbanned as requested. <:bITFGG:1022548636481114172>', components: [], ephemeral: true });
 
                                 break;
 
                             case "appeal-deny-cancel":
-                                interaction.editReply({ content: 'The user has not been banned as "No" was selected.', components: [], ephemeral: true });
-
-                                adUserID = "";
+                                await interaction.message.delete();
+                                await interaction.reply({ content: 'The user will not be banned as requested. <:bITFGG:1022548636481114172>', components: [], ephemeral: true });
 
                                 break;
 
                             default:
-
                                 break;
 
                         }
