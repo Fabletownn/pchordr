@@ -441,6 +441,8 @@ module.exports = async (Discord, client, interaction) => {
                                         } catch (err) {
                                             await interaction.update({ content: 'Ran into an issue trying to unban or accept that appeal, are you sure they are banned? <:bITFCry:1022548623243886593>\n```' + err + '```', components: [], ephemeral: true });
                                         }
+                                    } else {
+                                        console.log(i.customId)
                                     }
                                 });
 
@@ -515,6 +517,8 @@ module.exports = async (Discord, client, interaction) => {
                                         } catch (err) {
                                             await interaction.update({ content: 'Ran into an issue trying to deny that appeal! <:bITFCry:1022548623243886593>\n```' + err + '```', components: [], ephemeral: true });
                                         }
+                                    } else {
+                                        console.log(i.customId)
                                     }
                                 });
 
