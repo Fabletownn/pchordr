@@ -397,7 +397,7 @@ module.exports = async (Discord, client, interaction) => {
                                         pd.save().catch((err) => console.log(err));
                                     });
                                 }).then(async () => {
-                                    adata.pendingdata = true;
+                                    adata.pendingstatus = true;
                                     await adata.save().catch((err) => console.log(err));
                                 });
 
@@ -435,7 +435,7 @@ module.exports = async (Discord, client, interaction) => {
                                         pd.save().catch((err) => console.log(err));
                                     });
                                 }).then(async () => {
-                                    adata.pendingdata = true;
+                                    adata.pendingstatus = true;
                                     await adata.save().catch((err) => console.log(err));
                                 });
 
