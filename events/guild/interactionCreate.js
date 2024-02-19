@@ -135,6 +135,18 @@ module.exports = async (Discord, client, interaction) => {
                     .setColor('#FEBA00')
                     .setFooter({ text: `Appeal Pending  •  User ID: ${interaction.user.id}` })
                     .setTimestamp()
+                
+                const appealEmbedOL = new EmbedBuilder()
+                    .setAuthor({ name: `${interaction.user.username}#${interaction.user.discriminator} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
+                    .addFields([
+                        { name: 'Appeal Message', value: `${appealMessage.slice(0, 970)}... (see full message)` || 'None', inline: true },
+                        { name: 'Ban Reason', value: banReason || 'None', inline: true },
+                        { name: 'Additional Notes', value: appealNotes || 'None', inline: false },
+                        { name: 'Additional Files', value: appealAttachment || 'None', inline: false }
+                    ])
+                    .setColor('#FEBA00')
+                    .setFooter({ text: `Appeal Pending  •  User ID: ${interaction.user.id}` })
+                    .setTimestamp()
 
                 const staffButtons = new ActionRowBuilder()
                     .addComponents(
@@ -193,7 +205,7 @@ module.exports = async (Discord, client, interaction) => {
                         newAppealData.save().catch((err) => console.log(err))
                     });
                 } else {
-                    interaction.client.channels.cache.get('1198024034437320774').send({ content: `<@&821072490452353095> An appeal has been opened.`, embeds: [appealEmbed], components: [staffButtonsOL] }).then(async (amsg) => {
+                    interaction.client.channels.cache.get('1198024034437320774').send({ content: `<@&821072490452353095> An appeal has been opened.`, embeds: [appealEmbedOL], components: [staffButtonsOL] }).then(async (amsg) => {
                         await amsg.react('<:aITFUpvote:1022548599697051790>');
                         await amsg.react('<:bITFThink:1022548686158442537>');
                         await amsg.react('<:aITFDownvote:1022548597390180382>');
@@ -368,7 +380,7 @@ module.exports = async (Discord, client, interaction) => {
                                             .setStyle(ButtonStyle.Danger),
                                     );
 
-                                await interaction.reply({ content: 'This will unban <@' + adata.userID + ' > (' + adata.userID + ') from the main server. Are you sure?', components: [optionButtons], ephemeral: true });
+                                await interaction.reply({ content: 'This will unban <@' + adata.userID + '> (' + adata.userID + ') from the main server. Are you sure?', components: [optionButtons], ephemeral: true });
 
                                 break;
 
@@ -394,7 +406,7 @@ module.exports = async (Discord, client, interaction) => {
                                 break;
 
                             case "appeal-accept-sure":
-                                interaction.guild.members.unban(adata.userID).then(() => interaction.client.channels.cache.get('1208961703002378341').send(`<@${interaction.user.id}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.`));
+                                interaction.guild.members.unban(adata.userID).then(() => interaction.client.channels.cache.get('1208961703002378341').send(`<@${adata.userID}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.`));
 
                                 break;
 
