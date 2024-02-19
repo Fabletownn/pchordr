@@ -239,7 +239,7 @@ module.exports = async (Discord, client, interaction) => {
 
     if (interaction.isButton()) {
 
-        let adUserID;
+        var adUserID;
 
         CONFIG.findOne({
 
