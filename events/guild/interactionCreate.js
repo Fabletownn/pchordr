@@ -115,11 +115,7 @@ module.exports = async (Discord, client, interaction) => {
             let appealAttachment = interaction.fields.getTextInputValue('appeal-attachments');
             let banReason;
 
-            interaction.client.guilds.cache.get('614193406838571085').bans.fetch(interaction.user.id).then((ban) => {
-                if (!ban || ban === null) banReason = 'Not Banned';
-                if (!ban.reason || ban.reason === null) banReason = 'Not Fetched';
-                if (ban.reason) banReason = ban.reason;
-            });
+            interaction.client.guilds.cache.get('614193406838571085').bans.fetch(interaction.user.id).then((ban) => banReason = ban.reason).catch((err) => banReason = 'None');
 
             APPEALS.findOne({
                 guildID: interaction.guild.id,
@@ -131,7 +127,7 @@ module.exports = async (Discord, client, interaction) => {
                 const appealEmbed = new EmbedBuilder()
                     .setAuthor({ name: `${interaction.user.username}#${interaction.user.username} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
                     .addFields([
-                        { name: `Appeal Message`, value: appealMessage, inline: false },
+                        { name: 'Appeal Message', value: appealMessage, inline: false },
                         { name: 'Ban Reason', value: banReason },
                         { name: 'Additional Notes', value: appealNotes || 'None', inline: false },
                         { name: 'Additional Files', value: appealAttachment || 'None', inline: false }
