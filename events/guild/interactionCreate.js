@@ -455,14 +455,14 @@ module.exports = async (Discord, client, interaction) => {
                                 break;
 
                             case "appeal-accept-cancel":
-                                await interaction.message.delete();
-                                await interaction.reply({ content: 'The user will not be unbanned as requested. <:bITFGG:1022548636481114172>', components: [], ephemeral: true });
+                                //await interaction.message.delete();
+                                await interaction.update({ content: 'The user will not be unbanned as requested. <:bITFGG:1022548636481114172>', components: [], ephemeral: true });
 
                                 break;
 
                             case "appeal-deny-cancel":
-                                await interaction.message.delete();
-                                await interaction.reply({ content: 'The user will not be banned as requested. <:bITFGG:1022548636481114172>', components: [], ephemeral: true });
+                                //await interaction.message.delete();
+                                await interaction.update({ content: 'The user will not be banned as requested. <:bITFGG:1022548636481114172>', components: [], ephemeral: true });
 
                                 break;
 
