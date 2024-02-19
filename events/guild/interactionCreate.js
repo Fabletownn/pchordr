@@ -392,11 +392,14 @@ module.exports = async (Discord, client, interaction) => {
                                     );
 
                                 APPEALS.find({ pendingstatus: true }).then(async (pendingdata) => {
-                                    await pendingdata.forEach((pd) => pd.delete().catch((err) => console.log(err)));
+                                    await pendingdata.forEach((pd) => {
+                                        pd.pendingstatus = false;
+                                        pd.save().catch((err) => console.log(err));
+                                    });
+                                }).then(async () => {
+                                    adata.pendingdata = true;
+                                    await adata.save().catch((err) => console.log(err));
                                 });
-
-                                adata.pendingdata = true;
-                                await adata.save().catch((err) => console.log(err));
 
                                 APPEALS.findOne({
                                     pendingstatus: true
@@ -427,11 +430,14 @@ module.exports = async (Discord, client, interaction) => {
                                     );
 
                                 APPEALS.find({ pendingstatus: true }).then(async (pendingdata) => {
-                                    await pendingdata.forEach((pd) => pd.delete().catch((err) => console.log(err)));
+                                    await pendingdata.forEach((pd) => {
+                                        pd.pendingstatus = false;
+                                        pd.save().catch((err) => console.log(err));
+                                    });
+                                }).then(async () => {
+                                    adata.pendingdata = true;
+                                    await adata.save().catch((err) => console.log(err));
                                 });
-
-                                adata.pendingdata = true;
-                                await adata.save().catch((err) => console.log(err));
 
                                 APPEALS.findOne({
                                     pendingstatus: true
