@@ -391,10 +391,10 @@ module.exports = async (Discord, client, interaction) => {
                                             .setStyle(ButtonStyle.Danger),
                                     );
 
-                                await interaction.reply({ content: 'This will unban <@' + adata.userID + '> (' + adata.userID + ') from the main server.\n\nAre you sure? Ensure that you have discussed this decision with other moderators/I Talk first! <:bITFSweat:1022548683176284281>', components: [optionButtons], ephemeral: true });
+                                var confAccept = await interaction.reply({ content: 'This will unban <@' + adata.userID + '> (' + adata.userID + ') from the main server.\n\nAre you sure? Ensure that you have discussed this decision with other moderators/I Talk first! <:bITFSweat:1022548683176284281>', components: [optionButtons], ephemeral: true });
 
                                 const acceptFilter = (interaction) => (interaction.customId === 'appeal-accept-sure' || interaction.customId === 'appeal-accept-cancel') && interaction.user.id === interaction.user.id;
-                                const acceptCollector = interaction.message.createMessageComponentCollector({ acceptFilter, time: 15_000 });
+                                const acceptCollector = confAccept.createMessageComponentCollector({ acceptFilter, time: 15_000 });
 
                                 acceptCollector.on('collect', async (i) => {
                                     if (i.customId === 'appeal-accept-cancel') {
@@ -465,10 +465,10 @@ module.exports = async (Discord, client, interaction) => {
                                             .setStyle(ButtonStyle.Danger),
                                     );
 
-                                await interaction.reply({ content: 'This will ban <@' + adata.userID + '> (' + adata.userID + ') from the appeals server.\n\nAre you sure? Ensure that you have discussed this decision with other moderators/I Talk first! <:bITFSweat:1022548683176284281>', components: [optionButtons2], ephemeral: true });
+                                var confDeny = await interaction.reply({ content: 'This will ban <@' + adata.userID + '> (' + adata.userID + ') from the appeals server.\n\nAre you sure? Ensure that you have discussed this decision with other moderators/I Talk first! <:bITFSweat:1022548683176284281>', components: [optionButtons2], ephemeral: true });
 
                                 const denyFilter = (interaction) => (interaction.customId === 'appeal-deny-sure' || interaction.customId === 'appeal-deny-cancel') && interaction.user.id === interaction.user.id;
-                                const denyCollector = interaction.message.createMessageComponentCollector({ denyFilter, time: 15_000 });
+                                const denyCollector = confDeny.createMessageComponentCollector({ denyFilter, time: 15_000 });
 
                                 denyCollector.on('collect', async (i) => {
                                     if (i.customId === 'appeal-deny-cancel') {
