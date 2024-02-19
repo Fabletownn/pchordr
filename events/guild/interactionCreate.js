@@ -473,7 +473,7 @@ module.exports = async (Discord, client, interaction) => {
                                     .addFields([
                                         { name: 'User', value: `${interaction.client.users.cache.get(dUser).username}#${interaction.client.users.cache.get(dUser).discriminator}\n(${interaction.client.users.cache.get(dUser).displayName})`, inline: true },
                                         { name: 'Moderator', value: `${interaction.user.username}#${interaction.user.discriminator}\n(${interaction.user.displayName})`, inline: true },
-                                        { name: 'Date', value: `<t:${Math.round((message.createdTimestamp) / 1000)}:F> (<t:${Math.round((message.createdTimestamp) / 1000)}:R>)`, inline: false }
+                                        { name: 'Date', value: `<t:${Math.round((interaction.message.createdTimestamp) / 1000)}:F> (<t:${Math.round((interaction.message.createdTimestamp) / 1000)}:R>)`, inline: false }
                                     ])
                                     .setColor('#FF0000')
                                     .setFooter({ text: `User ID: ${dUser}` })
