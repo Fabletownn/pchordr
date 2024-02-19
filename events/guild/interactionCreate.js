@@ -187,7 +187,7 @@ module.exports = async (Discord, client, interaction) => {
                             .setStyle(ButtonStyle.Danger),
                     );
 
-                if (appealMessage.length <= 1024) {
+                if (appealMessage.length < 1024) {
                     interaction.client.channels.cache.get('1198024034437320774').send({ content: `<@&821072490452353095> An appeal has been opened.`, embeds: [appealEmbed], components: [staffButtons] }).then(async (amsg) => {
                         await amsg.react('<:aITFUpvote:1022548599697051790>');
                         await amsg.react('<:bITFThink:1022548686158442537>');
