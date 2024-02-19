@@ -127,7 +127,7 @@ module.exports = async (Discord, client, interaction) => {
                 const appealEmbed = new EmbedBuilder()
                     .setAuthor({ name: `${interaction.user.username}#${interaction.user.discriminator} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
                     .addFields([
-                        { name: 'Appeal Message', value: appealMessage || 'None', inline: true },
+                        { name: 'Appeal Message', value: appealMessage.slice(0, 1023) || 'None', inline: true },
                         { name: 'Ban Reason', value: banReason || 'None', inline: true },
                         { name: 'Additional Notes', value: appealNotes || 'None', inline: false },
                         { name: 'Additional Files', value: appealAttachment || 'None', inline: false }
