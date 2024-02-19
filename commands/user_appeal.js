@@ -4,7 +4,8 @@ const {
     ActionRowBuilder,
     ModalBuilder,
     TextInputBuilder,
-    TextInputStyle
+    TextInputStyle,
+    EmbedBuilder
 } = require('discord.js');
 
 module.exports = {
@@ -48,8 +49,16 @@ module.exports = {
                         .setMaxLength(500)
                 ),
             ]);
+        
+        const fileEmbed = new EmbedBuilder()
+            .setAuthor({ name: `${interaction.user.username}#${interaction.user.discriminator} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true}) })
+            .setDescription(`<@${interaction.user.id}> has filed an appeal and obtained the <@&1208961459283959848> role.`)
+            .setFooter({ text: `User ID: ${interaction.user.id}` })
+            .setTimestamp()
+            .setColor('#EDC351')
 
         await interaction.showModal(appealModal);
         await interaction.member.roles.add('1208961459283959848');
+        await interaction.client.channels.cache.get('803199322379780117').send({ embeds: [fileEmbed] });
     }
 }

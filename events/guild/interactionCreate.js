@@ -414,8 +414,20 @@ module.exports = async (Discord, client, interaction) => {
                             case "appeal-accept-sure":
                                 if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to unban or accept that appeal, you do not have permission!', components: [], ephemeral: true });
 
+                                const acceptEmbed = new EmbedBuilder()
+                                    .setAuthor({ name: `Appeal Approved by ${interaction.user.displayName}`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
+                                    .addFields([
+                                        { name: 'User', value: `${interaction.client.users.cache.get(adUserID).username}#${interaction.client.users.cache.get(adUserID).discriminator}\n(${interaction.client.users.cache.get(adUserID).displayName})`, inline: true },
+                                        { name: 'Moderator', value: `${interaction.user.username}#${interaction.user.discriminator}\n(${interaction.user.displayName})`, inline: true },
+                                        { name: 'Date', value: `<t:${Math.round((message.createdTimestamp) / 1000)}:F> (<t:${Math.round((message.createdTimestamp) / 1000)}:R>)`, inline: false }
+                                    ])
+                                    .setColor('#00FF00')
+                                    .setFooter({ text: `User ID: ${adUserID}` })
+                                    .setTimestamp()
+
                                 try {
                                     await interaction.guild.members.unban(adUserID);
+                                    await interaction.client.channels.cache.get('794486722356183052').send({ embeds: [acceptEmbed] });
                                     await interaction.client.channels.cache.get('1208961703002378341').send({ content: `<@${adUserID}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.` });
                                     await interaction.reply({ content: 'Successfully unbanned and notified the user! <:bITFVictory:1063265610303295619>' });
 
@@ -447,7 +459,19 @@ module.exports = async (Discord, client, interaction) => {
                             case "appeal-deny-sure":
                                 if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to deny that appeal, you do not have permission!', components: [], ephemeral: true });
 
+                                const denyEmbed = new EmbedBuilder()
+                                    .setAuthor({ name: `Appeal Denied by ${interaction.user.displayName}`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
+                                    .addFields([
+                                        { name: 'User', value: `${interaction.client.users.cache.get(adUserID).username}#${interaction.client.users.cache.get(adUserID).discriminator}\n(${interaction.client.users.cache.get(adUserID).displayName})`, inline: true },
+                                        { name: 'Moderator', value: `${interaction.user.username}#${interaction.user.discriminator}\n(${interaction.user.displayName})`, inline: true },
+                                        { name: 'Date', value: `<t:${Math.round((message.createdTimestamp) / 1000)}:F> (<t:${Math.round((message.createdTimestamp) / 1000)}:R>)`, inline: false }
+                                    ])
+                                    .setColor('#FF0000')
+                                    .setFooter({ text: `User ID: ${adUserID}` })
+                                    .setTimestamp()
+
                                 try {
+                                    await interaction.client.channels.cache.get('794486722356183052').send({ embeds: [denyEmbed] });
                                     await interaction.client.users.cache.get(adUserID).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nAfter consideration, your I Talk Server ban appeal has been denied and you can no longer appeal.` }).catch((err) => { return });
                                     await interaction.client.guilds.cache.get('685876599199236173').members.fetch(adUserID).ban({ reason: 'After consideration, your I Talk Server ban appeal has been denied.' });
 
@@ -491,13 +515,11 @@ module.exports = async (Discord, client, interaction) => {
 
                             default:
                                 break;
-
                         }
                     });
                 });
             });
         });
-
     }
 
     if (interaction.isStringSelectMenu()) {
