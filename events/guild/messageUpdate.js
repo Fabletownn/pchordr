@@ -21,8 +21,8 @@ module.exports = async (Discord, client, oldMessage, newMessage) => {
 
         const editedOldContent = oldMessage.content;
         const editedNewContent = newMessage.content;
-        const editedEditedOldContent = editedOldContent.replace(/`/g, '\\`').replace(/\*/g, '\\*').replace(/-/g, '\\-').replace(/_/g, '\\_').replace(/</g, '\\<').replace(/>/g, '\\>');
-        const editedEditedNewContent = editedNewContent.replace(/`/g, '\\`').replace(/\*/g, '\\*').replace(/-/g, '\\-').replace(/_/g, '\\_').replace(/</g, '\\<').replace(/>/g, '\\>');
+        const editedEditedOldContent = editedOldContent.replace(/`/g, '\\`').replace(/\*/g, '\\*').replace(/-/g, '\\-').replace(/_/g, '\\_').replace(/</g, '\\<').replace(/>/g, '\\>').replace(/\//g, '\\/');
+        const editedEditedNewContent = editedNewContent.replace(/`/g, '\\`').replace(/\*/g, '\\*').replace(/-/g, '\\-').replace(/_/g, '\\_').replace(/</g, '\\<').replace(/>/g, '\\>').replace(/\//g, '\\/');
         const editedID = newMessage.id;
         const editedChannelID = newMessage.channel.id;
         const editedAuthorID = newMessage.author.id;

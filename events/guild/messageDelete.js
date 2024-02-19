@@ -21,7 +21,7 @@ module.exports = async (Discord, client, message) => {
         if (data.ignoredcategories.some((ignored_cat) => message.channel.parent.id === ignored_cat)) return;
 
         const deletedContent = message.content ? message.content : '<No Message Content>';
-        const deletedEditedContent = deletedContent.replace(/`/g, '\\`').replace(/\*/g, '\\*').replace(/-/g, '\\-').replace(/_/g, '\\_').replace(/</g, '\\<').replace(/>/g, '\\>');
+        const deletedEditedContent = deletedContent.replace(/`/g, '\\`').replace(/\*/g, '\\*').replace(/-/g, '\\-').replace(/_/g, '\\_').replace(/</g, '\\<').replace(/>/g, '\\>').replace(/\//g, '\\/');
         const deletedID = message.id;
         const deletedChannelID = message.channel.id;
         const deletedAuthorID = message.author.id;

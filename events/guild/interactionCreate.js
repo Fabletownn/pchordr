@@ -3,6 +3,7 @@ const LCONFIG = require('../../models/logconfig.js');
 const GTB = require('../../models/gtb.js');
 const SCHEDULE = require('../../models/schedules.js');
 const CUSTOM = require('../../models/customs.js');
+const APPEALS = require('../../models/appeals.js');
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = async (Discord, client, interaction) => {
@@ -108,105 +109,107 @@ module.exports = async (Discord, client, interaction) => {
 
             });
 
-        } else if (interaction.customId === 'custom-role-editor') {
+        } else if (interaction.customId === 'appeal-modal') {
+            let appealMessage = interaction.fields.getTextInputValue('appeal-msg');
+            let appealNotes = interaction.fields.getTextInputValue('appeal-notes');
+            let appealAttachment = interaction.fields.getTextInputValue('appeal-attachments');
+            let banReason = interaction.client.guilds.cache.get('614193406838571085').bans.fetch(interaction.user.id).then((ban) => ban.reason || 'Not Found');
 
-            const roleName = interaction.fields.getTextInputValue('custom-role-name').toLowerCase();
-            const customRole = interaction.guild.roles.cache.find((role) => role.name.toLowerCase() === roleName);
-            const newRoleName = interaction.fields.getTextInputValue('custom-wanted-name');
-            const newRoleHex = interaction.fields.getTextInputValue('custom-wanted-color');
-
-            var propertiesEdited = [];
-
-            if (!customRole) {
-
-                await client.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role with the name **${roleName}** but it could not be found`, allowedMentions: { parse: [] } });
-
-                return interaction.reply({ content: `Could not find a role in the server with the name of **${roleName}**.`, ephemeral: true });
-
-            }
-
-            if (newRoleHex && !newRoleHex.match(/(^[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i)) {
-
-                await client.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role with the color **${newRoleHex}** but it was improper`, allowedMentions: { parse: [] } });
-
-                return interaction.reply({ content: `The hex code given of **${newRoleHex}** is improper or cannot be used.`, ephemeral: true });
-
-            }
-
-            CUSTOM.findOne({
-
+            APPEALS.findOne({
                 guildID: interaction.guild.id,
-                roleID: customRole.id
-
-            }, async (err, data) => {
-
+                userID: interaction.user.id
+            }, (err, data) => {
                 if (err) return console.log(err);
+                if (data) return;
 
-                if (!data) {
+                const appealEmbed = new EmbedBuilder()
+                    .setAuthor({ name: `${interaction.user.username}#${interaction.user.username} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
+                    .addFields([
+                        { name: `Appeal Message`, value: appealMessage, inline: false },
+                        { name: 'Ban Reason', value: banReason },
+                        { name: 'Additional Notes', value: appealNotes || 'None', inline: false },
+                        { name: 'Additional Files', value: appealAttachment || 'None', inline: false }
+                    ])
+                    .setColor('#FEBA00')
+                    .setFooter({ text: `Appeal Pending  •  User ID: ${interaction.user.id}` })
+                    .setTimestamp()
 
-                    await client.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit a role **${roleName}** but it did not have ownership`, allowedMentions: { parse: [] } });
+                const staffButtons = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('appeal-accept')
+                            .setEmoji('1022548602255589486')
+                            .setLabel('Approve (Unban)')
+                            .setStyle(ButtonStyle.Success),
+                    )
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('appeal-deny')
+                            .setEmoji('1063265618155020358')
+                            .setLabel('Deny (Ban)')
+                            .setStyle(ButtonStyle.Danger),
+                    );
 
-                    return interaction.reply({ content: `There is not yet a claimed owner for that role (**${roleName}**). If this is your custom role, ask a Moderator to set you as the owner.`, ephemeral: true });
+                const staffButtonsOL = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('appeal-seemsg')
+                            .setEmoji('1063265606566166628')
+                            .setLabel('Preview Full Message')
+                            .setStyle(ButtonStyle.Primary),
+                    )
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('appeal-accept')
+                            .setEmoji('1022548602255589486')
+                            .setLabel('Approve (Unban)')
+                            .setStyle(ButtonStyle.Success),
+                    )
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('appeal-deny')
+                            .setEmoji('1063265618155020358')
+                            .setLabel('Deny (Ban)')
+                            .setStyle(ButtonStyle.Danger),
+                    );
 
+                if (appealMessage.length <= 1024) {
+                    interaction.client.channels.cache.get('1198024034437320774').send({ content: `<@&821072490452353095> An appeal has been opened.`, embeds: [appealEmbed], components: [staffButtons] }).then(async (amsg) => {
+                        await amsg.react('<:aITFUpvote:1022548599697051790>');
+                        await amsg.react('<:bITFThink:1022548686158442537>');
+                        await amsg.react('<:aITFDownvote:1022548597390180382>');
+
+                        const newAppealData = new APPEALS({
+                            guildID: interaction.guild.id,
+                            msgID: amsg.id,
+                            userID: interaction.user.id,
+                            appealmsg: appealMessage,
+                            notes: appealNotes,
+                            attachs: appealAttachment
+                        });
+
+                        newAppealData.save().catch((err) => console.log(err))
+                    });
+                } else {
+                    interaction.client.channels.cache.get('1198024034437320774').send({ content: `<@&821072490452353095> An appeal has been opened.`, embeds: [appealEmbed], components: [staffButtonsOL] }).then(async (amsg) => {
+                        await amsg.react('<:aITFUpvote:1022548599697051790>');
+                        await amsg.react('<:bITFThink:1022548686158442537>');
+                        await amsg.react('<:aITFDownvote:1022548597390180382>');
+
+                        const newAppealData = new APPEALS({
+                            guildID: interaction.guild.id,
+                            msgID: amsg.id,
+                            userID: interaction.user.id,
+                            appealmsg: appealMessage,
+                            notes: appealNotes,
+                            attachs: appealAttachment
+                        });
+
+                        newAppealData.save().catch((err) => console.log(err))
+                    });
                 }
-
-                if (data.roleOwner !== interaction.user.id) {
-
-                    await client.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) attempted to edit the role of someone else (**${roleName}**) but did not have ownership`, allowedMentions: { parse: [] } });
-
-                    return interaction.reply({ content: `Could not change the assets of your role (**${roleName}**). You are not the owner of that custom role!`, ephemeral: true });
-
-                }
-
-                if (newRoleName) {
-
-                    try {
-
-                        customRole.edit({ name: newRoleName });
-
-                        propertiesEdited.push(`role name (now: **${newRoleName}**)`);
-
-                    } catch (err) {
-
-                        propertiesEdited.push(`role name (now: **invalid**)`);
-
-                        return;
-
-                    }
-
-                }
-
-                if (newRoleHex) {
-
-                    try {
-
-                        customRole.edit({ color: newRoleHex });
-
-                        propertiesEdited.push(`role color (now: **${newRoleHex}**)`);
-
-                    } catch (err) {
-
-                        propertiesEdited.push(`role name (now: **invalid**)`);
-
-                        return;
-
-                    }
-
-                }
-
-                if ((propertiesEdited.length <= 0) || (propertiesEdited.length === undefined)) return interaction.reply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.`, ephemeral: true });
-                if (!newRoleName && !newRoleHex) return interaction.reply({ content: `Nothing has been edited for that role (**${roleName}**). Use the optional values to change your custom role.`, ephemeral: true });
-
-                await interaction.reply({ content: `Edited the following assets of your custom role: ${propertiesEdited.join(', ')}.`, ephemeral: true });
-
-                await client.channels.cache.get('890718960016838686').send({ content: `<@${interaction.user.id}> (@${interaction.user.username}) edited a role of theirs **${roleName}** with the following assets: ${propertiesEdited.join(', ')}.`, allowedMentions: { parse: [] } });
-
-                propertiesEdited = [];
-
             });
-
         }
-
     }
 
     if (interaction.isButton()) {
@@ -233,113 +236,187 @@ module.exports = async (Discord, client, interaction) => {
                     if (gtbErr) return console.log(gtbErr);
                     if (!gtbData) return;
 
-                    switch (interaction.customId) {
+                    APPEALS.findOne({
+                        msgID: interaction.message.id
+                    }, async (aerr, adata) => {
+                        if (aerr) return console.log(aerr);
 
-                        case "setup-reset":
+                        switch (interaction.customId) {
 
-                            if (data) await data.delete();
-                            if (ldata) await ldata.delete();
+                            case "setup-reset":
 
-                            const newConfigData = new CONFIG({
-                                guildID: interaction.guild.id,
-                                generalChat: null,
-                                modChat: null,
-                                serverUpdatesChat: null,
-                                pollsChat: null,
-                                artChat: null,
-                                gpChat: null,
-                                supportersChat: null,
-                                gtbChat: null,
-                                adminRole: null,
-                                modRole: null,
-                                supportersRole: null,
-                                boosterRole: null,
-                                ytRole: null,
-                                twitchRole: null,
-                                gtbRole: null,
-                                autopublish: false,
-                                vxtwitter: false,
-                                artdelete: false,
-                                greeting: false,
-                                autogiveaway: false
-                            });
+                                if (data) await data.delete();
+                                if (ldata) await ldata.delete();
 
-                            newConfigData.save().catch((err) => console.log(err));
+                                const newConfigData = new CONFIG({
+                                    guildID: interaction.guild.id,
+                                    generalChat: null,
+                                    modChat: null,
+                                    serverUpdatesChat: null,
+                                    pollsChat: null,
+                                    artChat: null,
+                                    gpChat: null,
+                                    supportersChat: null,
+                                    gtbChat: null,
+                                    adminRole: null,
+                                    modRole: null,
+                                    supportersRole: null,
+                                    boosterRole: null,
+                                    ytRole: null,
+                                    twitchRole: null,
+                                    gtbRole: null,
+                                    autopublish: false,
+                                    vxtwitter: false,
+                                    artdelete: false,
+                                    greeting: false,
+                                    autogiveaway: false
+                                });
 
-                            const newLogData = new LCONFIG({
-                                guildID: interaction.guild.id,
-                                msglogid: "",
-                                ignoredchannels: [],
-                                ignoredcategories: [],
-                                logwebhook: "",
-                            });
+                                newConfigData.save().catch((err) => console.log(err));
 
-                            await newLogData.save().catch((err) => console.log(err));
+                                const newLogData = new LCONFIG({
+                                    guildID: interaction.guild.id,
+                                    msglogid: "",
+                                    ignoredchannels: [],
+                                    ignoredcategories: [],
+                                    logwebhook: "",
+                                });
 
-                            await interaction.update({ content: 'Set configuration back to the default settings. Use the `/config-edit` and `/log-config-edit` commands to edit their values.', components: [] });
+                                await newLogData.save().catch((err) => console.log(err));
 
-                            break;
+                                await interaction.update({ content: 'Set configuration back to the default settings. Use the `/config-edit` and `/log-config-edit` commands to edit their values.', components: [] });
 
-                        case "setup-cancel":
+                                break;
 
-                            await interaction.update({
-                                content: 'Configuration reset cancelled.',
-                                components: []
-                            });
+                            case "setup-cancel":
 
-                            break;
+                                await interaction.update({
+                                    content: 'Configuration reset cancelled.',
+                                    components: []
+                                });
 
-                        case "gtb-reset":
+                                break;
 
-                            await gtbData.delete();
+                            case "gtb-reset":
 
-                            const newGTBData = new GTB({
-                                guildID: interaction.guild.id,
-                                round1: [],
-                                round2: [],
-                                round3: [],
-                                round4: [],
-                                round5: [],
-                                round6: [],
-                                round7: [],
-                                round8: [],
-                                round9: [],
-                                round10: [],
-                                round11: [],
-                                round12: [],
-                                round13: [],
-                                round14: [],
-                                round15: [],
-                                round16: [],
-                                round17: [],
-                                round18: [],
-                                round19: [],
-                                round20: []
-                            });
+                                await gtbData.delete();
 
-                            newGTBData.save().catch((err) => console.log(err));
+                                const newGTBData = new GTB({
+                                    guildID: interaction.guild.id,
+                                    round1: [],
+                                    round2: [],
+                                    round3: [],
+                                    round4: [],
+                                    round5: [],
+                                    round6: [],
+                                    round7: [],
+                                    round8: [],
+                                    round9: [],
+                                    round10: [],
+                                    round11: [],
+                                    round12: [],
+                                    round13: [],
+                                    round14: [],
+                                    round15: [],
+                                    round16: [],
+                                    round17: [],
+                                    round18: [],
+                                    round19: [],
+                                    round20: []
+                                });
 
-                            await interaction.update({ content: 'Reset all Guess the Blank images and answers. Use the `/gtb-add` command to re-add their values.', components: [] });
+                                newGTBData.save().catch((err) => console.log(err));
 
-                            break;
+                                await interaction.update({ content: 'Reset all Guess the Blank images and answers. Use the `/gtb-add` command to re-add their values.', components: [] });
 
-                        case "gtb-reset-cancel":
+                                break;
 
-                            await interaction.update({
-                                content: 'Guess the Blank data reset cancelled.',
-                                components: []
-                            });
+                            case "gtb-reset-cancel":
 
-                            break;
+                                await interaction.update({
+                                    content: 'Guess the Blank data reset cancelled.',
+                                    components: []
+                                });
 
-                        default:
+                                break;
 
-                            break;
+                            case "appeal-seemsg":
+                                if (!adata) await interaction.reply({ content: 'There is no full preview available.', ephemeral: true });
 
-                    }
+                                await interaction.reply({ content: adata.appealmsg, ephemeral: true });
 
+                                break;
+
+                            case "appeal-accept":
+                                const optionButtons = new ActionRowBuilder()
+                                    .addComponents(
+                                        new ButtonBuilder()
+                                            .setCustomId('appeal-accept-sure')
+                                            .setEmoji('1022548599697051790')
+                                            .setLabel('Yes')
+                                            .setStyle(ButtonStyle.Success),
+                                    )
+                                    .addComponents(
+                                        new ButtonBuilder()
+                                            .setCustomId('appeal-accept-cancel')
+                                            .setEmoji('1022548597390180382')
+                                            .setLabel('No')
+                                            .setStyle(ButtonStyle.Danger),
+                                    );
+
+                                await interaction.reply({ content: 'This will unban <@' + adata.userID + ' > (' + adata.userID + ') from the main server. Are you sure?', components: [optionButtons], ephemeral: true });
+
+                                break;
+
+                            case "appeal-deny":
+                                const optionButtons2 = new ActionRowBuilder()
+                                    .addComponents(
+                                        new ButtonBuilder()
+                                            .setCustomId('appeal-deny-sure')
+                                            .setEmoji('1022548599697051790')
+                                            .setLabel('Yes')
+                                            .setStyle(ButtonStyle.Success),
+                                    )
+                                    .addComponents(
+                                        new ButtonBuilder()
+                                            .setCustomId('appeal-deny-cancel')
+                                            .setEmoji('1022548597390180382')
+                                            .setLabel('No')
+                                            .setStyle(ButtonStyle.Danger),
+                                    );
+
+                                await interaction.reply({ content: 'This will ban <@' + adata.userID + ' > (' + adata.userID + ') from the appeals server. Are you sure?', components: [optionButtons2], ephemeral: true });
+
+                                break;
+
+                            case "appeal-accept-sure":
+                                interaction.guild.members.unban(adata.userID).then(() => interaction.client.channels.cache.get('1208961703002378341').send(`<@${interaction.user.id}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.`));
+
+                                break;
+
+                            case "appeal-deny-sure":
+                                interaction.client.users.cache.get(adata.userID).send(`:wrench: **I Talk Server Ban Appeals**\n\nAfter consideration, your I Talk Server ban appeal has been denied and you can no longer appeal.`).catch((err) => { return });
+                                interaction.client.guilds.cache.get('685876599199236173').members.fetch(adata.userID).ban({ reason: 'After consideration, your I Talk Server ban appeal has been denied.' });
+
+                                break;
+
+                            case "appeal-accept-cancel":
+                                interaction.reply({ content: 'Approval cancelled.', ephemeral: true });
+
+                                break;
+
+                            case "appeal-deny-cancel":
+                                interaction.reply({ content: 'Denial cancelled.', ephemeral: true });
+
+                                break;
+
+                            default:
+
+                                break;
+
+                        }
+                    });
                 });
-
             });
         });
 
