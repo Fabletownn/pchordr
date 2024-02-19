@@ -20,14 +20,10 @@ const rest = new REST({
     version: '10'
 }).setToken(process.env.TOKEN);
 
-rest.put(Routes.applicationCommands(process.env.CLIENTID), {
-    body: []
-}).then(() => console.log('Successfully unregistered global application commands.')).catch(console.error);
-
 rest.put(Routes.applicationGuildCommands(process.env.CLIENTID, process.env.GUILDID), {
-    body: []
-}).then(() => console.log('Successfully unregistered application commands to the main server.')).catch(console.error); // TEMP
+    body: commands
+}).then(() => console.log('Successfully registered application commands to the main server.')).catch(console.error);
 
 rest.put(Routes.applicationGuildCommands(process.env.CLIENTID, '685876599199236173'), {
-    body: []
-}).then(() => console.log('Successfully unregistered application commands to the appeals server.')).catch(console.error); // TEMP
+    body: commands
+}).then(() => console.log('Successfully registered application commands to the appeals server.')).catch(console.error);
