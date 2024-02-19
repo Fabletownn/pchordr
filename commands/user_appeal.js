@@ -15,7 +15,7 @@ module.exports = {
 
     async execute(interaction) {
         if (interaction.guild.id !== '685876599199236173') return;
-        
+
         const appealModal = new ModalBuilder()
             .setCustomId('appeal-modal')
             .setTitle('File Ban Appeal')
@@ -37,7 +37,7 @@ module.exports = {
                         .setPlaceholder('00:00 PM/AM (UTC)')
                         .setStyle(TextInputStyle.Short)
                         .setRequired(false)
-                        .setMa
+                        .setMaxLength(500)
                 ),
                 new ActionRowBuilder().addComponents(
                     new TextInputBuilder()
@@ -46,6 +46,7 @@ module.exports = {
                         .setPlaceholder('https://cdn.discordapp.com/image-or-file-url-here/')
                         .setStyle(TextInputStyle.Short)
                         .setRequired(false)
+                        .setMaxLength(500)
                 ),
             ]);
 
