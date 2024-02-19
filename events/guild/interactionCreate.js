@@ -393,7 +393,7 @@ module.exports = async (Discord, client, interaction) => {
 
                                 var confAccept = await interaction.reply({ content: 'This will unban <@' + adata.userID + '> (' + adata.userID + ') from the main server.\n\nAre you sure? Ensure that you have discussed this decision with other moderators/I Talk first! <:bITFSweat:1022548683176284281>', components: [optionButtons], ephemeral: true });
 
-                                const acceptFilter = (interaction) => (interaction.customId === 'appeal-accept-sure' || interaction.customId === 'appeal-accept-cancel') && interaction.user.id === interaction.user.id;
+                                const acceptFilter = (interaction) => interaction.customId === 'appeal-accept-sure' || interaction.customId === 'appeal-accept-cancel';
                                 const acceptCollector = confAccept.createMessageComponentCollector({ acceptFilter, time: 15_000 });
 
                                 acceptCollector.on('collect', async (i) => {
@@ -442,7 +442,7 @@ module.exports = async (Discord, client, interaction) => {
                                             await interaction.update({ content: 'Ran into an issue trying to unban or accept that appeal, are you sure they are banned? <:bITFCry:1022548623243886593>\n```' + err + '```', components: [], ephemeral: true });
                                         }
                                     } else {
-                                        console.log(i.customId)
+                                        console.log('???')
                                     }
                                 });
 
@@ -467,7 +467,7 @@ module.exports = async (Discord, client, interaction) => {
 
                                 var confDeny = await interaction.reply({ content: 'This will ban <@' + adata.userID + '> (' + adata.userID + ') from the appeals server.\n\nAre you sure? Ensure that you have discussed this decision with other moderators/I Talk first! <:bITFSweat:1022548683176284281>', components: [optionButtons2], ephemeral: true });
 
-                                const denyFilter = (interaction) => (interaction.customId === 'appeal-deny-sure' || interaction.customId === 'appeal-deny-cancel') && interaction.user.id === interaction.user.id;
+                                const denyFilter = (interaction) => interaction.customId === 'appeal-deny-sure' || interaction.customId === 'appeal-deny-cancel';
                                 const denyCollector = confDeny.createMessageComponentCollector({ denyFilter, time: 15_000 });
 
                                 denyCollector.on('collect', async (i) => {
@@ -518,7 +518,7 @@ module.exports = async (Discord, client, interaction) => {
                                             await interaction.update({ content: 'Ran into an issue trying to deny that appeal! <:bITFCry:1022548623243886593>\n```' + err + '```', components: [], ephemeral: true });
                                         }
                                     } else {
-                                        console.log(i.customId)
+                                        console.log('???')
                                     }
                                 });
 
