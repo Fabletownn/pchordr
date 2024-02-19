@@ -266,7 +266,7 @@ module.exports = async (Discord, client, interaction) => {
                     }, async (aerr, adata) => {
                         if (aerr) return console.log(aerr);
 
-                        var adUserID = "";
+                        var adUserID;
 
                         switch (interaction.customId) {
 
