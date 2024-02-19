@@ -418,6 +418,8 @@ module.exports = async (Discord, client, interaction) => {
 
                                 adUserID = adata.userID;
 
+                                console.log(`AD ${interaction.message.id}`);
+
                                 break;
 
                             case "appeal-accept-sure":
@@ -468,7 +470,7 @@ module.exports = async (Discord, client, interaction) => {
                             case "appeal-deny-sure":
                                 if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to deny that appeal, you do not have permission!', components: [], ephemeral: true });
 
-                                console.log(adUserID);
+                                console.log(`ADS ${interaction.message.id}`);
 
                                 const denyEmbed = new EmbedBuilder()
                                     .setAuthor({ name: `Appeal Denied by ${interaction.user.displayName}`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
