@@ -6,8 +6,7 @@ const appealsSchema = mongoose.Schema({
     userID: String,
     appealmsg: String,
     notes: String,
-    attachs: String,
-    pendingstatus: Boolean
+    attachs: String
 });
 
 module.exports = mongoose.model("appeals", appealsSchema);
