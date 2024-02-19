@@ -113,7 +113,13 @@ module.exports = async (Discord, client, interaction) => {
             let appealMessage = interaction.fields.getTextInputValue('appeal-msg');
             let appealNotes = interaction.fields.getTextInputValue('appeal-notes');
             let appealAttachment = interaction.fields.getTextInputValue('appeal-attachments');
-            let banReason = interaction.client.guilds.cache.get('614193406838571085').bans.fetch(interaction.user.id).then((ban) => ban.reason || 'Not Found');
+            let banReason;
+
+            interaction.client.guilds.cache.get('614193406838571085').bans.fetch(interaction.user.id).then((ban) => {
+                if (!ban || ban === null) banReason = 'Not Banned';
+                if (!ban.reason || ban.reason === null) banReason = 'Not Fetched';
+                if (ban.reason) banReason = ban.reason;
+            });
 
             APPEALS.findOne({
                 guildID: interaction.guild.id,

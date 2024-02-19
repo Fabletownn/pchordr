@@ -34,7 +34,7 @@ module.exports = {
                     new TextInputBuilder()
                         .setCustomId('appeal-notes')
                         .setLabel('Additional Notes')
-                        .setPlaceholder('00:00 PM/AM (UTC)')
+                        .setPlaceholder('Note...')
                         .setStyle(TextInputStyle.Short)
                         .setRequired(false)
                         .setMaxLength(500)
