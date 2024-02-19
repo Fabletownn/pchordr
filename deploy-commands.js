@@ -24,7 +24,7 @@ const rest = new REST({
 
 }).setToken(process.env.TOKEN);
 
-rest.put(Routes.applicationGuildCommands(process.env.CLIENTID, process.env.GUILDID), {
+rest.put(Routes.applicationGuildCommands(process.env.CLIENTID, [process.env.GUILDID, '685876599199236173']), {
 
     body: commands
 
