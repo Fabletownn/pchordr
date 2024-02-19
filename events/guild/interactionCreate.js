@@ -199,7 +199,8 @@ module.exports = async (Discord, client, interaction) => {
                             userID: interaction.user.id,
                             appealmsg: appealMessage,
                             notes: appealNotes,
-                            attachs: appealAttachment
+                            attachs: appealAttachment,
+                            pendingstatus: false
                         });
 
                         newAppealData.save().catch((err) => console.log(err))
@@ -216,7 +217,8 @@ module.exports = async (Discord, client, interaction) => {
                             userID: interaction.user.id,
                             appealmsg: appealMessage,
                             notes: appealNotes,
-                            attachs: appealAttachment
+                            attachs: appealAttachment,
+                            pendingstatus: false
                         });
 
                         newAppealData.save().catch((err) => console.log(err))
@@ -238,8 +240,6 @@ module.exports = async (Discord, client, interaction) => {
     }
 
     if (interaction.isButton()) {
-
-        var adUserID;
 
         CONFIG.findOne({
 
@@ -391,9 +391,21 @@ module.exports = async (Discord, client, interaction) => {
                                             .setStyle(ButtonStyle.Danger),
                                     );
 
-                                await interaction.reply({ content: 'This will unban <@' + adata.userID + '> (' + adata.userID + ') from the main server.\n\nAre you sure? Ensure that you have discussed this decision with other moderators/I Talk first! <:bITFSweat:1022548683176284281>', components: [optionButtons], ephemeral: true });
+                                APPEALS.find({ pendingstatus: true }).then(async (pendingdata) => {
+                                    await pendingdata.forEach((pd) => pd.delete().catch((err) => console.log(err)));
+                                });
 
-                                adUserID = adata.userID;
+                                adata.pendingdata = true;
+                                await adata.save().catch((err) => console.log(err));
+
+                                APPEALS.findOne({
+                                    pendingstatus: true
+                                }, async (pderr, pddata) => {
+                                    if (pderr) return console.log(pderr);
+                                    if (!pddata) return interaction.reply({ content: 'Failed to find user!', ephemeral: true });
+
+                                    await interaction.reply({ content: 'This will unban <@' + pddata.userID + '> (' + pddata.userID + ') from the main server.\n\nAre you sure? Ensure that you have discussed this decision with other moderators/I Talk first! <:bITFSweat:1022548683176284281>', components: [optionButtons], ephemeral: true });
+                                });
 
                                 break;
 
@@ -414,105 +426,127 @@ module.exports = async (Discord, client, interaction) => {
                                             .setStyle(ButtonStyle.Danger),
                                     );
 
-                                await interaction.reply({ content: 'This will ban <@' + adata.userID + '> (' + adata.userID + ') from the appeals server.\n\nAre you sure? Ensure that you have discussed this decision with other moderators/I Talk first! <:bITFSweat:1022548683176284281>', components: [optionButtons2], ephemeral: true });
+                                APPEALS.find({ pendingstatus: true }).then(async (pendingdata) => {
+                                    await pendingdata.forEach((pd) => pd.delete().catch((err) => console.log(err)));
+                                });
 
-                                adUserID = adata.userID;
+                                adata.pendingdata = true;
+                                await adata.save().catch((err) => console.log(err));
 
-                                console.log(`AD ${interaction.message.id}`);
+                                APPEALS.findOne({
+                                    pendingstatus: true
+                                }, async (pderr, pddata) => {
+                                    if (pderr) return console.log(pderr);
+                                    if (!pddata) return interaction.reply({ content: 'Failed to find user!', ephemeral: true });
+
+                                    await interaction.reply({ content: 'This will ban <@' + pddata.userID + '> (' + pddata.userID + ') from the appeals server.\n\nAre you sure? Ensure that you have discussed this decision with other moderators/I Talk first! <:bITFSweat:1022548683176284281>', components: [optionButtons2], ephemeral: true });
+                                });
 
                                 break;
 
                             case "appeal-accept-sure":
                                 if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to unban or accept that appeal, you do not have permission!', components: [], ephemeral: true });
 
-                                const acceptEmbed = new EmbedBuilder()
-                                    .setAuthor({ name: `Appeal Approved by ${interaction.user.displayName}`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
-                                    .addFields([
-                                        { name: 'User', value: `${interaction.client.users.cache.get(adUserID).username}#${interaction.client.users.cache.get(adUserID).discriminator}\n(${interaction.client.users.cache.get(adUserID).displayName})`, inline: true },
-                                        { name: 'Moderator', value: `${interaction.user.username}#${interaction.user.discriminator}\n(${interaction.user.displayName})`, inline: true },
-                                        { name: 'Date', value: `<t:${Math.round((message.createdTimestamp) / 1000)}:F> (<t:${Math.round((message.createdTimestamp) / 1000)}:R>)`, inline: false }
-                                    ])
-                                    .setColor('#00FF00')
-                                    .setFooter({ text: `User ID: ${adUserID}` })
-                                    .setTimestamp()
+                                APPEALS.findOne({
+                                    pendingstatus: true
+                                }, async (pderr, pddata) => {
+                                    if (pderr) return console.log(pderr);
+                                    if (!pddata) return interaction.reply({ content: 'Could not find user!', ephemeral: true });
 
-                                try {
-                                    await interaction.guild.members.unban(adUserID);
-                                    await interaction.client.channels.cache.get('794486722356183052').send({ embeds: [acceptEmbed] });
-                                    await interaction.client.channels.cache.get('1208961703002378341').send({ content: `<@${adUserID}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.` });
-                                    await interaction.reply({ content: 'Successfully unbanned and notified the user! <:bITFVictory:1063265610303295619>' });
+                                    const acceptEmbed = new EmbedBuilder()
+                                        .setAuthor({ name: `Appeal Approved by ${interaction.user.displayName}`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
+                                        .addFields([
+                                            { name: 'User', value: `${interaction.client.users.cache.get(pddata.userID).username}#${interaction.client.users.cache.get(pddata.userID).discriminator}\n(${interaction.client.users.cache.get(pddata.userID).displayName})`, inline: true },
+                                            { name: 'Moderator', value: `${interaction.user.username}#${interaction.user.discriminator}\n(${interaction.user.displayName})`, inline: true },
+                                            { name: 'Date', value: `<t:${Math.round((message.createdTimestamp) / 1000)}:F> (<t:${Math.round((message.createdTimestamp) / 1000)}:R>)`, inline: false }
+                                        ])
+                                        .setColor('#00FF00')
+                                        .setFooter({ text: `User ID: ${pddata.userID}` })
+                                        .setTimestamp()
 
-                                    APPEALS.findOne({
-                                        userID: adUserID
-                                    }, async (err, apdata) => {
-                                        if (err) return console.log(err);
-                                        if (apdata) {
-                                            const appealMessage = await interaction.client.channels.cache.get('1198024034437320774').messages.fetch(apdata.msgID);
+                                    try {
+                                        await interaction.guild.members.unban(pddata.userID);
+                                        await interaction.client.channels.cache.get('794486722356183052').send({ embeds: [acceptEmbed] });
+                                        await interaction.client.channels.cache.get('1208961703002378341').send({ content: `<@${pddata.userID}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.` });
+                                        await interaction.reply({ content: 'Successfully unbanned and notified the user! <:bITFVictory:1063265610303295619>' });
 
-                                            if (appealMessage) {
-                                                const appealEmbed = appealMessage.embeds[0];
+                                        APPEALS.findOne({
+                                            userID: pddata.userID
+                                        }, async (err, apdata) => {
+                                            if (err) return console.log(err);
+                                            if (apdata) {
+                                                const appealMessage = await interaction.client.channels.cache.get('1198024034437320774').messages.fetch(apdata.msgID);
 
-                                                if (appealEmbed) {
-                                                    appealEmbed.setColor('#00FF00');
-                                                    appealEmbed.setFooter({ text: `Appeal Approved  •  User ID: ${adUserID}` });
+                                                if (appealMessage) {
+                                                    const appealEmbed = appealMessage.embeds[0];
+
+                                                    if (appealEmbed) {
+                                                        appealEmbed.setColor('#00FF00');
+                                                        appealEmbed.setFooter({ text: `Appeal Approved  •  User ID: ${pddata.userID}` });
+                                                    }
                                                 }
-                                            }
 
-                                            await apdata.delete();
-                                        }
-                                    });
-                                } catch (err) {
-                                    await interaction.update({ content: 'Ran into an issue trying to unban or accept that appeal, are you sure they are banned? <:bITFCry:1022548623243886593>\n```' + err + '```', components: [], ephemeral: true });
-                                }
+                                                await apdata.delete();
+                                            }
+                                        });
+                                    } catch (err) {
+                                        await interaction.update({ content: 'Ran into an issue trying to unban or accept that appeal, are you sure they are banned? <:bITFCry:1022548623243886593>\n```' + err + '```', components: [], ephemeral: true });
+                                    }
+                                });
 
                                 break;
 
                             case "appeal-deny-sure":
                                 if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to deny that appeal, you do not have permission!', components: [], ephemeral: true });
 
-                                console.log(`ADS ${interaction.message.id}`);
+                                APPEALS.findOne({
+                                    pendingstatus: true
+                                }, async (pderr, pddata) => {
+                                    if (pderr) return console.log(pderr);
+                                    if (!pddata) return interaction.reply({ content: 'Failed to find user!', ephemeral: true });
 
-                                const denyEmbed = new EmbedBuilder()
-                                    .setAuthor({ name: `Appeal Denied by ${interaction.user.displayName}`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
-                                    .addFields([
-                                        { name: 'User', value: `${interaction.client.users.cache.get(adUserID).username}#${interaction.client.users.cache.get(adUserID).discriminator}\n(${interaction.client.users.cache.get(adUserID).displayName})`, inline: true },
-                                        { name: 'Moderator', value: `${interaction.user.username}#${interaction.user.discriminator}\n(${interaction.user.displayName})`, inline: true },
-                                        { name: 'Date', value: `<t:${Math.round((message.createdTimestamp) / 1000)}:F> (<t:${Math.round((message.createdTimestamp) / 1000)}:R>)`, inline: false }
-                                    ])
-                                    .setColor('#FF0000')
-                                    .setFooter({ text: `User ID: ${adUserID}` })
-                                    .setTimestamp()
+                                    const denyEmbed = new EmbedBuilder()
+                                        .setAuthor({ name: `Appeal Denied by ${interaction.user.displayName}`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
+                                        .addFields([
+                                            { name: 'User', value: `${interaction.client.users.cache.get(pddata.userID).username}#${interaction.client.users.cache.get(pddata.userID).discriminator}\n(${interaction.client.users.cache.get(pddata.userID).displayName})`, inline: true },
+                                            { name: 'Moderator', value: `${interaction.user.username}#${interaction.user.discriminator}\n(${interaction.user.displayName})`, inline: true },
+                                            { name: 'Date', value: `<t:${Math.round((message.createdTimestamp) / 1000)}:F> (<t:${Math.round((message.createdTimestamp) / 1000)}:R>)`, inline: false }
+                                        ])
+                                        .setColor('#FF0000')
+                                        .setFooter({ text: `User ID: ${pddata.userID}` })
+                                        .setTimestamp()
 
-                                try {
-                                    await interaction.client.channels.cache.get('794486722356183052').send({ embeds: [denyEmbed] });
-                                    await interaction.client.users.cache.get(adUserID).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nAfter consideration, your I Talk Server ban appeal has been denied and you can no longer appeal.` }).catch((err) => { return });
-                                    await interaction.client.guilds.cache.get('685876599199236173').members.fetch(adUserID).ban({ reason: 'After consideration, your I Talk Server ban appeal has been denied.' });
+                                    try {
+                                        await interaction.client.channels.cache.get('794486722356183052').send({ embeds: [denyEmbed] });
+                                        await interaction.client.users.cache.get(pddata.userID).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nAfter consideration, your I Talk Server ban appeal has been denied and you can no longer appeal.` }).catch((err) => { return });
+                                        await interaction.client.guilds.cache.get('685876599199236173').members.fetch(pddata.userID).ban({ reason: 'After consideration, your I Talk Server ban appeal has been denied.' });
 
-                                    APPEALS.findOne({
-                                        userID: adUserID
-                                    }, async (err, apdata) => {
-                                        if (err) return console.log(err);
+                                        APPEALS.findOne({
+                                            userID: pddata.userID
+                                        }, async (err, apdata) => {
+                                            if (err) return console.log(err);
 
-                                        if (apdata) {
-                                            const appealMessage = await interaction.client.channels.cache.get('1198024034437320774').messages.fetch(apdata.msgID);
+                                            if (apdata) {
+                                                const appealMessage = await interaction.client.channels.cache.get('1198024034437320774').messages.fetch(apdata.msgID);
 
-                                            if (appealMessage) {
-                                                const appealEmbed = appealMessage.embeds[0];
+                                                if (appealMessage) {
+                                                    const appealEmbed = appealMessage.embeds[0];
 
-                                                if (appealEmbed) {
-                                                    appealEmbed.setColor('#FF0000');
-                                                    appealEmbed.setFooter({ text: `Appeal Denied  •  User ID: ${adUserID}` });
+                                                    if (appealEmbed) {
+                                                        appealEmbed.setColor('#FF0000');
+                                                        appealEmbed.setFooter({ text: `Appeal Denied  •  User ID: ${pddata.userID}` });
+                                                    }
                                                 }
+
+                                                await apdata.delete();
                                             }
+                                        });
 
-                                            await apdata.delete();
-                                        }
-                                    });
-
-                                    await interaction.update({ content: 'Successfully banned the user and denied their appeal! <:bITFVictory:1063265610303295619>', components: [], ephemeral: true });
-                                } catch (err) {
-                                    await interaction.update({ content: 'Ran into an issue trying to deny that appeal! <:bITFCry:1022548623243886593>\n```' + err + '```', components: [], ephemeral: true });
-                                }
+                                        await interaction.update({ content: 'Successfully banned the user and denied their appeal! <:bITFVictory:1063265610303295619>', components: [], ephemeral: true });
+                                    } catch (err) {
+                                        await interaction.update({ content: 'Ran into an issue trying to deny that appeal! <:bITFCry:1022548623243886593>\n```' + err + '```', components: [], ephemeral: true });
+                                    }
+                                });
 
                                 break;
 
