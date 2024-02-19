@@ -417,7 +417,7 @@ module.exports = async (Discord, client, interaction) => {
                                     await interaction.client.channels.cache.get('1208961703002378341').send({ content: `<@${adUserID}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.` });
                                     await interaction.reply({ content: 'Successfully unbanned and notified the user! <:bITFVictory:1063265610303295619>' });
                                 } catch (err) {
-                                    await interaction.reply({ content: 'Failed to unban that user as they are not banned. <:bITFCry:1022548623243886593>' });
+                                    await interaction.reply({ content: 'Failed to unban that user as they are not banned. <:bITFCry:1022548623243886593>', ephemeral: true });
                                 }
 
                                 adUserID = "";
@@ -428,7 +428,7 @@ module.exports = async (Discord, client, interaction) => {
                                 await interaction.client.users.cache.get(adUserID).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nAfter consideration, your I Talk Server ban appeal has been denied and you can no longer appeal.` }).catch((err) => { return });
                                 await interaction.client.guilds.cache.get('685876599199236173').members.fetch(adUserID).ban({ reason: 'After consideration, your I Talk Server ban appeal has been denied.' });
 
-                                await interaction.reply({ content: 'Successfully banned the user and denied their appeal! <:bITFVictory:1063265610303295619>'});
+                                await interaction.reply({ content: 'Successfully banned the user and denied their appeal! <:bITFVictory:1063265610303295619>', ephemeral: true });
 
                                 adUserID = "";
 
