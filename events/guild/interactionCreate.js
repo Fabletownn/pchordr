@@ -419,7 +419,7 @@ module.exports = async (Discord, client, interaction) => {
                             case "appeal-accept-sure":
                                 if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to unban or accept that appeal, you do not have permission!', components: [], ephemeral: true });
 
-                                const aUser = interaction.message.split('(')[1].split(')')[0];
+                                const aUser = interaction.message.content.split('(')[1].split(')')[0];
 
                                 const acceptEmbed = new EmbedBuilder()
                                     .setAuthor({ name: `Appeal Approved by ${interaction.user.displayName}`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
@@ -466,7 +466,7 @@ module.exports = async (Discord, client, interaction) => {
                             case "appeal-deny-sure":
                                 if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to deny that appeal, you do not have permission!', components: [], ephemeral: true });
 
-                                const dUser = interaction.message.split('(')[1].split(')')[0];
+                                const dUser = interaction.message.content.split('(')[1].split(')')[0];
 
                                 const denyEmbed = new EmbedBuilder()
                                     .setAuthor({ name: `Appeal Denied by ${interaction.user.displayName}`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
