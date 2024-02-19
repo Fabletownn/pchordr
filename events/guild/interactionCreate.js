@@ -110,9 +110,9 @@ module.exports = async (Discord, client, interaction) => {
             });
 
         } else if (interaction.customId === 'appeal-modal') {
-            let appealMessage = interaction.fields.getTextInputValue('appeal-msg') || '???';
-            let appealNotes = interaction.fields.getTextInputValue('appeal-notes') || '???';
-            let appealAttachment = interaction.fields.getTextInputValue('appeal-attachments') || '???';
+            let appealMessage = interaction.fields.getTextInputValue('appeal-msg') || 'None';
+            let appealNotes = interaction.fields.getTextInputValue('appeal-notes') || 'None';
+            let appealAttachment = interaction.fields.getTextInputValue('appeal-attachments') || 'None';
             let banReason;
 
             interaction.client.guilds.cache.get('614193406838571085').bans.fetch(interaction.user.id).then((ban) => banReason = ban.reason).catch((err) => banReason = 'None');
@@ -120,15 +120,15 @@ module.exports = async (Discord, client, interaction) => {
             APPEALS.findOne({
                 guildID: interaction.guild.id,
                 userID: interaction.user.id
-            }, (err, data) => {
+            }, async (err, data) => {
                 if (err) return console.log(err);
                 if (data) return;
 
                 const appealEmbed = new EmbedBuilder()
-                    .setAuthor({ name: `${interaction.user.username}#${interaction.user.username} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
+                    .setAuthor({ name: `${interaction.user.username}#${interaction.user.discriminator} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
                     .addFields([
-                        { name: 'Appeal Message', value: appealMessage || 'None', inline: false },
-                        { name: 'Ban Reason', value: banReason || 'None' },
+                        { name: 'Appeal Message', value: appealMessage || 'None', inline: true },
+                        { name: 'Ban Reason', value: banReason || 'None', inline: true },
                         { name: 'Additional Notes', value: appealNotes || 'None', inline: false },
                         { name: 'Additional Files', value: appealAttachment || 'None', inline: false }
                     ])
@@ -210,6 +210,8 @@ module.exports = async (Discord, client, interaction) => {
                         newAppealData.save().catch((err) => console.log(err))
                     });
                 }
+
+                await interaction.reply({ content: 'Your I Talk Server Ban Appeal has been submitted.\n\nPlease be patient for a response as appeals are gone over every Mod Meeting finalized by I Talk.', ephemeral: true });
             });
         }
     }
