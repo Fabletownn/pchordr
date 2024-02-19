@@ -257,6 +257,8 @@ module.exports = async (Discord, client, interaction) => {
                     }, async (aerr, adata) => {
                         if (aerr) return console.log(aerr);
 
+                        var adUserID;
+
                         switch (interaction.customId) {
 
                             case "setup-reset":
@@ -382,6 +384,8 @@ module.exports = async (Discord, client, interaction) => {
 
                                 await interaction.reply({ content: 'This will unban <@' + adata.userID + '> (' + adata.userID + ') from the main server. Are you sure?', components: [optionButtons], ephemeral: true });
 
+                                adUserID = adata.userID;
+
                                 break;
 
                             case "appeal-deny":
@@ -403,26 +407,36 @@ module.exports = async (Discord, client, interaction) => {
 
                                 await interaction.reply({ content: 'This will ban <@' + adata.userID + ' > (' + adata.userID + ') from the appeals server. Are you sure?', components: [optionButtons2], ephemeral: true });
 
+                                adUserID = adata.userID;
+
                                 break;
 
                             case "appeal-accept-sure":
-                                interaction.guild.members.unban(adata.userID).then(() => interaction.client.channels.cache.get('1208961703002378341').send(`<@${adata.userID}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.`));
+                                interaction.guild.members.unban(adUserID).then(() => interaction.client.channels.cache.get('1208961703002378341').send(`<@${adUserID}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.`));
+
+                                adUserID = "";
 
                                 break;
 
                             case "appeal-deny-sure":
-                                interaction.client.users.cache.get(adata.userID).send(`:wrench: **I Talk Server Ban Appeals**\n\nAfter consideration, your I Talk Server ban appeal has been denied and you can no longer appeal.`).catch((err) => { return });
-                                interaction.client.guilds.cache.get('685876599199236173').members.fetch(adata.userID).ban({ reason: 'After consideration, your I Talk Server ban appeal has been denied.' });
+                                interaction.client.users.cache.get(adUserID).send(`:wrench: **I Talk Server Ban Appeals**\n\nAfter consideration, your I Talk Server ban appeal has been denied and you can no longer appeal.`).catch((err) => { return });
+                                interaction.client.guilds.cache.get('685876599199236173').members.fetch(adUserID).ban({ reason: 'After consideration, your I Talk Server ban appeal has been denied.' });
+
+                                adUserID = "";
 
                                 break;
 
                             case "appeal-accept-cancel":
-                                interaction.reply({ content: 'Approval cancelled.', ephemeral: true });
+                                interaction.editReply({ content: 'Approval cancelled.', components: [], ephemeral: true });
+
+                                adUserID = "";
 
                                 break;
 
                             case "appeal-deny-cancel":
-                                interaction.reply({ content: 'Denial cancelled.', ephemeral: true });
+                                interaction.editReply({ content: 'Denial cancelled.', components: [], ephemeral: true });
+
+                                adUserID = "";
 
                                 break;
 
