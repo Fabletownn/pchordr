@@ -421,7 +421,7 @@ module.exports = async (Discord, client, interaction) => {
 
                                 const aUser = interaction.message.content.split('(')[1].split(')')[0];
 
-                                if (!interaction.client.users.cache.get(aUser)) return interaction.update({ content: 'User not found, are you sure they haven\'t already left? <:bITFCry:1022548623243886593>' });
+                                if (!interaction.client.users.cache.get(aUser)) return interaction.update({ content: 'User not found, are you sure they haven\'t already left? <:bITFCry:1022548623243886593>', components: [], ephemeral: true });
 
                                 const acceptEmbed = new EmbedBuilder()
                                     .setAuthor({ name: `Appeal Approved by ${interaction.user.displayName}`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
@@ -478,7 +478,7 @@ module.exports = async (Discord, client, interaction) => {
 
                                 const dUser = interaction.message.content.split('(')[1].split(')')[0];
 
-                                if (!interaction.client.users.cache.get(dUser)) return interaction.update({ content: 'User not found, are you sure they haven\'t already left or been denied? <:bITFCry:1022548623243886593>' });
+                                if (!interaction.client.users.cache.get(dUser)) return interaction.update({ content: 'User not found, are you sure they haven\'t already left or been denied? <:bITFCry:1022548623243886593>', components: [], ephemeral: true });
 
                                 const denyEmbed = new EmbedBuilder()
                                     .setAuthor({ name: `Appeal Denied by ${interaction.user.displayName}`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
