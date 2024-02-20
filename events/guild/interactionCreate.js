@@ -188,7 +188,7 @@ module.exports = async (Discord, client, interaction) => {
                     );
 
                 if (appealMessage.length < 1024) {
-                    interaction.client.channels.cache.get('1198024034437320774').send({ content: `<@&821072490452353095> An appeal has been opened.`, embeds: [appealEmbed], components: [staffButtons] }).then(async (amsg) => {
+                    interaction.client.channels.cache.get('1198024034437320774').send({ content: `<@&821072490452353095> A pending appeal is open for votes!`, embeds: [appealEmbed], components: [staffButtons] }).then(async (amsg) => {
                         await amsg.react('<:aITFUpvote:1022548599697051790>');
                         await amsg.react('<:bITFThink:1022548686158442537>');
                         await amsg.react('<:aITFDownvote:1022548597390180382>');
@@ -206,7 +206,7 @@ module.exports = async (Discord, client, interaction) => {
                         newAppealData.save().catch((err) => console.log(err))
                     });
                 } else {
-                    interaction.client.channels.cache.get('1198024034437320774').send({ content: `<@&821072490452353095> An appeal has been opened.`, embeds: [appealEmbedOL], components: [staffButtonsOL] }).then(async (amsg) => {
+                    interaction.client.channels.cache.get('1198024034437320774').send({ content: `<@&821072490452353095> A pending appeal is open for votes!`, embeds: [appealEmbedOL], components: [staffButtonsOL] }).then(async (amsg) => {
                         await amsg.react('<:aITFUpvote:1022548599697051790>');
                         await amsg.react('<:bITFThink:1022548686158442537>');
                         await amsg.react('<:aITFDownvote:1022548597390180382>');
@@ -451,10 +451,9 @@ module.exports = async (Discord, client, interaction) => {
                                                 const appealEmbed = appealMessage.embeds[0];
 
                                                 if (appealEmbed) {
-                                                    console.log(appealEmbed);
+                                                    let newApproveEmbed = EmbedBuilder.from(appealEmbed).setColor('#00FF00').setFooter({ text: `Appeal Approved  •  User ID: ${dUser}` });
 
-                                                    //appealEmbed.setColor('#00FF00');
-                                                    //appealEmbed.setFooter({ text: `Appeal Approved  •  User ID: ${aUser}` });
+                                                    await appealMessage.edit({ embeds: [newApproveEmbed] });
                                                 }
                                             }
 
@@ -501,9 +500,18 @@ module.exports = async (Discord, client, interaction) => {
                                                     const appealEmbed = appealMessage.embeds[0];
 
                                                     if (appealEmbed) {
-                                                        let newEmbed = EmbedBuilder.from(appealMessage.embeds[0]).setColor('#FF0000').setFooter({ text: `Appeal Denied  •  User ID: ${dUser}` });
+                                                        let newDenyEmbed = EmbedBuilder.from(appealEmbed).setColor('#FF0000').setFooter({ text: `Appeal Denied  •  User ID: ${dUser}` });
 
-                                                        await appealMessage.edit({ embeds: [newEmbed] });
+                                                        await appealMessage.edit({ content: null, embeds: [newDenyEmbed] });
+
+                                                        const denyButtons = ButtonBuilder.from(appealMessage.components[0]);
+
+                                                        denyButtons.forEach((button) => {
+                                                            if (button.customId !== 'appeal-seemsg') {
+
+                                                                button.setDisabled(true);
+                                                            }
+                                                        });
                                                     }
                                                 }
                                             });
