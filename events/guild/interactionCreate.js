@@ -504,11 +504,9 @@ module.exports = async (Discord, client, interaction) => {
 
                                                         await appealMessage.edit({ content: null, embeds: [newDenyEmbed] });
 
-                                                        const appealComponents = appealMessage.components[0];
+                                                        const appealComponents = ActionRowBuilder(appealMessage.components[0]);
 
                                                         appealComponents.components.forEach((button) => {
-                                                            console.log(button);
-
                                                             const dButton = ButtonBuilder.from(button);
 
                                                             if (button.data.custom_id !== 'appeal-seemsg') {
