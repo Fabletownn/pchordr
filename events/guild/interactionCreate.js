@@ -509,7 +509,7 @@ module.exports = async (Discord, client, interaction) => {
                                                         newDenyRow.components.find((button) => button.data.custom_id === 'appeal-accept').setDisabled(true);
                                                         newDenyRow.components.find((button) => button.data.custom_id === 'appeal-deny').setDisabled(true);
 
-                                                        appealMessage.editReply({ components: [newDenyRow] });
+                                                        appealMessage.update({ components: [newDenyRow] });
                                                     }
                                                 }
                                             });
