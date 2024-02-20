@@ -504,15 +504,9 @@ module.exports = async (Discord, client, interaction) => {
 
                                                         await appealMessage.edit({ content: null, embeds: [newDenyEmbed] });
 
-                                                        const appealComponents = ActionRowBuilder(appealMessage.components[0]);
-
-                                                        appealComponents.components.forEach((button) => {
-                                                            const dButton = ButtonBuilder.from(button);
-
-                                                            if (button.data.custom_id !== 'appeal-seemsg') {
-                                                                dButton.setDisabled(true);
-                                                            }
-                                                        });
+                                                        const denyRow = ActionRowBuilder.from(appealMessage.components[0]);
+                                                        denyRow.components.find((button) => button.data.custom_id === 'appeal-accept').setDisabled(true);
+                                                        denyRow.components.find((button) => button.data.custom_id === 'appeal-deny').setDisabled(true);
                                                     }
                                                 }
                                             });
