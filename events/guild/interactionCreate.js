@@ -509,8 +509,7 @@ module.exports = async (Discord, client, interaction) => {
                                                         appealComponents.components.forEach((button) => {
                                                             const dButton = ButtonBuilder.from(button);
 
-                                                            if (button.customId !== 'appeal-seemsg') {
-
+                                                            if (dButton.customId !== 'appeal-seemsg') {
                                                                 dButton.setDisabled(true);
                                                             }
                                                         });
