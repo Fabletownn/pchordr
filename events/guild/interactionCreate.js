@@ -504,12 +504,14 @@ module.exports = async (Discord, client, interaction) => {
 
                                                         await appealMessage.edit({ content: null, embeds: [newDenyEmbed] });
 
-                                                        const denyButtons = ButtonBuilder.from(appealMessage.components[0]);
+                                                        const appealComponents = appealMessage.components[0];
 
                                                         denyButtons.components.forEach((button) => {
+                                                            const dButton = ButtonBuilder.from(button);
+
                                                             if (button.customId !== 'appeal-seemsg') {
 
-                                                                button.setDisabled(true);
+                                                                dButton.setDisabled(true);
                                                             }
                                                         });
                                                     }
