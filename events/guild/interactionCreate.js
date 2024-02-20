@@ -451,8 +451,10 @@ module.exports = async (Discord, client, interaction) => {
                                                 const appealEmbed = appealMessage.embeds[0];
 
                                                 if (appealEmbed) {
-                                                    appealEmbed.setColor('#00FF00');
-                                                    appealEmbed.setFooter({ text: `Appeal Approved  •  User ID: ${aUser}` });
+                                                    console.log(appealEmbed);
+
+                                                    //appealEmbed.setColor('#00FF00');
+                                                    //appealEmbed.setFooter({ text: `Appeal Approved  •  User ID: ${aUser}` });
                                                 }
                                             }
 
@@ -499,10 +501,11 @@ module.exports = async (Discord, client, interaction) => {
                                                     const appealEmbed = appealMessage.embeds[0];
 
                                                     if (appealEmbed) {
-                                                        appealEmbed.setColor('#FF0000');
-                                                        appealEmbed.setFooter({ text: `Appeal Denied  •  User ID: ${dUser}` });
+                                                        console.log(appealEmbed);
+                                                        //appealEmbed.setColor('#FF0000');
+                                                        //appealEmbed.setFooter({ text: `Appeal Denied  •  User ID: ${dUser}` });
 
-                                                        appealMessage.edit({ embeds: [appealEmbed] });
+                                                        //appealMessage.edit({ embeds: [appealEmbed] });
                                                     }
                                                 }
                                             });
