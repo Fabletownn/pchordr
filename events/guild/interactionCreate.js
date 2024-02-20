@@ -245,9 +245,9 @@ module.exports = async (Discord, client, interaction) => {
 
             guildID: interaction.guild.id
 
-        }, async (err, data) => {
+        }, async (cerr, cdata) => {
 
-            if (err) return console.log(err);
+            if (cerr) return console.log(cerr);
 
             LCONFIG.findOne({
                 guildID: interaction.guild.id
@@ -272,7 +272,7 @@ module.exports = async (Discord, client, interaction) => {
 
                             case "setup-reset":
 
-                                if (data) await data.delete();
+                                if (cdata) await cdata.delete();
                                 if (ldata) await ldata.delete();
 
                                 const newConfigData = new CONFIG({
@@ -504,15 +504,12 @@ module.exports = async (Discord, client, interaction) => {
 
                                                         await appealMessage.edit({ content: null, embeds: [newDenyEmbed] });
 
-                                                        const appealComponents = ActionRowBuilder.from(appealMessage.components[0]);
+                                                        const newDenyRow = ActionRowBuilder.from(appealMessage.components[0]);
 
-                                                        appealComponents.components.forEach((button) => {
-                                                            const dButton = ButtonBuilder.from(button);
+                                                        newDenyRow.components.find((button) => button.data.custom_id === 'appeal-accept').setDisabled(true);
+                                                        newDenyRow.components.find((button) => button.data.custom_id === 'appeal-deny').setDisabled(true);
 
-                                                            if (button.data.custom_id !== 'appeal-seemsg') {
-                                                                dButton.setDisabled(true);
-                                                            }
-                                                        });
+                                                        appealMessage.editReply({ components: [newDenyRow] });
                                                     }
                                                 }
                                             });
@@ -611,10 +608,10 @@ async function emergencyEmbedAlert(interaction, userRequested, reason) {
 
         guildID: interaction.guild.id
 
-    }, async (err, data) => {
+    }, async (cferr, cfdata) => {
 
-        if (err) return console.log(err);
-        if (!data) return;
+        if (cferr) return console.log(cferr);
+        if (!cfdata) return;
 
         const assistance_embed = new EmbedBuilder()
             .setTitle(`Assistance Request`)
@@ -628,7 +625,7 @@ async function emergencyEmbedAlert(interaction, userRequested, reason) {
             })
             .setTimestamp()
 
-        await interaction.client.channels.cache.get(data.modChat).send({ content: `<@&672857887894274058> <@&614196214078111745> Somebody needs your help!`, embeds: [assistance_embed] }).then(async (assistMessage) => {
+        await interaction.client.channels.cache.get(cfdata.modChat).send({ content: `<@&672857887894274058> <@&614196214078111745> Somebody needs your help!`, embeds: [assistance_embed] }).then(async (assistMessage) => {
 
             await assistMessage.react(`<:bITFNotes:1022548667317624842>`);
 
