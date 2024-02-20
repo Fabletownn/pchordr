@@ -36,7 +36,7 @@ module.exports = async (Discord, client, oldMember, newMember) => {
 
         if (!oldMember.roles.cache.has(twitchRoleID) && newMember.roles.cache.has(twitchRoleID)) {
 
-            guild.channels.cache.get(supportersChannelID).send(`${newMember} has just supported I Talk on **Twitch**. Welcome to <#${supportersChannelID}!\n\nYour access to this channel will not expire once your subscription expires. Thank you for the support. <:bITFBits:1022548606995136572>`);
+            guild.channels.cache.get(supportersChannelID).send(`${newMember} has just supported I Talk on **Twitch**. Welcome to <#${supportersChannelID}>!\n\nYour access to this channel will not expire once your subscription expires. Thank you for the support. <:bITFBits:1022548606995136572>`);
 
             newMember.roles.add(supporterRoleID);
 

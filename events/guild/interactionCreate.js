@@ -481,7 +481,7 @@ module.exports = async (Discord, client, interaction) => {
 
                                 try {
                                     await interaction.client.channels.cache.get('794486722356183052').send({ embeds: [denyEmbed] });
-                                    //await interaction.client.users.cache.get(dUser).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nAfter consideration, your I Talk Server ban appeal has been denied and you can no longer appeal.` }).catch((err) => { return });
+                                    await interaction.client.users.cache.get(dUser).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nAfter consideration, your I Talk Server ban appeal has been denied and you can no longer appeal.` }).catch((err) => { return });
                                     await interaction.client.guilds.cache.get('685876599199236173').members.ban(dUser, { reason: 'After consideration, your I Talk Server ban appeal has been denied.' });
 
                                     APPEALS.findOne({
