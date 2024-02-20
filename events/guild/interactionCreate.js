@@ -454,6 +454,13 @@ module.exports = async (Discord, client, interaction) => {
                                                     let newApproveEmbed = EmbedBuilder.from(appealEmbed).setColor('#00FF00').setFooter({ text: `Appeal Approved  •  User ID: ${dUser}` });
 
                                                     await appealMessage.edit({ embeds: [newApproveEmbed] });
+
+                                                    const newApproveRow = ActionRowBuilder.from(appealMessage.components[0]);
+
+                                                    newApproveRow.components.find((button) => button.data.custom_id === 'appeal-accept').setDisabled(true);
+                                                    newApproveRow.components.find((button) => button.data.custom_id === 'appeal-deny').setDisabled(true);
+
+                                                    appealMessage.edit({ components: [newApproveRow] });
                                                 }
                                             }
 
