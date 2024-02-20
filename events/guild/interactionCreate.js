@@ -501,7 +501,9 @@ module.exports = async (Discord, client, interaction) => {
                                                     const appealEmbed = appealMessage.embeds[0];
 
                                                     if (appealEmbed) {
-                                                        await appealMessage.edit({ embeds: [appealEmbed.setColor('#FF0000').setFooter({ text: `Appeal Denied  •  User ID: ${dUser}` })] });
+                                                        let newEmbed = EmbedBuilder.from(appealMessage.embeds[0]).setColor('#FF0000').setFooter({ text: `Appeal Denied  •  User ID: ${dUser}` });
+
+                                                        await appealMessage.edit({ embeds: [newEmbed] });
                                                     }
                                                 }
                                             });
