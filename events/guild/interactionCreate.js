@@ -490,16 +490,18 @@ module.exports = async (Discord, client, interaction) => {
                                         if (err) return console.log(err);
 
                                         if (apdata) {
-                                            const appealMessage = await interaction.client.channels.cache.get('1198024034437320774').messages.fetch(apdata.msgID);
+                                            await interaction.client.channels.cache.get('1198024034437320774').messages.fetch(apdata.msgID).then((appealMessage) => {
+                                                if (appealMessage) {
+                                                    const appealEmbed = appealMessage.embeds[0];
 
-                                            if (appealMessage) {
-                                                const appealEmbed = appealMessage.embeds[0];
+                                                    if (appealEmbed) {
+                                                        appealEmbed.setColor('#FF0000');
+                                                        appealEmbed.setFooter({ text: `Appeal Denied  •  User ID: ${dUser}` });
 
-                                                if (appealEmbed) {
-                                                    appealEmbed.setColor('#FF0000');
-                                                    appealEmbed.setFooter({ text: `Appeal Denied  •  User ID: ${dUser}` });
+                                                        appealMessage.edit({ embeds: [appealEmbed] });
+                                                    }
                                                 }
-                                            }
+                                            });
 
                                             await apdata.delete();
                                         }
