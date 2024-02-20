@@ -507,6 +507,8 @@ module.exports = async (Discord, client, interaction) => {
                                                         const appealComponents = appealMessage.components[0];
 
                                                         appealComponents.components.forEach((button) => {
+                                                            console.log(button);
+                                                            
                                                             const dButton = ButtonBuilder.from(button);
 
                                                             if (dButton.customId !== 'appeal-seemsg') {
