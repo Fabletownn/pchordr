@@ -113,9 +113,9 @@ module.exports = async (Discord, client, interaction) => {
             let appealMessage = interaction.fields.getTextInputValue('appeal-msg') || 'None';
             let appealNotes = interaction.fields.getTextInputValue('appeal-notes') || 'None';
             let appealAttachment = interaction.fields.getTextInputValue('appeal-attachments') || 'None';
-            let banReason;
+            var banReason;
 
-            interaction.client.guilds.cache.get('614193406838571085').bans.fetch(interaction.user.id).then((ban) => banReason = ban.reason).catch((err) => banReason = 'None');
+            await interaction.client.guilds.cache.get('614193406838571085').bans.fetch(interaction.user.id).then((ban) => banReason = ban.reason).catch((err) => banReason = 'None');
 
             APPEALS.findOne({
                 guildID: interaction.guild.id,
@@ -128,7 +128,7 @@ module.exports = async (Discord, client, interaction) => {
                     .setAuthor({ name: `${interaction.user.username}#${interaction.user.discriminator} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
                     .addFields([
                         { name: 'Appeal Message', value: appealMessage.slice(0, 1023) || 'None', inline: true },
-                        { name: 'Ban Reason', value: banReason || 'None', inline: true },
+                        { name: 'Ban Reason', value: banReason || '???', inline: true },
                         { name: 'Additional Notes', value: appealNotes || 'None', inline: false },
                         { name: 'Additional Files', value: appealAttachment || 'None', inline: false }
                     ])
@@ -140,7 +140,7 @@ module.exports = async (Discord, client, interaction) => {
                     .setAuthor({ name: `${interaction.user.username}#${interaction.user.discriminator} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
                     .addFields([
                         { name: 'Appeal Message', value: `${appealMessage.slice(0, 970)}... (see full message)` || 'None', inline: true },
-                        { name: 'Ban Reason', value: banReason || 'None', inline: true },
+                        { name: 'Ban Reason', value: banReason || '???', inline: true },
                         { name: 'Additional Notes', value: appealNotes || 'None', inline: false },
                         { name: 'Additional Files', value: appealAttachment || 'None', inline: false }
                     ])
@@ -421,6 +421,8 @@ module.exports = async (Discord, client, interaction) => {
 
                                 const aUser = interaction.message.content.split('(')[1].split(')')[0];
 
+                                if (!interaction.client.users.cache.get(aUser)) return interaction.update({ content: 'User not found, are you sure they haven\'t already left? <:bITFCry:1022548623243886593>' });
+
                                 const acceptEmbed = new EmbedBuilder()
                                     .setAuthor({ name: `Appeal Approved by ${interaction.user.displayName}`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
                                     .addFields([
@@ -467,6 +469,8 @@ module.exports = async (Discord, client, interaction) => {
                                 if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to deny that appeal, you do not have permission!', components: [], ephemeral: true });
 
                                 const dUser = interaction.message.content.split('(')[1].split(')')[0];
+
+                                if (!interaction.client.users.cache.get(dUser)) return interaction.update({ content: 'User not found, are you sure they haven\'t already left or been denied? <:bITFCry:1022548623243886593>' });
 
                                 const denyEmbed = new EmbedBuilder()
                                     .setAuthor({ name: `Appeal Denied by ${interaction.user.displayName}`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
