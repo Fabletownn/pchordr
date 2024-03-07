@@ -597,22 +597,28 @@ module.exports = async (Discord, client, interaction) => {
                 guildID: interaction.guild.id
             }, async (cferr, cfdata) => {
                 if (cferr) return console.log(cferr);
-                if (!cfdata) return;
+                if (!cfdata) return console.log('No cfdata');
+
+                console.log('handled button pressed')
 
                 await interaction.client.channels.cache.get(cfdata.modChat).messages.fetch(interaction.message.id).then(async (assistanceMessage) => {
                     if (assistanceMessage) {
+                        console.log('handled msg')
                         const appealEmbed = assistanceMessage.embeds[0];
 
                         if (appealEmbed) {
+                            console.log('handled embed')
                             let newAssistanceEmbed = EmbedBuilder.from(appealEmbed).setColor('#ff5154').setTitle(`Assistance Request Handled`).setFooter({ text: 'This request has been handled' });
 
-                            await assistanceMessage.edit({ content: null, embeds: [newAssistanceEmbed] });
+                            await assistanceMessage.edit({ embeds: [newAssistanceEmbed] });
 
-                            const newDenyRow = ActionRowBuilder.from(assistanceMessage.components[0]);
+                            const newAssistanceRow = ActionRowBuilder.from(assistanceMessage.components[0]);
 
-                            newDenyRow.components.find((button) => button.data.custom_id === 'assistance-handled').setDisabled(true);
+                            await newAssistanceRow.components.find((button) => button.data.custom_id === 'assistance-handled').setDisabled(true);
 
-                            assistanceMessage.edit({ components: [newDenyRow] });
+                            await assistanceMessage.edit({ components: [newDenyRow] });
+
+                            console.log('handled end')
                         }
                     }
                 });
@@ -647,7 +653,7 @@ async function emergencyEmbedAlert(interaction, userRequested, reason) {
                     .setCustomId('assistance-handled')
                     .setEmoji('1022548669641277542')
                     .setLabel('Handled')
-                    .setStyle(ButtonStyle.Success),
+                    .setStyle(ButtonStyle.Primary),
             );
 
         await interaction.client.channels.cache.get(cfdata.modChat).send({ content: `<@&6728578878942740581> <@&6141962140781117451> Somebody needs your help!`, embeds: [assistanceEmbed], components: [assistanceButton] });
