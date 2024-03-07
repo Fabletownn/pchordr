@@ -552,13 +552,9 @@ module.exports = async (Discord, client, interaction) => {
     }
 
     if (interaction.isStringSelectMenu()) {
-
         if (interaction.customId === 'assistance-select') {
-
             switch (interaction.values[0]) {
-
                 case "hatespeech":
-
                     emergencyEmbedAlert(interaction, interaction.user, `Hate Speech`);
 
                     await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **Hate Speech**.`, components: [], ephemeral: true });
@@ -566,7 +562,6 @@ module.exports = async (Discord, client, interaction) => {
                     break;
 
                 case "nsfw":
-
                     emergencyEmbedAlert(interaction, interaction.user, `NSFW Content`);
 
                     await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **NSFW Content**.`, components: [], ephemeral: true });
@@ -574,7 +569,6 @@ module.exports = async (Discord, client, interaction) => {
                     break;
 
                 case "spam":
-
                     emergencyEmbedAlert(interaction, interaction.user, `Spam`);
 
                     await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **Spam**.`, components: [], ephemeral: true });
@@ -582,7 +576,6 @@ module.exports = async (Discord, client, interaction) => {
                     break;
 
                 case "troll":
-
                     emergencyEmbedAlert(interaction, interaction.user, `Troll`);
 
                     await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **Troll**.`, components: [], ephemeral: true });
@@ -590,7 +583,6 @@ module.exports = async (Discord, client, interaction) => {
                     break;
 
                 case "other":
-
                     emergencyEmbedAlert(interaction, interaction.user, `Other`);
 
                     await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle the situation.`, components: [], ephemeral: true });
@@ -598,76 +590,66 @@ module.exports = async (Discord, client, interaction) => {
                     break;
 
                 default:
-
                     break;
-
             }
+        } else if (interaction.customId === 'assistance-handled') {
+            CONFIG.findOne({
+                guildID: interaction.guild.id
+            }, async (cferr, cfdata) => {
+                if (cferr) return console.log(cferr);
+                if (!cfdata) return;
 
+                await interaction.client.channels.cache.get(cfdata.modChat).messages.fetch(interaction.message.id).then(async (assistanceMessage) => {
+                    if (assistanceMessage) {
+                        const appealEmbed = assistanceMessage.embeds[0];
+
+                        if (appealEmbed) {
+                            let newAssistanceEmbed = EmbedBuilder.from(appealEmbed).setColor('#ff5154').setTitle(`Assistance Request Handled`).setFooter({ text: 'This request has been handled' });
+
+                            await assistanceMessage.edit({ content: null, embeds: [newAssistanceEmbed] });
+
+                            const newDenyRow = ActionRowBuilder.from(assistanceMessage.components[0]);
+
+                            newDenyRow.components.find((button) => button.data.custom_id === 'assistance-handled').setDisabled(true);
+
+                            assistanceMessage.edit({ components: [newDenyRow] });
+                        }
+                    }
+                });
+            });
         }
-
     }
-
 }
 
 async function emergencyEmbedAlert(interaction, userRequested, reason) {
 
     CONFIG.findOne({
-
         guildID: interaction.guild.id
-
     }, async (cferr, cfdata) => {
-
         if (cferr) return console.log(cferr);
         if (!cfdata) return;
 
-        const assistance_embed = new EmbedBuilder()
+        const assistanceEmbed = new EmbedBuilder()
             .setTitle(`Assistance Request`)
-            .setDescription(`${userRequested} (@${interaction.user.username}) has flagged an __**[emergency](https://discord.com/channels/${interaction.message.guild.id}/${interaction.message.channel.id})**__ in ${interaction.message.channel}!\n\n- **React with <:bITFNotes:1022548667317624842> to confirm you are handling this request.**\n\nSelected Reason: **${reason}**`)
-            .setColor('eed202')
+            .setDescription(`${userRequested} (@${interaction.user.username}) has flagged an **emergency** in ${interaction.message.channel}!\n\nSelected Reason: **${reason}**`)
+            .setColor('#eed202')
             .setFooter({
-                text: 'Nobody is handling this request yet',
+                text: 'This request is not yet handled',
                 iconURL: userRequested.displayAvatarURL({
                     dynamic: true
                 })
             })
             .setTimestamp()
 
-        await interaction.client.channels.cache.get(cfdata.modChat).send({ content: `<@&672857887894274058> <@&614196214078111745> Somebody needs your help!`, embeds: [assistance_embed] }).then(async (assistMessage) => {
+        const assistanceButton = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('assistance-handled')
+                    .setEmoji('1022548669641277542')
+                    .setLabel('Handled')
+                    .setStyle(ButtonStyle.Success),
+            );
 
-            await assistMessage.react(`<:bITFNotes:1022548667317624842>`);
-
-            const dealFilter = (reaction, userRequested) => reaction.emoji.id === '1022548667317624842' && !userRequested.bot;
-
-            const reactionAdded = await assistMessage.createReactionCollector(dealFilter, {
-                time: 10800000
-            });
-
-            reactionAdded.on('collect', async (r, user) => {
-
-                const assistanceEmbed2 = new EmbedBuilder()
-                    .setTitle(`Emergency Being Handled`)
-                    .setDescription(`${userRequested} (@${interaction.user.username}) has flagged an __**[emergency](https://discord.com/channels/${interaction.message.guild.id}/${interaction.message.channel.id})**__ in ${interaction.message.channel}!\n\nSelected Reason: **${reason}**.`)
-                    .setColor('ff5154')
-                    .setFooter({
-                        text: 'This request is being handled',
-                        iconURL: user.displayAvatarURL({
-                            dynamic: true
-                        })
-                    })
-                    .setTimestamp()
-
-                if (!user.bot && r.emoji.id === '1022548667317624842') {
-
-                    await assistMessage.edit({ embeds: [assistanceEmbed2] });
-
-                    await assistMessage.reactions.removeAll().catch(error => console.error(error));
-
-                }
-
-            });
-
-        });
-
+        await interaction.client.channels.cache.get(cfdata.modChat).send({ content: `<@&6728578878942740581> <@&6141962140781117451> Somebody needs your help!`, embeds: [assistanceEmbed], components: [assistanceButton] });
     });
-
 }
