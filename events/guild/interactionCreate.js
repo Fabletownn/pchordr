@@ -562,7 +562,7 @@ module.exports = async (Discord, client, interaction) => {
 
                                                 newAssistanceRow.components.find((button) => button.data.custom_id === 'assistance-handled').setDisabled(true);
 
-                                                await assistanceMessage.edit({ components: [newDenyRow] });
+                                                await assistanceMessage.edit({ components: [newAssistanceRow] });
 
                                                 await interaction.update({ content: 'Successfully marked the assistance request as handled. <:bITFPat:1022548669641277542>', ephemeral: true });
                                             }
