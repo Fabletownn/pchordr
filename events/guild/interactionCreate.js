@@ -542,6 +542,40 @@ module.exports = async (Discord, client, interaction) => {
 
                                 break;
 
+                            case "assistance-handled":
+                                CONFIG.findOne({
+                                    guildID: interaction.guild.id
+                                }, async (cferr, cfdata) => {
+                                    if (cferr) return console.log(cferr);
+                                    if (!cfdata) return console.log('No cfdata');
+
+                                    console.log('handled button pressed')
+
+                                    await interaction.client.channels.cache.get(cfdata.modChat).messages.fetch(interaction.message.id).then(async (assistanceMessage) => {
+                                        if (assistanceMessage) {
+                                            console.log('handled msg')
+                                            const appealEmbed = assistanceMessage.embeds[0];
+
+                                            if (appealEmbed) {
+                                                console.log('handled embed')
+                                                let newAssistanceEmbed = EmbedBuilder.from(appealEmbed).setColor('#ff5154').setTitle(`Assistance Request Handled`).setFooter({ text: 'This request has been handled' });
+
+                                                await assistanceMessage.edit({ embeds: [newAssistanceEmbed] });
+
+                                                const newAssistanceRow = ActionRowBuilder.from(assistanceMessage.components[0]);
+
+                                                await newAssistanceRow.components.find((button) => button.data.custom_id === 'assistance-handled').setDisabled(true);
+
+                                                await assistanceMessage.edit({ components: [newDenyRow] });
+
+                                                console.log('handled end')
+                                            }
+                                        }
+                                    });
+                                });
+                                
+                                break;
+
                             default:
                                 break;
                         }
@@ -592,37 +626,6 @@ module.exports = async (Discord, client, interaction) => {
                 default:
                     break;
             }
-        } else if (interaction.customId === 'assistance-handled') {
-            CONFIG.findOne({
-                guildID: interaction.guild.id
-            }, async (cferr, cfdata) => {
-                if (cferr) return console.log(cferr);
-                if (!cfdata) return console.log('No cfdata');
-
-                console.log('handled button pressed')
-
-                await interaction.client.channels.cache.get(cfdata.modChat).messages.fetch(interaction.message.id).then(async (assistanceMessage) => {
-                    if (assistanceMessage) {
-                        console.log('handled msg')
-                        const appealEmbed = assistanceMessage.embeds[0];
-
-                        if (appealEmbed) {
-                            console.log('handled embed')
-                            let newAssistanceEmbed = EmbedBuilder.from(appealEmbed).setColor('#ff5154').setTitle(`Assistance Request Handled`).setFooter({ text: 'This request has been handled' });
-
-                            await assistanceMessage.edit({ embeds: [newAssistanceEmbed] });
-
-                            const newAssistanceRow = ActionRowBuilder.from(assistanceMessage.components[0]);
-
-                            await newAssistanceRow.components.find((button) => button.data.custom_id === 'assistance-handled').setDisabled(true);
-
-                            await assistanceMessage.edit({ components: [newDenyRow] });
-
-                            console.log('handled end')
-                        }
-                    }
-                });
-            });
         }
     }
 }
