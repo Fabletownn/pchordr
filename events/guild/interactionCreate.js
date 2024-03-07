@@ -553,12 +553,10 @@ module.exports = async (Discord, client, interaction) => {
 
                                     await interaction.client.channels.cache.get(cfdata.modChat).messages.fetch(interaction.message.id).then(async (assistanceMessage) => {
                                         if (assistanceMessage) {
-                                            console.log('handled msg')
                                             const appealEmbed = assistanceMessage.embeds[0];
 
                                             if (appealEmbed) {
-                                                console.log('handled embed')
-                                                let newAssistanceEmbed = EmbedBuilder.from(appealEmbed).setColor('#ff5154').setTitle(`Assistance Request Handled`).setFooter({ text: 'This request has been handled' });
+                                                let newAssistanceEmbed = EmbedBuilder.from(appealEmbed).setColor('#ff5154').setTitle(`Assistance Request Handled`).setFooter({ text: 'This request has been handled by ' + interaction.user.displayName, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
                                                 await assistanceMessage.edit({ embeds: [newAssistanceEmbed] });
 
@@ -567,13 +565,11 @@ module.exports = async (Discord, client, interaction) => {
                                                 await newAssistanceRow.components.find((button) => button.data.custom_id === 'assistance-handled').setDisabled(true);
 
                                                 await assistanceMessage.edit({ components: [newDenyRow] });
-
-                                                console.log('handled end')
                                             }
                                         }
                                     });
                                 });
-                                
+
                                 break;
 
                             default:
@@ -659,6 +655,6 @@ async function emergencyEmbedAlert(interaction, userRequested, reason) {
                     .setStyle(ButtonStyle.Primary),
             );
 
-        await interaction.client.channels.cache.get(cfdata.modChat).send({ content: `<@&6728578878942740581> <@&6141962140781117451> Somebody needs your help!`, embeds: [assistanceEmbed], components: [assistanceButton] });
+        await interaction.client.channels.cache.get(cfdata.modChat).send({ content: `<@&672857887894274058> <@&614196214078111745> Somebody needs your help!`, embeds: [assistanceEmbed], components: [assistanceButton] });
     });
 }
