@@ -564,7 +564,7 @@ module.exports = async (Discord, client, interaction) => {
 
                                                 await assistanceMessage.edit({ components: [newAssistanceRow] });
 
-                                                await interaction.update({ content: 'Successfully marked the assistance request as handled. <:bITFPat:1022548669641277542>', ephemeral: true });
+                                                await interaction.reply({ content: 'Successfully marked the assistance request as handled. <:bITFPat:1022548669641277542>', ephemeral: true });
                                             }
                                         }
                                     });
@@ -655,6 +655,6 @@ async function emergencyEmbedAlert(interaction, userRequested, reason) {
                     .setStyle(ButtonStyle.Primary),
             );
 
-        await interaction.client.channels.cache.get(cfdata.modChat).send({ content: `<@&6728578878942740581> <@&6141962140781117451> Somebody needs your help!`, embeds: [assistanceEmbed], components: [assistanceButton] });
+        await interaction.client.channels.cache.get(cfdata.modChat).send({ content: `<@&672857887894274058> <@&614196214078111745> Somebody needs your help!`, embeds: [assistanceEmbed], components: [assistanceButton] });
     });
 }
