@@ -549,8 +549,6 @@ module.exports = async (Discord, client, interaction) => {
                                     if (cferr) return console.log(cferr);
                                     if (!cfdata) return console.log('No cfdata');
 
-                                    console.log('handled button pressed')
-
                                     await interaction.client.channels.cache.get(cfdata.modChat).messages.fetch(interaction.message.id).then(async (assistanceMessage) => {
                                         if (assistanceMessage) {
                                             const appealEmbed = assistanceMessage.embeds[0];
@@ -565,6 +563,8 @@ module.exports = async (Discord, client, interaction) => {
                                                 await newAssistanceRow.components.find((button) => button.data.custom_id === 'assistance-handled').setDisabled(true);
 
                                                 await assistanceMessage.edit({ components: [newDenyRow] });
+
+                                                await interaction.reply({ content: 'Successfully marked the assistance request as handled. <:bITFPat:1022548669641277542>', ephemeral: true });
                                             }
                                         }
                                     });
