@@ -133,11 +133,12 @@ module.exports = async (Discord, client, message) => {
 
         }
 
-        if (data.giveawayChannel !== null) {
+        if (data.giveawayChannel !== null && message.mentions.users.size >= 1) {
             if (message.channel.id === data.giveawayChannel) {
                 if (data.autogiveaway === true) {
                     if (data.modChat !== null) {
-                        message.guild.channels.cache.get(data.modChat).send({ content: 'A giveaway has been detected, <@152597531824619521>:' });
+                        message.guild.channels.cache.get(data.modChat).send({ content: '<@152597531824619521>:' });
+
                         // Clear channel
                         if (data.giveawayWinnerChannel !== null) {
                             await message.guild.channels.cache.get(data.giveawayWinnerChannel).bulkDelete(50);
@@ -157,7 +158,7 @@ module.exports = async (Discord, client, message) => {
                             });
                         }
 
-                        setTimeout(async() => await message.guild.channels.cache.get(data.modChat).send({ content: `_ _\nDone! <:bITFGG:1022548636481114172>` }), 1000);
+                        setTimeout(async() => await message.guild.channels.cache.get(data.modChat).send({ content: `<:bITFGG:1022548636481114172>` }), 1500);
                     }
                 }
             }
