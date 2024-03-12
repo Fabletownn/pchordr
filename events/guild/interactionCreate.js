@@ -166,7 +166,7 @@ module.exports = async (Discord, client, interaction) => {
                         new ButtonBuilder()
                             .setCustomId('appeal-misuse')
                             .setEmoji('1022548647948333117')
-                            .setLabel('Not Banned (Kick)')
+                            .setLabel('Misuse (Not Banned)')
                             .setStyle(ButtonStyle.Secondary),
                     );
 
@@ -195,7 +195,7 @@ module.exports = async (Discord, client, interaction) => {
                         new ButtonBuilder()
                             .setCustomId('appeal-misuse')
                             .setEmoji('1022548647948333117')
-                            .setLabel('Not Banned (Kick)')
+                            .setLabel('Misuse (Not Banned)')
                             .setStyle(ButtonStyle.Secondary),
                     );
 
@@ -212,7 +212,6 @@ module.exports = async (Discord, client, interaction) => {
                             appealmsg: appealMessage,
                             notes: appealNotes,
                             attachs: appealAttachment,
-                            pendingstatus: false
                         });
 
                         newAppealData.save().catch((err) => console.log(err))
@@ -230,7 +229,6 @@ module.exports = async (Discord, client, interaction) => {
                             appealmsg: appealMessage,
                             notes: appealNotes,
                             attachs: appealAttachment,
-                            pendingstatus: false
                         });
 
                         newAppealData.save().catch((err) => console.log(err))
