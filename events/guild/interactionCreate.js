@@ -162,6 +162,12 @@ module.exports = async (Discord, client, interaction) => {
                             .setEmoji('1063265618155020358')
                             .setLabel('Deny (Ban)')
                             .setStyle(ButtonStyle.Danger),
+                    ).addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('appeal-misuse')
+                            .setEmoji('1022548647948333117')
+                            .setLabel('Not Banned (Kick)')
+                            .setStyle(ButtonStyle.Secondary),
                     );
 
                 const staffButtonsOL = new ActionRowBuilder()
@@ -185,6 +191,12 @@ module.exports = async (Discord, client, interaction) => {
                             .setEmoji('1063265618155020358')
                             .setLabel('Deny (Ban)')
                             .setStyle(ButtonStyle.Danger),
+                    ).addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('appeal-misuse')
+                            .setEmoji('1022548647948333117')
+                            .setLabel('Not Banned (Kick)')
+                            .setStyle(ButtonStyle.Secondary),
                     );
 
                 if (appealMessage.length < 1024) {
@@ -416,6 +428,27 @@ module.exports = async (Discord, client, interaction) => {
 
                                 break;
 
+                            case "appeal-misuse":
+                                const optionButtons3 = new ActionRowBuilder()
+                                    .addComponents(
+                                        new ButtonBuilder()
+                                            .setCustomId('appeal-misuse-sure')
+                                            .setEmoji('1022548599697051790')
+                                            .setLabel('Yes')
+                                            .setStyle(ButtonStyle.Success),
+                                    )
+                                    .addComponents(
+                                        new ButtonBuilder()
+                                            .setCustomId('appeal-misuse-cancel')
+                                            .setEmoji('1022548597390180382')
+                                            .setLabel('No')
+                                            .setStyle(ButtonStyle.Danger),
+                                    );
+
+                                await interaction.reply({ content: 'This will kick <@' + adata.userID + '> (' + adata.userID + ') from the appeals server for misuse (submitted an appeal when not banned).\n\nAre you sure? <:bITFSweat:1022548683176284281>', components: [optionButtons3], ephemeral: true });
+
+                                break;
+
                             case "appeal-accept-sure":
                                 if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to unban or accept that appeal, you do not have permission!', components: [], ephemeral: true });
 
@@ -438,7 +471,7 @@ module.exports = async (Discord, client, interaction) => {
                                     await interaction.guild.members.unban(aUser);
                                     await interaction.client.channels.cache.get('794486722356183052').send({ embeds: [acceptEmbed] });
                                     await interaction.client.channels.cache.get('1208961703002378341').send({ content: `<@${appealaUserUserID}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.` });
-                                    await interaction.reply({ content: 'Successfully unbanned and notified the user! <:bITFVictory:1063265610303295619>' });
+                                    await interaction.reply({ content: 'Successfully unbanned and notified the user! <:bITFDab:1022548625735303258>' });
 
                                     APPEALS.findOne({
                                         userID: aUser
@@ -459,12 +492,13 @@ module.exports = async (Discord, client, interaction) => {
 
                                                     newApproveRow.components.find((button) => button.data.custom_id === 'appeal-accept').setDisabled(true);
                                                     newApproveRow.components.find((button) => button.data.custom_id === 'appeal-deny').setDisabled(true);
+                                                    newApproveRow.components.find((button) => button.data.custom_id === 'appeal-misuse').setDisabled(true);
 
                                                     appealMessage.edit({ components: [newApproveRow] });
                                                 }
                                             }
 
-                                            await apdata.delete();
+                                            setTimeout(() => apdata.delete(), 3000);
                                         }
                                     });
                                 } catch (err) {
@@ -477,6 +511,8 @@ module.exports = async (Discord, client, interaction) => {
                                 if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to deny that appeal, you do not have permission!', components: [], ephemeral: true });
 
                                 const dUser = interaction.message.content.split('(')[1].split(')')[0];
+
+                                if (interaction.guild.members.cache.get(dUser) && interaction.guild.members.cache.get(dUser).permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to deny that appeal, that is a staff member!', components: [], ephemeral: true });
 
                                 if (!interaction.client.users.cache.get(dUser)) return interaction.update({ content: 'User not found, are you sure they haven\'t already left or been denied? <:bITFCry:1022548623243886593>', components: [], ephemeral: true });
 
@@ -515,19 +551,82 @@ module.exports = async (Discord, client, interaction) => {
 
                                                         newDenyRow.components.find((button) => button.data.custom_id === 'appeal-accept').setDisabled(true);
                                                         newDenyRow.components.find((button) => button.data.custom_id === 'appeal-deny').setDisabled(true);
+                                                        newDenyRow.components.find((button) => button.data.custom_id === 'appeal-misuse').setDisabled(true);
 
                                                         appealMessage.edit({ components: [newDenyRow] });
                                                     }
                                                 }
                                             });
 
-                                            await apdata.delete();
+                                            setTimeout(() => apdata.delete(), 3000);
                                         }
                                     });
 
-                                    await interaction.update({ content: 'Successfully banned the user and denied their appeal! <:bITFVictory:1063265610303295619>', components: [], ephemeral: true });
+                                    await interaction.update({ content: 'Successfully banned the user and denied their appeal! <:bITFDab:1022548625735303258>', components: [], ephemeral: true });
                                 } catch (err) {
                                     await interaction.update({ content: 'Ran into an issue trying to deny that appeal! <:bITFCry:1022548623243886593>\n```' + err + '```', components: [], ephemeral: true });
+                                }
+
+                                break;
+
+                            case "appeal-misuse-sure":
+                                if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to deny that appeal, you do not have permission!', components: [], ephemeral: true });
+
+                                const mUser = interaction.message.content.split('(')[1].split(')')[0];
+
+                                if (interaction.guild.members.cache.get(mUser) && interaction.guild.members.cache.get(mUser).permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to deny that appeal, that is a staff member!', components: [], ephemeral: true });
+
+                                if (!interaction.client.users.cache.get(mUser)) return interaction.update({ content: 'User not found, are you sure they haven\'t already left or been denied? <:bITFCry:1022548623243886593>', components: [], ephemeral: true });
+
+                                const misuseEmbed = new EmbedBuilder()
+                                    .setAuthor({ name: `Appeal Voided for Misuse by ${interaction.user.displayName}`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
+                                    .addFields([
+                                        { name: 'User', value: `${interaction.client.users.cache.get(mUser).username}#${interaction.client.users.cache.get(mUser).discriminator}\n(${interaction.client.users.cache.get(mUser).displayName})`, inline: true },
+                                        { name: 'Moderator', value: `${interaction.user.username}#${interaction.user.discriminator}\n(${interaction.user.displayName})`, inline: true },
+                                        { name: 'Date', value: `<t:${Math.round((interaction.message.createdTimestamp) / 1000)}:F> (<t:${Math.round((interaction.message.createdTimestamp) / 1000)}:R>)`, inline: false }
+                                    ])
+                                    .setColor('#FF0000')
+                                    .setFooter({ text: `User ID: ${mUser}` })
+                                    .setTimestamp()
+
+                                try {
+                                    await interaction.client.channels.cache.get('794486722356183052').send({ embeds: [misuseEmbed] });
+                                    await interaction.client.users.cache.get(mUser).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nFor misuse of the ban appeals server, you have been kicked from the server. Do not file an appeal if you aren't banned!` }).catch((err) => { return });
+                                    await interaction.client.guilds.cache.get('685876599199236173').members.kick(mUser, { reason: 'Misuse (Not Banned)' });
+
+                                    APPEALS.findOne({
+                                        userID: mUser
+                                    }, async (err, apdata) => {
+                                        if (err) return console.log(err);
+
+                                        if (apdata) {
+                                            await interaction.client.channels.cache.get('1198024034437320774').messages.fetch(apdata.msgID).then(async (appealMessage) => {
+                                                if (appealMessage) {
+                                                    const appealEmbed = appealMessage.embeds[0];
+
+                                                    if (appealEmbed) {
+                                                        let newMisuseEmbed = EmbedBuilder.from(appealEmbed).setColor('#4E525B').setFooter({ text: `Appeal Voided For Misuse  •  User ID: ${dUser}` });
+
+                                                        await appealMessage.edit({ content: null, embeds: [newMisuseEmbed] });
+
+                                                        const newMisuseRow = ActionRowBuilder.from(appealMessage.components[0]);
+
+                                                        newMisuseRow.components.find((button) => button.data.custom_id === 'appeal-accept').setDisabled(true);
+                                                        newMisuseRow.components.find((button) => button.data.custom_id === 'appeal-deny').setDisabled(true);
+                                                        newMisuseRow.components.find((button) => button.data.custom_id === 'appeal-misuse').setDisabled(true);
+
+                                                        appealMessage.edit({ components: [newMisuseRow] });
+                                                    }
+                                                }
+                                            });
+
+                                            setTimeout(() => apdata.delete(), 3000);
+                                        }
+                                    });
+
+                                    await interaction.update({ content: 'Successfully kicked the user and voided their appeal. <:bITFDab:1022548625735303258>', components: [], ephemeral: true });
+                                } catch (err) {
+                                    await interaction.update({ content: 'Ran into an issue trying to void that appeal! <:bITFCry:1022548623243886593>\n```' + err + '```', components: [], ephemeral: true });
                                 }
 
                                 break;
