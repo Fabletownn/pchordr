@@ -468,7 +468,7 @@ module.exports = async (Discord, client, interaction) => {
                                 try {
                                     await interaction.guild.members.unban(aUser);
                                     await interaction.client.channels.cache.get('794486722356183052').send({ embeds: [acceptEmbed] });
-                                    await interaction.client.channels.cache.get('1208961703002378341').send({ content: `<@${appealaUserUserID}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.` });
+                                    await interaction.client.channels.cache.get('1208961703002378341').send({ content: `<@${aUser}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.` });
                                     await interaction.reply({ content: 'Successfully unbanned and notified the user! <:bITFDab:1022548625735303258>' });
 
                                     APPEALS.findOne({
@@ -568,11 +568,11 @@ module.exports = async (Discord, client, interaction) => {
                                 break;
 
                             case "appeal-misuse-sure":
-                                if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to deny that appeal, you do not have permission!', components: [], ephemeral: true });
+                                if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to void that appeal, you do not have permission!', components: [], ephemeral: true });
 
                                 const mUser = interaction.message.content.split('(')[1].split(')')[0];
 
-                                if (interaction.guild.members.cache.get(mUser) && interaction.guild.members.cache.get(mUser).permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to deny that appeal, that is a staff member!', components: [], ephemeral: true });
+                                if (interaction.guild.members.cache.get(mUser) && interaction.guild.members.cache.get(mUser).permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to void that appeal, that is a staff member!', components: [], ephemeral: true });
 
                                 if (!interaction.client.users.cache.get(mUser)) return interaction.update({ content: 'User not found, are you sure they haven\'t already left or been denied? <:bITFCry:1022548623243886593>', components: [], ephemeral: true });
 
