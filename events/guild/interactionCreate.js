@@ -450,7 +450,6 @@ module.exports = async (Discord, client, interaction) => {
                                 break;
 
                             case "appeal-accept-sure":
-                                await interaction.deferReply({ ephemeral: true });
                                 if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to unban or accept that appeal, you do not have permission!', components: [], ephemeral: true });
 
                                 const aUser = interaction.message.content.split('(')[1].split(')')[0];
@@ -510,7 +509,6 @@ module.exports = async (Discord, client, interaction) => {
                                 break;
 
                             case "appeal-deny-sure":
-                                await interaction.deferReply({ ephemeral: true });
                                 if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to deny that appeal, you do not have permission!', components: [], ephemeral: true });
 
                                 const dUser = interaction.message.content.split('(')[1].split(')')[0];
@@ -574,7 +572,6 @@ module.exports = async (Discord, client, interaction) => {
                                 break;
 
                             case "appeal-misuse-sure":
-                                await interaction.deferReply({ ephemeral: true });
                                 if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to void that appeal, you do not have permission!', components: [], ephemeral: true });
 
                                 const mUser = interaction.message.content.split('(')[1].split(')')[0];
