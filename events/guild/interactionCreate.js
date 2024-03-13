@@ -204,6 +204,7 @@ module.exports = async (Discord, client, interaction) => {
                         await amsg.react('<:aITFUpvote:1022548599697051790>');
                         await amsg.react('<:bITFThink:1022548686158442537>');
                         await amsg.react('<:aITFDownvote:1022548597390180382>');
+                        await amsg.pin().catch((err) => console.log(err));
 
                         const newAppealData = new APPEALS({
                             guildID: interaction.guild.id,
@@ -221,6 +222,7 @@ module.exports = async (Discord, client, interaction) => {
                         await amsg.react('<:aITFUpvote:1022548599697051790>');
                         await amsg.react('<:bITFThink:1022548686158442537>');
                         await amsg.react('<:aITFDownvote:1022548597390180382>');
+                        await amsg.pin().catch((err) => console.log(err));
 
                         const newAppealData = new APPEALS({
                             guildID: interaction.guild.id,
@@ -493,6 +495,7 @@ module.exports = async (Discord, client, interaction) => {
                                                     newApproveRow.components.find((button) => button.data.custom_id === 'appeal-misuse').setDisabled(true);
 
                                                     appealMessage.edit({ components: [newApproveRow] });
+                                                    appealMessage.unpin().catch((err) => console.log(err));
                                                 }
                                             }
 
@@ -552,6 +555,7 @@ module.exports = async (Discord, client, interaction) => {
                                                         newDenyRow.components.find((button) => button.data.custom_id === 'appeal-misuse').setDisabled(true);
 
                                                         appealMessage.edit({ components: [newDenyRow] });
+                                                        appealMessage.unpin().catch((err) => console.log(err));
                                                     }
                                                 }
                                             });
@@ -614,6 +618,7 @@ module.exports = async (Discord, client, interaction) => {
                                                         newMisuseRow.components.find((button) => button.data.custom_id === 'appeal-misuse').setDisabled(true);
 
                                                         appealMessage.edit({ components: [newMisuseRow] });
+                                                        appealMessage.unpin().catch((err) => console.log(err));
                                                     }
                                                 }
                                             });
