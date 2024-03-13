@@ -466,10 +466,10 @@ module.exports = async (Discord, client, interaction) => {
                                     .setTimestamp()
 
                                 try {
-                                    await interaction.guild.members.unban(aUser, { reason: 'Appeal has been accepted.' });
+                                    await interaction.guild.members.unban(aUser, 'Appeal has been accepted.');
                                     await interaction.client.channels.cache.get('794486722356183052').send({ embeds: [acceptEmbed] });
                                     await interaction.client.channels.cache.get('1208961703002378341').send({ content: `<@${aUser}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.` });
-                                    await interaction.reply({ content: 'Successfully unbanned and notified the user! <:bITFDab:1022548625735303258>' });
+                                    await interaction.reply({ content: 'Successfully unbanned and notified the user! <:bITFDab:1022548625735303258>', ephemeral: true });
 
                                     APPEALS.findOne({
                                         userID: aUser
@@ -482,7 +482,7 @@ module.exports = async (Discord, client, interaction) => {
                                                 const appealEmbed = appealMessage.embeds[0];
 
                                                 if (appealEmbed) {
-                                                    let newApproveEmbed = EmbedBuilder.from(appealEmbed).setColor('#00FF00').setFooter({ text: `Appeal Approved  •  User ID: ${dUser}` });
+                                                    let newApproveEmbed = EmbedBuilder.from(appealEmbed).setColor('#00FF00').setFooter({ text: `Appeal Approved  •  User ID: ${aUser}` });
 
                                                     await appealMessage.edit({ embeds: [newApproveEmbed] });
 
