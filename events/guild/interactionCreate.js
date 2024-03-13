@@ -466,7 +466,7 @@ module.exports = async (Discord, client, interaction) => {
                                     .setTimestamp()
 
                                 try {
-                                    await interaction.guild.members.unban(aUser);
+                                    await interaction.guild.members.unban(aUser, { reason: 'Appeal has been accepted.' });
                                     await interaction.client.channels.cache.get('794486722356183052').send({ embeds: [acceptEmbed] });
                                     await interaction.client.channels.cache.get('1208961703002378341').send({ content: `<@${aUser}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.` });
                                     await interaction.reply({ content: 'Successfully unbanned and notified the user! <:bITFDab:1022548625735303258>' });
