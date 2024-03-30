@@ -7,12 +7,12 @@ module.exports = async (Discord, client, thread, newlyCreated) => {
         if (err) return console.log(err);
         if (!data) return;
 
-        console.log(thread);
+        console.log(thread.messages);
 
         if (newlyCreated) {
             if ((data.artChat !== null) && (data.gpChat !== null) && (data.modRole !== null) && (data.artdelete !== null)) {
 
-                if ((thread.parentId === data.artChat || thread.parentId === data.gpChat) && (thread.attachments.size <= 0) && (!thread.member.roles.cache.has(data.modRole)) && (!thread.content.includes('https://')) && (!thread.content.includes('www.'))) {
+                if ((thread.parentId === data.artChat || thread.parentId === data.gpChat) && (thread.messages.first().attachments.size <= 0) && (!thread.messages.first().member.roles.cache.has(data.modRole)) && (!thread.messages.first().content.includes('https://')) && (!thread.messages.first().content.includes('www.'))) {
 
                     if (data.artdelete === true) {
 
