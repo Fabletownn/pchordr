@@ -15,7 +15,7 @@ module.exports = async (Discord, client, thread, newlyCreated) => {
                     console.log(post);
 
                     if ((thread.parentId === data.artChat || thread.parentId === data.gpChat) && (post.attachments.size <= 0) && (!post.member.roles.cache.has(data.modRole)) && (!post.content.includes('https://')) && (!post.content.includes('www.'))) {
-                        if (thread.author.bot) return;
+                        if (post.author.bot) return;
 
                         setTimeout(() => thread.send(`<@${thread.ownerId}>: Make sure your post has an image or media link attached to it! This post will automatically delete in 5 seconds. <a:bITFLeave:1063266447251492935>`), 1500);
 
