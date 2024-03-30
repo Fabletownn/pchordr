@@ -6,4 +6,4 @@ const deletelogSchema = mongoose.Schema({
     embed: Array
 });
 
-module.exports = mongoose.model('deletes', deletelogSchema);
+module.exports = mongoose.model('msglogs', deletelogSchema);

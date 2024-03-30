@@ -194,7 +194,7 @@ module.exports = {
                 case "artchat":
 
                     if (!interaction.guild.channels.cache.get(configVal)) return interaction.reply({ content: 'Failed to set that ID as the Art channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>\n\nThis parameter requires you to provide the channel\'s ID, not the mention.' });
-                    if (interaction.guild.channels.cache.get(configVal).type !== ChannelType.GuildText) return interaction.reply({ content: 'Failed to set that ID as the Art channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>' });
+                    if (interaction.guild.channels.cache.get(configVal).type !== ChannelType.GuildForum) return interaction.reply({ content: 'Failed to set that ID as the Art channel, as it does not exist or is not forum-based. <:bITFSweat:1022548683176284281>' });
 
                     if (data.artChat === configVal) return interaction.reply({ content: 'That channel is already in use.' });
 
@@ -208,7 +208,7 @@ module.exports = {
                 case "gpchat":
 
                     if (!interaction.guild.channels.cache.get(configVal)) return interaction.reply({ content: 'Failed to set that ID as the Game Photography channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>\n\nThis parameter requires you to provide the channel\'s ID, not the mention.' });
-                    if (interaction.guild.channels.cache.get(configVal).type !== ChannelType.GuildText) return interaction.reply({ content: 'Failed to set that ID as the Game Photography channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>' });
+                    if (interaction.guild.channels.cache.get(configVal).type !== ChannelType.GuildForum) return interaction.reply({ content: 'Failed to set that ID as the Game Photography channel, as it does not exist or is not forum-based. <:bITFSweat:1022548683176284281>' });
 
                     if (data.gpChat === configVal) return interaction.reply({ content: 'That channel is already in use.' });
 

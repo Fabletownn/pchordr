@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require('discord.js');
 const LCONFIG = require('../../models/logconfig.js');
-const DELETES = require('../../models/deletes.js');
+const LOGS = require('../../models/msglogs.js');
 
 module.exports = async (Discord, client, message) => {
     if (message.partial) return;
@@ -59,13 +59,13 @@ module.exports = async (Discord, client, message) => {
             overloadedEmbed = contentFieldsNeeded;
         }
 
-        DELETES.findOne({
+        LOGS.findOne({
             guildID: message.guild.id
         }, (err, data) => {
             if (err) return console.log(err);
 
             if (data) {
-                DELETES.find({ guildID: message.guild.id }).then(async (deletedata) => {
+                LOGS.find({ guildID: message.guild.id }).then(async (deletedata) => {
                     var addedData = 0;
 
                     await deletedata.forEach((d) => {
@@ -79,7 +79,7 @@ module.exports = async (Discord, client, message) => {
                     });
 
                     if (addedData == 0) {
-                        const newDeletedData = new DELETES({
+                        const newDeletedData = new LOGS({
                             guildID: message.guild.id,
                             overload: overloadedEmbed,
                             embed: deletedEmbed.toJSON()
@@ -89,7 +89,7 @@ module.exports = async (Discord, client, message) => {
                     }
                 });
             } else {
-                const newDeletedData = new DELETES({
+                const newDeletedData = new LOGS({
                     guildID: message.guild.id,
                     overload: overloadedEmbed,
                     embed: deletedEmbed.toJSON()

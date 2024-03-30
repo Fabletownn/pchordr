@@ -471,12 +471,12 @@ module.exports = async (Discord, client, interaction) => {
                                     await interaction.guild.members.unban(aUser, 'Appeal has been accepted.');
                                     await interaction.client.channels.cache.get('794486722356183052').send({ embeds: [acceptEmbed] });
                                     await interaction.client.channels.cache.get('1208961703002378341').send({ content: `<@${aUser}> Your appeal has been accepted. Restart your Discord (CTRL + R) and rejoin using the invite <https://discord.gg/italk>.` });
-                                    await interaction.reply({ content: 'Successfully unbanned and notified the user! <:bITFDab:1022548625735303258>', ephemeral: true });
 
                                     APPEALS.findOne({
                                         userID: aUser
                                     }, async (err, apdata) => {
                                         if (err) return console.log(err);
+                                        
                                         if (apdata) {
                                             const appealMessage = await interaction.client.channels.cache.get('1198024034437320774').messages.fetch(apdata.msgID);
 
@@ -502,6 +502,8 @@ module.exports = async (Discord, client, interaction) => {
                                             setTimeout(() => apdata.delete(), 3000);
                                         }
                                     });
+
+                                    await interaction.update({ content: 'Successfully unbanned and notified the user! <:bITFDab:1022548625735303258>', ephemeral: true });
                                 } catch (err) {
                                     await interaction.update({ content: 'Ran into an issue trying to unban or accept that appeal, are you sure they are banned? <:bITFCry:1022548623243886593>\n```' + err + '```', components: [], ephemeral: true });
                                 }
@@ -539,26 +541,26 @@ module.exports = async (Discord, client, interaction) => {
                                         if (err) return console.log(err);
 
                                         if (apdata) {
-                                            await interaction.client.channels.cache.get('1198024034437320774').messages.fetch(apdata.msgID).then(async (appealMessage) => {
-                                                if (appealMessage) {
-                                                    const appealEmbed = appealMessage.embeds[0];
+                                            const appealMessage = await interaction.client.channels.cache.get('1198024034437320774').messages.fetch(apdata.msgID);
 
-                                                    if (appealEmbed) {
-                                                        let newDenyEmbed = EmbedBuilder.from(appealEmbed).setColor('#FF0000').setFooter({ text: `Appeal Denied  •  User ID: ${dUser}` });
+                                            if (appealMessage) {
+                                                const appealEmbed = appealMessage.embeds[0];
 
-                                                        await appealMessage.edit({ content: null, embeds: [newDenyEmbed] });
+                                                if (appealEmbed) {
+                                                    let newDenyEmbed = EmbedBuilder.from(appealEmbed).setColor('#FF0000').setFooter({ text: `Appeal Denied  •  User ID: ${dUser}` });
 
-                                                        const newDenyRow = ActionRowBuilder.from(appealMessage.components[0]);
+                                                    await appealMessage.edit({ content: null, embeds: [newDenyEmbed] });
 
-                                                        newDenyRow.components.find((button) => button.data.custom_id === 'appeal-accept').setDisabled(true);
-                                                        newDenyRow.components.find((button) => button.data.custom_id === 'appeal-deny').setDisabled(true);
-                                                        newDenyRow.components.find((button) => button.data.custom_id === 'appeal-misuse').setDisabled(true);
+                                                    const newDenyRow = ActionRowBuilder.from(appealMessage.components[0]);
 
-                                                        appealMessage.edit({ components: [newDenyRow] });
-                                                        appealMessage.unpin().catch((err) => console.log(err));
-                                                    }
+                                                    newDenyRow.components.find((button) => button.data.custom_id === 'appeal-accept').setDisabled(true);
+                                                    newDenyRow.components.find((button) => button.data.custom_id === 'appeal-deny').setDisabled(true);
+                                                    newDenyRow.components.find((button) => button.data.custom_id === 'appeal-misuse').setDisabled(true);
+
+                                                    appealMessage.edit({ components: [newDenyRow] });
+                                                    appealMessage.unpin().catch((err) => console.log(err));
                                                 }
-                                            });
+                                            }
 
                                             setTimeout(() => apdata.delete(), 3000);
                                         }

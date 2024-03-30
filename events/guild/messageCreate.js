@@ -90,7 +90,7 @@ module.exports = async (Discord, client, message) => {
 
         }
 
-        if ((data.artChat !== null) && (data.gpChat !== null) && (data.modRole !== null) && (data.artdelete !== null)) {
+        /*if ((data.artChat !== null) && (data.gpChat !== null) && (data.modRole !== null) && (data.artdelete !== null)) {
 
             if ((message.channel.id === data.artChat || message.channel.id === data.gpChat) && (message.attachments.size <= 0) && (!message.member.roles.cache.has(data.modRole)) && (!message.content.includes('https://')) && (!message.content.includes('www.'))) {
 
@@ -105,7 +105,7 @@ module.exports = async (Discord, client, message) => {
 
             }
 
-        }
+        }*/
 
         if (data.generalChat !== null) {
 

@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require('discord.js');
 const LCONFIG = require('../../models/logconfig.js');
-const EDITS = require('../../models/edits.js');
+const LOGS = require('../../models/msglogs.js');
 
 module.exports = async (Discord, client, oldMessage, newMessage) => {
     if (oldMessage.partial || newMessage.partial) return;
@@ -70,19 +70,19 @@ module.exports = async (Discord, client, oldMessage, newMessage) => {
             overloadedEmbed = contentFieldsNeeded;
         }
 
-        EDITS.findOne({
+        LOGS.findOne({
             guildID: newMessage.guild.id
         }, async (err, data) => {
             if (err) return console.log(err);
 
             if (overloadedEmbed >= 1) {
-                const newEditedData = new EDITS({
+                const newEditedData = new LOGS({
                     guildID: newMessage.guild.id,
                     overload: overloadedEmbed,
                     embed: editedEmbed.toJSON()
                 });
 
-                const newContinuedData = new EDITS({
+                const newContinuedData = new LOGS({
                     guildID: newMessage.guild.id,
                     overload: overloadedEmbed,
                     embed: editedEmbedContinued.toJSON()
@@ -95,7 +95,7 @@ module.exports = async (Discord, client, oldMessage, newMessage) => {
             }
 
             if (data) {
-                EDITS.find({ guildID: newMessage.guild.id }).then(async (editdata) => {
+                LOGS.find({ guildID: newMessage.guild.id }).then(async (editdata) => {
                     var addedData = 0;
 
                     await editdata.forEach((d) => {
@@ -109,7 +109,7 @@ module.exports = async (Discord, client, oldMessage, newMessage) => {
                     });
 
                     if (addedData == 0) {
-                        const newEditedData = new EDITS({
+                        const newEditedData = new LOGS({
                             guildID: newMessage.guild.id,
                             overload: overloadedEmbed,
                             embed: editedEmbed.toJSON()
@@ -119,7 +119,7 @@ module.exports = async (Discord, client, oldMessage, newMessage) => {
                     }
                 });
             } else {
-                const newEditedData = new EDITS({
+                const newEditedData = new LOGS({
                     guildID: newMessage.guild.id,
                     overload: overloadedEmbed,
                     embed: editedEmbed.toJSON()

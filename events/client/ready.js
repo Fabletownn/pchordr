@@ -9,8 +9,7 @@ const {
 const SCHEDULE = require('../../models/schedules.js');
 const cron = require('node-cron');
 const LCONFIG = require('../../models/logconfig.js');
-const DELETES = require('../../models/deletes.js');
-const EDITS = require('../../models/edits.js');
+const LOGS = require('../../models/msglogs.js');
 
 module.exports = async (Discord, client) => {
     console.log(`${client.user.username} (Rewrite V3) is successfully up and running in ${client.guilds.cache.size} guilds.\n\n`);
@@ -44,23 +43,15 @@ module.exports = async (Discord, client) => {
 
             const msgWebhookClient = new WebhookClient({ id: logWebhookID, token: logWebhookToken });
 
-            DELETES.find({ guildID: '614193406838571085' }).then((deletes) => {
-                deletes.forEach((d) => {
+            LOGS.find({ guildID: '614193406838571085' }).then((msglogs) => {
+                msglogs.forEach((d) => {
                     msgWebhookClient.send({ embeds: d.embed })
                         .catch((err) => { console.log('Error uploading delete log, deleting anyway:\n' + err) })
-                        .then(() => d.delete().catch((err) => console.log(err))); // NEEDS TESTING ON SOME MESSAGES DELETING WITHOUT BEING SENT
-                });
-            });
-
-            EDITS.find({ guildID: '614193406838571085' }).then((edits) => {
-                edits.forEach((d) => {
-                    msgWebhookClient.send({ embeds: d.embed })
-                        .catch((err) => { console.log('Error uploading edit log, deleting anyway:\n' + err) })
-                        .then(() => d.delete().catch((err) => console.log(err))); // NEEDS TESTING ON SOME MESSAGES DELETING WITHOUT BEING SENT
+                        .then(() => d.delete().catch((err) => console.log(err)));
                 });
             });
         });
-    }, (5000));
+    }, (7500));
 
 }
 
