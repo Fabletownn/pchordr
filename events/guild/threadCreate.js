@@ -10,7 +10,7 @@ module.exports = async (Discord, client, thread, newlyCreated) => {
         if (newlyCreated) {
             if ((data.artChat !== null) && (data.gpChat !== null) && (data.modRole !== null) && (data.artdelete !== null)) {
 
-                if ((thread.channel.id === data.artChat || thread.channel.id === data.gpChat) && (thread.attachments.size <= 0) && (!thread.member.roles.cache.has(data.modRole)) && (!thread.content.includes('https://')) && (!thread.content.includes('www.'))) {
+                if ((thread.parentId === data.artChat || thread.parentId === data.gpChat) && (thread.attachments.size <= 0) && (!thread.member.roles.cache.has(data.modRole)) && (!thread.content.includes('https://')) && (!thread.content.includes('www.'))) {
 
                     if (data.artdelete === true) {
 
