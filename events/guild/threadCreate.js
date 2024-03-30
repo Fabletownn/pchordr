@@ -7,6 +7,8 @@ module.exports = async (Discord, client, thread, newlyCreated) => {
         if (err) return console.log(err);
         if (!data) return;
 
+        console.log(thread);
+
         if (newlyCreated) {
             if ((data.artChat !== null) && (data.gpChat !== null) && (data.modRole !== null) && (data.artdelete !== null)) {
 
