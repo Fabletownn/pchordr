@@ -17,17 +17,20 @@ const lcArray = ([
 
 const pcArray = ([
     { name: 'View Channel', value: 'viewchannel' },
+    { name: 'Connect (VC)', value: 'connect' },
+    { name: 'Speak (VC)', value: 'speak' },
+    { name: 'Video (VC)', value: 'video' },
     { name: 'Send Messages', value: 'sendmessages' },
     { name: 'Send Messages in Threads', value: 'sendmessagesinthreads' },
-    { name: 'Create Public Threads', value: 'createpublicthreads' },
+    { name: 'Create Public Threads / Create Posts', value: 'createpublicthreads' },
     { name: 'Create Private Threads', value: 'createprivatethreads' },
     { name: 'Embed Links', value: 'embedlinks' },
     { name: 'Attach Files', value: 'attachfiles' },
     { name: 'Add Reactions', value: 'addreactions' },
     { name: 'Use External Emoji', value: 'useexternalemoji' },
     { name: 'Use External Stickers', value: 'useexternalstickers' },
-    { name: 'Use Soundboard', value: 'usesoundboard' },
-    { name: 'Use External Soundboard Sounds', value: 'useexternalsounds' }
+    { name: 'Use Soundboard (VC)', value: 'usesoundboard' },
+    { name: 'Use External Soundboard Sounds (VC)', value: 'useexternalsounds' }
 ]);
 
 var lvlArray = ([
@@ -53,7 +56,7 @@ module.exports = {
         .setDMPermission(false)
         .addChannelOption((option) =>
             option.setName('channel')
-                .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.GuildForum)
+                .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.GuildForum, ChannelType.GuildVoice)
                 .setDescription('What channel should this permission change affect?')
                 .setRequired(true)
         )
@@ -99,6 +102,15 @@ module.exports = {
         switch (permPerm) {
             case "viewchannel":
                 pFlagBit = PermissionFlagsBits.ViewChannel;
+                break;
+            case "connect":
+                pFlagBit = PermissionFlagsBits.Connect;
+                break;
+            case "speak":
+                pFlagBit = PermissionFlagsBits.Speak;
+                break;
+            case "video":
+                pFlagBit = PermissionFlagsBits.Stream;
                 break;
             case "sendmessages":
                 pFlagBit = PermissionFlagsBits.SendMessages;
