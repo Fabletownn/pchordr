@@ -151,14 +151,11 @@ module.exports = {
 
             interaction.deferReply().then(() => {
                 for (const item of newLevelArray) {
-                    let roleChanges = '';
-
                     permChannel.permissionOverwrites.edit(item.value, { [pFlagBit]: pValue }).then(async () => {
-                        roleChanges += ` ${item.name},`;
                         changeCounter++;
 
                         if (changeCounter == newLevelArray.length) {
-                            interaction.followUp({ content: `${(pValue == true) ? 'Enabled' : (pValue == false) ? 'Disabled' : 'Unset'} **${pcArray[pcArray.map((v) => v.value).indexOf(permPerm)].name}** permission for **${changeCounter} roles** in ${permChannel} (levels${roleChanges}). <:bITFGG:1022548636481114172>` });
+                            interaction.followUp({ content: `${(pValue == true) ? 'Enabled' : (pValue == false) ? 'Disabled' : 'Unset'} **${pcArray[pcArray.map((v) => v.value).indexOf(permPerm)].name}** permission for **${changeCounter} roles** in ${permChannel}. <:bITFGG:1022548636481114172>` });
                         }
                     });
                 }
