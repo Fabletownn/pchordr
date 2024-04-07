@@ -53,7 +53,7 @@ module.exports = {
                     SendMessages: true
                 });
 
-                await interaction.reply({ content: `Unlocked the <#${serverEventsVC}> and <#${streamChat}> channels for the <@&${discordStreamsRole}> role. <:bITFVictory:1063265610303295619>` });
+                await interaction.reply({ content: `Unlocked the ${serverEventsVC} and ${streamChat} channels for the <@&${discordStreamsRole}> role. <:bITFVictory:1063265610303295619>` });
                 break;
             case "server_event": // (Server Events role) Enable permissions for Server Events and Stream Chat
                 await serverEventsVC.permissionOverwrites.edit(serverEventsRole, {
@@ -66,7 +66,7 @@ module.exports = {
                     SendMessages: true
                 });
 
-                await interaction.reply({ content: `Unlocked the <#${serverEventsVC}> and <#${streamChat}> channels for the <@&${serverEventsRole}> role. <:bITFVictory:1063265610303295619>` });
+                await interaction.reply({ content: `Unlocked the ${serverEventsVC} and ${streamChat} channels for the <@&${serverEventsRole}> role. <:bITFVictory:1063265610303295619>` });
                 break;
             case "fortnite_custom": // (Fortnite Customs role) Enable permissions for Server Events, Customs Chat, and Stream Chat
                 await serverEventsVC.permissionOverwrites.edit(fortniteCustomsRole, {
@@ -83,7 +83,7 @@ module.exports = {
                     SendMessages: true
                 });
 
-                await interaction.reply({ content: `Unlocked the <#${serverEventsVC}>, <#${customsCodeChat}>, and <#${streamChat}> channels for the <@&${fortniteCustomsRole}> role. <:bITFVictory:1063265610303295619>` });
+                await interaction.reply({ content: `Unlocked the ${serverEventsVC}>, ${customsCodeChat}, and ${streamChat} channels for the <@&${fortniteCustomsRole}> role. <:bITFVictory:1063265610303295619>` });
                 break;
             case "discord_movie": // (Discord Streams role) Enable permissions for Discord Movies and Stream Chat
                 await movieEventsVC.permissionOverwrites.edit(discordStreamsRole, {
@@ -96,7 +96,7 @@ module.exports = {
                     SendMessages: true
                 });
 
-                await interaction.reply({ content: `Unlocked the <#${movieEventsVC}> and <#${streamChat}> channels for the <@&${discordStreamsRole}> role. <:bITFVictory:1063265610303295619>` });
+                await interaction.reply({ content: `Unlocked the ${movieEventsVC} and ${streamChat} channels for the <@&${discordStreamsRole}> role. <:bITFVictory:1063265610303295619>` });
                 break;
             default:
                 break;

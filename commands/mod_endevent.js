@@ -59,7 +59,7 @@ module.exports = {
                     });
                 }
 
-                await interaction.reply({ content: `Closed up the <#${serverEventsVC}> (all members disconnected) and <#${streamChat}> channels for the <@&${discordStreamsRole}> role. Hope you had fun! <:bITFWave:1022548691988512778>` });
+                await interaction.reply({ content: `Closed up the ${serverEventsVC} (all members disconnected) and ${streamChat} channels for the <@&${discordStreamsRole}> role. Hope you had fun! <:bITFWave:1022548691988512778>` });
                 break;
             case "server_event": // (Server Events role) Disable permissions for Server Events and Stream Chat
                 await serverEventsVC.permissionOverwrites.edit(serverEventsRole, {
@@ -78,7 +78,7 @@ module.exports = {
                     });
                 }
 
-                await interaction.reply({ content: `Closed up the <#${serverEventsVC}> (all members disconnected) and <#${streamChat}> channels for the <@&${serverEventsRole}> role. Hope you had fun! <:bITFWave:1022548691988512778>` });
+                await interaction.reply({ content: `Closed up the ${serverEventsVC} (all members disconnected) and ${streamChat} channels for the <@&${serverEventsRole}> role. Hope you had fun! <:bITFWave:1022548691988512778>` });
                 break;
             case "fortnite_custom": // (Fortnite Customs role) Disable permissions for Server Events, Customs Chat, and Stream Chat
                 await serverEventsVC.permissionOverwrites.edit(fortniteCustomsRole, {
@@ -101,7 +101,7 @@ module.exports = {
                     });
                 }
 
-                await interaction.reply({ content: `Closed up the <#${serverEventsVC}> (all members disconnected), <#${customsCodeChat}>, and <#${streamChat}> channels for the <@&${fortniteCustomsRole}> role. Hope you had fun! <:bITFWave:1022548691988512778>` });
+                await interaction.reply({ content: `Closed up the ${serverEventsVC} (all members disconnected), ${customsCodeChat}, and ${streamChat} channels for the <@&${fortniteCustomsRole}> role. Hope you had fun! <:bITFWave:1022548691988512778>` });
                 break;
             case "discord_movie": // (Discord Streams role) Disable permissions for Discord Movies and Stream Chat
                 await movieEventsVC.permissionOverwrites.edit(discordStreamsRole, {
@@ -120,7 +120,7 @@ module.exports = {
                     });
                 }
 
-                await interaction.reply({ content: `Closed up the <#${movieEventsVC}> (all members disconnected) and <#${streamChat}> channels for the <@&${discordStreamsRole}> role. Hope you had fun! <:bITFWave:1022548691988512778>` });
+                await interaction.reply({ content: `Closed up the ${movieEventsVC} (all members disconnected) and ${streamChat} channels for the <@&${discordStreamsRole}> role. Hope you had fun! <:bITFWave:1022548691988512778>` });
                 break;
             default:
                 break;

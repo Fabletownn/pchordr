@@ -93,22 +93,16 @@ module.exports = {
         ),
 
     async execute(interaction) {
-
         CONFIG.findOne({
-
             guildID: interaction.guild.id,
-
         }, async (err, data) => {
-
             if (err) return interaction.reply({ content: 'An unknown issue came up and I could not handle configurations. <:bITFSweat:1022548683176284281>', ephemeral: true });
-
             if (!data) return interaction.reply({ content: 'Could not configurate values since data hasn\'t been set up yet. Use the `/config-setup` command to get started. <:bITFSweat:1022548683176284281>' });
 
             const configChoice = interaction.options.get('config').value;
             const configVal = interaction.options.getString('value').toLowerCase();
 
             switch (configChoice) {
-
                 case "generalchat":
 
                     if (!interaction.guild.channels.cache.get(configVal)) return interaction.reply({ content: 'Failed to set that ID as the General channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>\n\nThis parameter requires you to provide the channel\'s ID, not the mention.' });
@@ -120,11 +114,8 @@ module.exports = {
                     data.save().catch((err) => console.log(err));
 
                     await interaction.reply({ content: 'Set the General Chat channel to <#' + configVal + '>. <:bITFVictory:1063265610303295619>' });
-
                     break;
-
                 case "giveawaychannel":
-
                     if (!interaction.guild.channels.cache.get(configVal)) return interaction.reply({ content: 'Failed to set that ID as the Giveaway channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>\n\nThis parameter requires you to provide the channel\'s ID, not the mention.' });
 
                     if (data.giveawayChannel === configVal) return interaction.reply({ content: 'That channel is already in use.' });
@@ -133,24 +124,17 @@ module.exports = {
                     data.save().catch((err) => console.log(err));
 
                     await interaction.reply({ content: 'Set the Giveaway channel to <#' + configVal + '>. <:bITFVictory:1063265610303295619>' });
-
                     break;
-
                 case "giveawaywinnerchannel":
-
                     if (!interaction.guild.channels.cache.get(configVal)) return interaction.reply({ content: 'Failed to set that ID as the Giveaway Winner channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>\n\nThis parameter requires you to provide the channel\'s ID, not the mention.' });
-
                     if (data.giveawayWinnerChannel === configVal) return interaction.reply({ content: 'That channel is already in use.' });
 
                     data.giveawayWinnerChannel = configVal;
                     data.save().catch((err) => console.log(err));
 
                     await interaction.reply({ content: 'Set the Giveaway Winner channel to <#' + configVal + '>. <:bITFVictory:1063265610303295619>' });
-
                     break;
-
                 case "modchat":
-
                     if (!interaction.guild.channels.cache.get(configVal)) return interaction.reply({ content: 'Failed to set that ID as the Mod Chat channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>\n\nThis parameter requires you to provide the channel\'s ID, not the mention.' });
                     if (interaction.guild.channels.cache.get(configVal).type !== ChannelType.GuildText) return interaction.reply({ content: 'Failed to set that ID as the Mod Chat channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>' });
 
@@ -160,11 +144,8 @@ module.exports = {
                     data.save().catch((err) => console.log(err));
 
                     await interaction.reply({ content: 'Set the Mod Chat channel to <#' + configVal + '>. <:bITFVictory:1063265610303295619>' });
-
                     break;
-
                 case "serverupdateschat":
-
                     if (!interaction.guild.channels.cache.get(configVal)) return interaction.reply({ content: 'Failed to set that ID as the Server Updates channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>\n\nThis parameter requires you to provide the channel\'s ID, not the mention.' });
                     if (interaction.guild.channels.cache.get(configVal).type !== ChannelType.GuildAnnouncement) return interaction.reply({ content: 'Failed to set that ID as the Server Updates channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>' });
 
@@ -176,9 +157,7 @@ module.exports = {
                     await interaction.reply({ content: 'Set the Server Updates channel to <#' + configVal + '>. <:bITFVictory:1063265610303295619>' });
 
                     break;
-
                 case "pollschat":
-
                     if (!interaction.guild.channels.cache.get(configVal)) return interaction.reply({ content: 'Failed to set that ID as the Polls channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>\n\nThis parameter requires you to provide the channel\'s ID, not the mention.' });
                     if (interaction.guild.channels.cache.get(configVal).type !== ChannelType.GuildText) return interaction.reply({ content: 'Failed to set that ID as the Polls channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>' });
 
@@ -188,11 +167,8 @@ module.exports = {
                     data.save().catch((err) => console.log(err));
 
                     await interaction.reply({ content: 'Set the Polls channel to <#' + configVal + '>. <:bITFVictory:1063265610303295619>' });
-
                     break;
-
                 case "artchat":
-
                     if (!interaction.guild.channels.cache.get(configVal)) return interaction.reply({ content: 'Failed to set that ID as the Art channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>\n\nThis parameter requires you to provide the channel\'s ID, not the mention.' });
                     if (interaction.guild.channels.cache.get(configVal).type !== ChannelType.GuildForum) return interaction.reply({ content: 'Failed to set that ID as the Art channel, as it does not exist or is not forum-based. <:bITFSweat:1022548683176284281>' });
 
@@ -202,11 +178,8 @@ module.exports = {
                     data.save().catch((err) => console.log(err));
 
                     await interaction.reply({ content: 'Set the Art channel to <#' + configVal + '>. <:bITFVictory:1063265610303295619>' });
-
                     break;
-
                 case "gpchat":
-
                     if (!interaction.guild.channels.cache.get(configVal)) return interaction.reply({ content: 'Failed to set that ID as the Game Photography channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>\n\nThis parameter requires you to provide the channel\'s ID, not the mention.' });
                     if (interaction.guild.channels.cache.get(configVal).type !== ChannelType.GuildForum) return interaction.reply({ content: 'Failed to set that ID as the Game Photography channel, as it does not exist or is not forum-based. <:bITFSweat:1022548683176284281>' });
 
@@ -216,11 +189,8 @@ module.exports = {
                     data.save().catch((err) => console.log(err));
 
                     await interaction.reply({ content: 'Set the Game Photography channel to <#' + configVal + '>. <:bITFVictory:1063265610303295619>' });
-
                     break;
-
                 case "supporterschat":
-
                     if (!interaction.guild.channels.cache.get(configVal)) return interaction.reply({ content: 'Failed to set that ID as the supporters channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>\n\nThis parameter requires you to provide the channel\'s ID, not the mention.' });
                     if (interaction.guild.channels.cache.get(configVal).type !== ChannelType.GuildText) return interaction.reply({ content: 'Failed to set that ID as the supporters channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>' });
 
@@ -230,11 +200,8 @@ module.exports = {
                     data.save().catch((err) => console.log(err));
 
                     await interaction.reply({ content: 'Set the Supporters channel to <#' + configVal + '>. <:bITFVictory:1063265610303295619>' });
-
                     break;
-
                 case "gtbchat":
-
                     if (!interaction.guild.channels.cache.get(configVal)) return interaction.reply({ content: 'Failed to set that ID as the GTB channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>\n\nThis parameter requires you to provide the channel\'s ID, not the mention.' });
                     if (interaction.guild.channels.cache.get(configVal).type !== ChannelType.GuildText) return interaction.reply({ content: 'Failed to set that ID as the GTB channel, as it does not exist or is not text-based. <:bITFSweat:1022548683176284281>' });
 
@@ -244,13 +211,9 @@ module.exports = {
                     data.save().catch((err) => console.log(err));
 
                     await interaction.reply({ content: 'Set the GTB channel to <#' + configVal + '>. <:bITFVictory:1063265610303295619>' });
-
                     break;
-
                 case "adminrole":
-
                     if (!interaction.guild.roles.cache.get(configVal)) return interaction.reply({ content: 'Failed to set that ID as the Administrator role, as it does not exist or not found. <:bITFSweat:1022548683176284281>\n\nThis parameter requires you to provide the role\'s ID, not the mention.' });
-
                     if (data.adminRole === configVal) return interaction.reply({ content: 'That role is already in use.' });
 
                     data.adminRole = configVal;
