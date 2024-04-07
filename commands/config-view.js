@@ -43,12 +43,11 @@ module.exports = {
                     { name: `GTB Champion Role ID`, value: `<@&${data.gtbRole || 'None'}>`, inline: true },
                     { name: `\u200b`, value: `\u200b`, inline: true },
                     { name: `\u200b`, value: `\u200b`, inline: false },
-                    { name: `Autopublishing`, value: (data.autopublish === true) ? 'Enabled' : 'Disabled', inline: true },
-                    { name: `VXTwitter`, value: (data.vxtwitter === true) ? 'Enabled' : 'Disabled', inline: true },
-                    { name: `Non-Art Deletion`, value: (data.artdelete === true) ? 'Enabled' : 'Disabled', inline: true },
-                    { name: `Greeting Reaction`, value: (data.greeting === true) ? 'Enabled' : 'Disabled', inline: true },
-                    { name: `Giveaway Winner Trigger`, value: (data.autogiveaway === true) ? 'Enabled' : 'Disabled', inline: true },
-                    { name: `\u200b`, value: `\u200b`, inline: true }
+                    { name: `Autopublishing`, value: ((data.autopublish === true) ? 'Enabled' : 'Disabled'), inline: true },
+                    { name: `VXTwitter`, value: ((data.vxtwitter === true) ? 'Enabled' : 'Disabled'), inline: true },
+                    { name: `Non-Art Deletion`, value: ((data.artdelete === true) ? 'Enabled' : 'Disabled'), inline: true },
+                    { name: `Greeting Reaction`, value: ((data.greeting === true) ? 'Enabled' : 'Disabled'), inline: true },
+                    { name: `Giveaway Winner Trigger`, value: ((data.autogiveaway === true) ? 'Enabled' : 'Disabled'), inline: true },
                 );
 
             await interaction.reply({ embeds: [configEmbed] });
