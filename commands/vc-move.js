@@ -27,14 +27,18 @@ module.exports = {
         const channelTo = interaction.options.getChannel('to');
 
         const fromSize = channelFrom.members.size;
+        let memberCounter = 0;
 
         if (fromSize <= 0) return interaction.reply({ content: `Failed to move members, as there are no occupants in the original channel. <:bITFSweat:1022548683176284281>` });
         if (channelFrom === channelTo) return interaction.reply({ content: `Failed to move members, as you provided the same channel twice. <:bITFSweat:1022548683176284281>` });
 
         await channelFrom.members.each((member) => {
-            if (!member.user.bot) member.voice.setChannel(channelTo);
+            if (!member.user.bot) {
+                member.voice.setChannel(channelTo);
+                memberCounter++;
+            }
         });
 
-        await interaction.reply({ content: `Merged ${fromSize} member(s) from <#${channelFrom.id}> to <#${channelTo.id}> successfully. <:bITFGG:1022548636481114172>` });
+        await interaction.reply({ content: `Merged ${memberCounter} member(s) from <#${channelFrom.id}> to <#${channelTo.id}> successfully. <:bITFGG:1022548636481114172>` });
     },
 };
