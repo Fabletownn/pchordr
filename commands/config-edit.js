@@ -64,15 +64,15 @@ module.exports = {
         CONFIG.findOne({
             guildID: interaction.guild.id,
         }, async (err, data) => {
-            if (!channelOption && !roleOption && !boolOption) return interaction.reply({ content: 'This command requires a configuration option to be chosen from (e.g. "Change General ID (Channel)" requires "channel" option).' });
-
-            if (err) return interaction.reply({ content: 'An unknown issue came up and I could not handle configurations. <:bITFSweat:1022548683176284281>', ephemeral: true });
-            if (!data) return interaction.reply({ content: 'Could not configurate values since data hasn\'t been set up yet. Use the `/config-setup` command to get started. <:bITFSweat:1022548683176284281>' });
-
             const configChoice = interaction.options.get('config').value;
             const channelOption = interaction.options.getChannel('channel');
             const roleOption = interaction.options.getRole('role');
             const boolOption = interaction.options.getBoolean('boolean');
+            
+            if (!channelOption && !roleOption && !boolOption) return interaction.reply({ content: 'This command requires a configuration option to be chosen from (e.g. "Change General ID (Channel)" requires "channel" option).' });
+
+            if (err) return interaction.reply({ content: 'An unknown issue came up and I could not handle configurations. <:bITFSweat:1022548683176284281>', ephemeral: true });
+            if (!data) return interaction.reply({ content: 'Could not configurate values since data hasn\'t been set up yet. Use the `/config-setup` command to get started. <:bITFSweat:1022548683176284281>' });
 
             switch (configChoice) {
                 case "generalchat":

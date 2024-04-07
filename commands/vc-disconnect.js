@@ -23,7 +23,7 @@ module.exports = {
         if (channelDisconnect.members.size <= 0) return interaction.reply(`Failed to disconnect members, as there are no occupants in that channel. <:bITFSweat:1022548683176284281>`);
 
         await channelDisconnect.members.each((member) => {
-            member.voice.disconnect();
+            if (!member.user.bot) member.voice.disconnect();
         });
 
         await interaction.reply(`Disconnected all members from ${channelDisconnect}. <:bITFVictory:1063265610303295619>`)
