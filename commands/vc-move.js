@@ -35,6 +35,6 @@ module.exports = {
             await member.voice.setChannel(channelTo);
         });
 
-        await interaction.reply({ content: `Merged **${fromSize} member(s)** from ${channelFrom} → ${channelTo}. <:bITFVictory:1063265610303295619>` });
+        await interaction.reply({ content: `Merged ${fromSize} member(s) from <#${channelFrom.id}> to <#${channelTo.id}> successfully. <:bITFGG:1022548636481114172>` });
     },
 };
