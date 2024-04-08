@@ -6,7 +6,7 @@ module.exports = async (Discord, client, reaction, user) => {
     if (user.bot) return;
 
     CONFIG.findOne({
-        guildID: reaction.guild.id
+        guildID: '614193406838571085'
     }, async (err, data) => {
         if (err) return;
         if (!data) return;
