@@ -16,7 +16,7 @@ module.exports = {
                 .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
                 .setRequired(true),
         )
-        .addChannelOption((option) =>
+        .addStringOption((option) =>
             option.setName('message-link')
                 .setDescription('What is the post you want to replicate\'s message link?')
                 .setRequired(true)
