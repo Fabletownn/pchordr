@@ -35,13 +35,15 @@ module.exports = {
         if (!channelID || !messageID) return interaction.reply({ content: 'That message link is not valid. <:bITFSweat:1022548683176284281>' });
 
         await interaction.client.channels.cache.get(channelID).messages.fetch(messageID).then(async (messageFound) => {
+            await interaction.deferReply();
+
             for (const iemoji in emojiArray) {
                 await messageFound.react(emojiArray[iemoji]).catch((err) => { return failCounter++ }).then(() => emojiCounter++);
             }
 
-            await interaction.reply({ content: `Reacted with **${emojiCounter - failCounter} emotes** on the [specified post](<${messageFound.url}>${(failCounter > 0) ? `, with **${failCounter}** emotes failing to be reacted.` : '.'} <:bITFAYAYA:1022548602255589486>` });
+            await interaction.followUp({ content: `Reacted with **${emojiCounter - failCounter} emotes** on the [specified post](<${messageFound.url}>${(failCounter > 0) ? `, with **${failCounter}** emotes failing to be reacted.` : '.'} <:bITFAYAYA:1022548602255589486>` });
         }).catch((err) => {
-            return interaction.reply({ content: `Failed to append reaction on the post. Ensure the emoji, channel and message is valid.` });
+            return interaction.followUp({ content: `Failed to append reaction on the post. Ensure the emoji, channel and message is valid.` });
         });
     },
 };
