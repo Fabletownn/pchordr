@@ -21,7 +21,7 @@ module.exports = {
             if (!data) return interaction.reply({ content: 'Could not view configuration values since data hasn\'t been set up yet. Use the `/config-setup` command to get started. <:bITFSweat:1022548683176284281>' });
 
             const channelEmbed = new EmbedBuilder()
-                .setAuthor({ name: 'Channel Configuration', iconURL: interaction.guild.iconURL({ dynamic: true })})
+                .setAuthor({ name: 'Channel Configuration', iconURL: interaction.guild.iconURL({ dynamic: true }) })
                 .addFields(
                     { name: `General`, value: `<#${data.generalChat || 'None'}>`, inline: true },
                     { name: `Giveaways`, value: `<#${data.giveawayChannel || 'None'}>`, inline: true },
@@ -34,9 +34,9 @@ module.exports = {
                     { name: `Supporters`, value: `<#${data.supportersChat || 'None'}>`, inline: true },
                     { name: `Guess The Blank`, value: `<#${data.gtbChat || 'None'}>`, inline: true },
                 );
-            
-                const roleEmbed = new EmbedBuilder()
-                .setAuthor({ name: 'Role Configuration', iconURL: interaction.guild.iconURL({ dynamic: true })})
+
+            const roleEmbed = new EmbedBuilder()
+                .setAuthor({ name: 'Role Configuration', iconURL: interaction.guild.iconURL({ dynamic: true }) })
                 .addFields(
                     { name: `Administrator`, value: ((data.adminRole !== null) ? `<@&${data.adminRole}>` : 'None'), inline: true },
                     { name: `Moderator`, value: ((data.modRole !== null) ? `<@&${data.modRole}>` : 'None'), inline: true },
@@ -48,14 +48,15 @@ module.exports = {
                     { name: `Guess The Blank Champion`, value: ((data.gtbRole !== null) ? `<@&${data.gtbRole}>` : 'None'), inline: true },
                 );
 
-                const featureEmbed = new EmbedBuilder()
-                .setAuthor({ name: 'Trigger Configuration', iconURL: interaction.guild.iconURL({ dynamic: true })})
+            const featureEmbed = new EmbedBuilder()
+                .setAuthor({ name: 'Trigger Configuration', iconURL: interaction.guild.iconURL({ dynamic: true }) })
                 .addFields(
                     { name: `Autopublishing`, value: ((data.autopublish === true) ? 'Enabled' : 'Disabled'), inline: true },
                     { name: `VXTwitter`, value: ((data.vxtwitter === true) ? 'Enabled' : 'Disabled'), inline: true },
                     { name: `Non-Art Deletion`, value: ((data.artdelete === true) ? 'Enabled' : 'Disabled'), inline: true },
                     { name: `General Chat Greeting`, value: ((data.greeting === true) ? 'Enabled' : 'Disabled'), inline: true },
                     { name: `Giveaway Winner Setup`, value: ((data.autogiveaway === true) ? 'Enabled' : 'Disabled'), inline: true },
+                    { name: '\u200b', value: '\u200b', inline: true },
                 );
 
             await interaction.reply({ embeds: [channelEmbed, roleEmbed, featureEmbed] });

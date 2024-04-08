@@ -13,42 +13,16 @@ module.exports = async (Discord, client, message) => {
         if (err) return console.log(err);
         if (!data) return;
 
+        ////////////////////// VXTwitter
         if (message.channel.id === data.modChat) {
             if (data.vxtwitter === true) {
-                const twitterRegex = /(https:\/\/twitter\.com\/)|(https:\/\/x\.com\/)/;
-
                 if (message.content.match(twitterRegex)) {
-                    const messageSplit = message.content.split(' ');
-                    const twitterIndex = messageSplit.findIndex(msg => msg.includes('.com/'));
-
-                    const preLink = messageSplit[twitterIndex];
-                    const repLink = preLink.replace(/(twitter)|(x)/, 'vxtwitter');
-
-                    await message.react('✨');
-
-                    const reactionFilter = (reaction, userRequested) => reaction.emoji.id === '✨' && !reaction.user.bot && userRequested.id !== '363766977585479680';
-
-                    const vxReaction = await message.createReactionCollector({
-                        reactionFilter,
-                        time: 300000
-                    });
-
-                    vxReaction.on('collect', async (r, user) => {
-                        if (!user.bot) {
-                            await message.reply(repLink);
-
-                            await r.users.remove(user.id);
-                            await r.users.remove(client.user.id);
-                        }
-                    });
-
-                    vxReaction.on('end', async (collected) => {
-                        if (collected.size <= 0) await message.reactions.removeAll();
-                    });
+                    await message.react('<a:vxtwitterfy:1226754754621870130>');
                 }
             }
         }
 
+        ////////////////////// Autopublish
         if (message.channel.type === ChannelType.GuildAnnouncement) {
             if (message.content.startsWith('=')) setTimeout(() => message.delete(), 1800000);
 
@@ -59,11 +33,13 @@ module.exports = async (Discord, client, message) => {
             }
         }
 
+        ////////////////////// Server Updates and Poll Notifications
         if ((data.serverUpdatesChat !== null) && (data.pollsChat !== null)) {
             if ((message.channel.id === data.serverUpdatesChat) && (!message.content.startsWith('='))) client.channels.cache.get('614193406842765375').send(`There has been a new server update posted, you can read more in <#${data.serverUpdatesChat}>. <:bITFGG:1022548636481114172>`);
             if ((message.channel.id === data.pollsChat) && (!message.content.startsWith('='))) client.channels.cache.get('614193406842765375').send(`There has been a new poll posted, check it out and vote in <#${data.pollsChat}>! <:bITFCool:1022548621360635994>`);
         }
 
+        ////////////////////// General Greeting
         if (data.generalChat !== null) {
             const greetingArray = ['hi', 'hey', 'hello', 'wassup', 'sup', 'what\'s up', 'hiya'];
             const goodmorningArray = ['goodmorning', 'good morning', 'gmorning', 'g\'morning'];
@@ -82,6 +58,7 @@ module.exports = async (Discord, client, message) => {
             }
         }
 
+        ////////////////////// Giveaway Winner Setup
         if (data.giveawayChannel !== null && message.mentions.users.size >= 1) {
             if (message.channel.id === data.giveawayChannel) {
                 if (data.autogiveaway === true) {
