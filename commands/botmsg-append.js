@@ -16,11 +16,6 @@ module.exports = {
                 .setRequired(true)
         )
         .addStringOption((option) =>
-            option.setName('message-id')
-                .setDescription('What is the post\'s message ID?')
-                .setRequired(true)
-        )
-        .addStringOption((option) =>
             option.setName('content')
                 .setDescription('What content do you want added to the end of the message? \\n = new line')
                 .setRequired(true)
