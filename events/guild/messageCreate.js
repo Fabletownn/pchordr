@@ -16,6 +16,8 @@ module.exports = async (Discord, client, message) => {
         ////////////////////// VXTwitter
         if (message.channel.id === data.modChat) {
             if (data.vxtwitter === true) {
+                const twitterRegex = /(https:\/\/twitter\.com\/)|(https:\/\/x\.com\/)/;
+                
                 if (message.content.match(twitterRegex)) {
                     await message.react('<a:vxtwitterfy:1226754754621870130>');
                 }
