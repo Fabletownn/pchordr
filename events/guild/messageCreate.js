@@ -23,7 +23,7 @@ module.exports = async (Discord, client, message) => {
                 }
             }
 
-            if (message.content.match(/(https:\/\/twitter\.com\/(_|i)firemonkey)|(https:\/\/x\.com\/(_|i)firemonkey)/)) {
+            if (message.content.match(/(?i)(https:\/\/twitter\.com\/(_|i)firemonkey)|(https:\/\/x\.com\/(_|i)firemonkey)/)) {
                 await message.reply('https://tenor.com/view/spongebob-sniffing-sniff-smelling-smell-gif-8726179370742836028');
             }
         }
