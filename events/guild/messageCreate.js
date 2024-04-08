@@ -22,10 +22,6 @@ module.exports = async (Discord, client, message) => {
                     await message.react('<a:vxtwitterfy:1226754754621870130>');
                 }
             }
-
-            if (message.content.match(/(https:\/\/twitter\.com\/(_|i)firemonkey)|(https:\/\/x\.com\/(_|i)firemonkey)/gi)) {
-                await message.reply('https://tenor.com/view/spongebob-sniffing-sniff-smelling-smell-gif-8726179370742836028');
-            }
         }
 
         ////////////////////// Autopublish
