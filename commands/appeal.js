@@ -13,9 +13,8 @@ module.exports = {
         .setName('appeal')
         .setDescription('Begin the ban appeal process and modal')
         .setDMPermission(false),
-
     async execute(interaction) {
-        if (interaction.guild.id !== '685876599199236173') return;
+        if (interaction.guild.id !== '685876599199236173') return interaction.reply({ content: 'That command does not work here.', ephemeral: true });
 
         const appealModal = new ModalBuilder()
             .setCustomId('appeal-modal')
@@ -51,6 +50,5 @@ module.exports = {
             ]);
 
         await interaction.showModal(appealModal);
-        await interaction.member.roles.add('1208961459283959848');
     }
 }

@@ -3,8 +3,8 @@ const CONFIG = require('../../models/config.js');
 module.exports = async (Discord, client, oldMember, newMember) => {
     const guild = newMember.guild;
 
-    if (guild === null) return console.log(`Null guild!`);
-    if (newMember.user.bot) return console.log(`User bot!`);
+    if (guild === null) return;
+    if (newMember.user.bot) return;
 
     CONFIG.findOne({
         guildID: guild.id
@@ -22,7 +22,7 @@ module.exports = async (Discord, client, oldMember, newMember) => {
         const twitchRoleID = data.twitchRole;
         const youtubeRoleID = data.ytRole;
 
-        if ((boosterRoleID === null) || (twitchRoleID === null) || (youtubeRoleID === null) || (supporterRoleID === null) || (supportersChannelID === null)) return console.log('B/T/Y/S/C is null');
+        if ((boosterRoleID === null) || (twitchRoleID === null) || (youtubeRoleID === null) || (supporterRoleID === null) || (supportersChannelID === null)) return;
 
         if (!oldMember.roles.cache.has(boosterRoleID) && newMember.roles.cache.has(boosterRoleID)) {
             guild.channels.cache.get(supportersChannelID).send(`${newMember} has just supported I Talk on **Discord**. Welcome to <#${supportersChannelID}>!\n\nYour access to this channel will not expire once your Boost expires. Thank you for the support. <:bITFGift:1022548639542951977>`);

@@ -10,15 +10,9 @@ module.exports = {
         .setDescription('Reacts on the specified post with upvote/downvote reactions')
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-        .addChannelOption((option) =>
-            option.setName('channel')
-                .setDescription('What channel is the message in?')
-                .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
-                .setRequired(true),
-        )
         .addStringOption((option) =>
-            option.setName('message-id')
-                .setDescription('What is the post\'s message ID?')
+            option.setName('message-link')
+                .setDescription('What is the post\'s message link?')
                 .setRequired(true)
         )
         .addStringOption((option) =>
@@ -35,38 +29,20 @@ module.exports = {
                 )
         ),
     async execute(interaction) {
-        const channel = interaction.options.getChannel('channel');
-        const message = interaction.options.getString('message-id');
+        const messageLink = interaction.options.getString('message-link');
         const neutralOption = interaction.options.get('neutral').value;
 
-        switch (neutralOption) {
-            case "yes_neutral":
-                await interaction.client.channels.cache.get(channel.id).messages.fetch(message).then(async (message_found) => {
-                    await message_found.react(`<:aITFUpvote:1022548599697051790>`);
-                    await message_found.react(`<:bITFThink:1022548686158442537>`);
-                    await message_found.react(`<:aITFDownvote:1022548597390180382>`);
+        const channelID = messageLink.split('/')[5];
+        const messageID = messageLink.split('/')[6];
 
-                    await interaction.reply(`Voted up/neutral/down on the specified post (**[jump here](<${message_found.url}>)**).`);
-                }).catch((err) => {
-                    interaction.reply(`Failed to append reactions on the post. Ensure the emoji, channel and message is valid.`)
+        await interaction.client.channels.cache.get(channelID).messages.fetch(messageID).then(async (messageFound) => {
+            if (!messageFound) return interaction.reply({ content: 'Failed to find the message for that link. <:bITFSweat:1022548683176284281>' });
 
-                    return console.log(err);
-                });
-                break;
-            case "no_neutral":
-                await interaction.client.channels.cache.get(channel.id).messages.fetch(message).then(async (message_found) => {
-                    await message_found.react(`<:aITFUpvote:1022548599697051790>`);
-                    await message_found.react(`<:aITFDownvote:1022548597390180382>`);
+            await messageFound.react('<:aITFUpvote:1022548599697051790>');
+            if (neutralOption === 'yes_neutral') await messageFound.react('<:bITFThink:1022548686158442537>');
+            await messageFound.react('<:aITFDownvote:1022548597390180382>');
 
-                    await interaction.reply(`Voted up/down on the specified post (**[jump here](<${message_found.url}>)**).`);
-                }).catch((err) => {
-                    interaction.reply(`Failed to append reactions on the post. Ensure the emoji, channel and message is valid.`)
-
-                    return console.log(err);
-                });
-                break;
-            default:
-                break;
-        }
+            await interaction.reply({ content: `Voted up/neutral/down on the specified post (**[jump here](<${messageFound.url}>)**).` });
+        });
     },
 };

@@ -19,7 +19,7 @@ module.exports = async (Discord, client, reaction, user) => {
 
                     if (message.content.match(twitterRegex)) {
                         const messageSplit = message.content.split(' ');
-                        const twitterIndex = messageSplit.findIndex(msg => msg.includes('.com/'));
+                        const twitterIndex = messageSplit.findIndex((msg) => msg.includes('.com/'));
 
                         const preLink = messageSplit[twitterIndex];
                         const repLink = preLink.replace(/(twitter)|(x)/, 'vxtwitter');

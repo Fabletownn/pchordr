@@ -5,7 +5,7 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('message')
+        .setName('dm')
         .setDescription('Will message a member with specified content if DMs are turned on')
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
@@ -29,7 +29,6 @@ module.exports = {
                 .setDescription('Would you like to add an attachment with the message?')
                 .setRequired(false)
         ),
-
     async execute(interaction) {
         const userMessage = interaction.options.getMember('member');
         const messageContents = interaction.options.getString('content');

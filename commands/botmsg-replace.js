@@ -6,19 +6,13 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('replace')
+        .setName('botmsg-replace')
         .setDescription('Replaces a specific portion of a bot message with the given values')
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-        .addChannelOption((option) =>
-            option.setName('channel')
-            .setDescription('What channel is the bot message in?')
-            .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
-            .setRequired(true),
-        )
         .addStringOption((option) =>
-            option.setName('message-id')
-            .setDescription('What is the post\'s message ID?')
+            option.setName('message-link')
+            .setDescription('What is the post\'s message link?')
             .setRequired(true)
         )
         .addStringOption((option) =>
@@ -47,15 +41,18 @@ module.exports = {
             }, )
         ),
     async execute(interaction) {
-        const channel = interaction.options.getChannel('channel');
-        const message = interaction.options.getString('message-id');
+        const messageLink = interaction.options.getString('message-link');
+
+        const channelID = messageLink.split('/')[5];
+        const messageID = messageLink.split('/')[6];
+
         const toReplace = interaction.options.getString('old');
         const replaceWith = interaction.options.getString('new');
         const instance = interaction.options.get('method').value;
 
         let newMessage;
 
-        interaction.client.channels.cache.get(channel.id).messages.fetch(message).then(async (messageFound) => {
+        interaction.client.channels.cache.get(channelID).messages.fetch(messageID).then(async (messageFound) => {
             if (messageFound.author.id !== interaction.client.user.id) return interaction.reply(`Failed to edit message as it doesn't belong to me. This command is designated for editing Power Chord messages, often for announcements or posts.`);
             if (!messageFound.content.includes(toReplace)) return interaction.reply(`Failed to replace. Couldn't find '${toReplace}' anywhere within the requested message.`);
 

@@ -6,7 +6,7 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('append')
+        .setName('botmsg-append')
         .setDescription('Edits a message to add a string to the end of a bot message')
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
