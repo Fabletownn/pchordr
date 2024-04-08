@@ -105,7 +105,7 @@ module.exports = async (Discord, client, interaction) => {
                 if (err) return console.log(err);
                 if (data) return interaction.reply({ content: 'You already have an appeal open! <:bITFWave:1022548691988512778>\n\nWe review appeals every mod meeting and as such, it may take a while for them to be processed and reviewed.\n\nIf you have additional context, evidence, or information you would like to add to the appeal, message <@99299332494200832> for now.', ephemeral: true });
 
-                await interaction.guilds.cache.get('685876599199236173').members.cache.get(interaction.user.id).roles.add('1208961459283959848');
+                await interaction.client.guilds.cache.get('685876599199236173').members.cache.get(interaction.user.id).roles.add('1208961459283959848');
 
                 const appealEmbed = new EmbedBuilder()
                     .setAuthor({ name: `${interaction.user.username}#${interaction.user.discriminator} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })

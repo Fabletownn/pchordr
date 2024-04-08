@@ -42,7 +42,7 @@ module.exports = {
             if (neutralOption === 'yes_neutral') await messageFound.react('<:bITFThink:1022548686158442537>');
             await messageFound.react('<:aITFDownvote:1022548597390180382>');
 
-            await interaction.reply({ content: `Voted up/neutral/down on the specified post (**[jump here](<${messageFound.url}>)**).` });
+            await interaction.reply({ content: `Voted up${(neutralOption === 'yes_neutral' ? '/neutral/' : '/')}down on the [specified post](<${messageFound.url}>) successfully.` });
         });
     },
 };
