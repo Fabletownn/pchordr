@@ -26,6 +26,8 @@ module.exports = {
         const channelID = messageLink.split('/')[5];
         const messageID = messageLink.split('/')[6];
 
+        if (!channelID || !messageID) return interaction.reply({ content: 'That message link is not valid. <:bITFSweat:1022548683176284281>' });
+
         const newMessage = interaction.options.getString('content').replace(/\\n/g, `\n`);
 
         await interaction.client.channels.cache.get(channelID).messages.fetch(messageID).then(async (messageFound) => {

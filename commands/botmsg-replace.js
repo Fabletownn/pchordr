@@ -46,6 +46,8 @@ module.exports = {
         const channelID = messageLink.split('/')[5];
         const messageID = messageLink.split('/')[6];
 
+        if (!channelID || !messageID) return interaction.reply({ content: 'That message link is not valid. <:bITFSweat:1022548683176284281>' });
+
         const toReplace = interaction.options.getString('old');
         const replaceWith = interaction.options.getString('new');
         const instance = interaction.options.get('method').value;
