@@ -37,7 +37,7 @@ module.exports = async (Discord, client, message) => {
 
         ////////////////////// Poll Deletion
         if (!message.content && message.attachments.size <= 0 && message.stickers.size <= 0) {
-            if (!(message.member.roles.cache.has('1084176862353305661'))) {
+            if (!(message.member.roles.cache.has('614196214078111745')) && message.channel.id !== data.modChat) {
                 if (data.deletepoll === true) {
                     await message.reply({ content: 'Polls have been disallowed for posting!' }).then((m) => setTimeout(() => m.delete(), 4000));
                     await message.delete();
