@@ -282,7 +282,8 @@ module.exports = async (Discord, client, interaction) => {
                                     vxtwitter: false,
                                     artdelete: false,
                                     greeting: false,
-                                    autogiveaway: false
+                                    autogiveaway: false,
+                                    deletepoll: false
                                 });
 
                                 newConfigData.save().catch((err) => console.log(err));

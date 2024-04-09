@@ -17,7 +17,7 @@ module.exports = async (Discord, client, message) => {
         if (message.channel.id === data.modChat) {
             if (data.vxtwitter === true) {
                 const twitterRegex = /(https:\/\/twitter\.com\/)|(https:\/\/x\.com\/)/;
-                
+
                 if (message.content.match(twitterRegex)) {
                     await message.react('<a:vxtwitterfy:1226754754621870130>');
                 }
@@ -31,6 +31,16 @@ module.exports = async (Discord, client, message) => {
             if (data.autopublish === true) {
                 if ((message.crosspostable) && (!message.content.startsWith('='))) {
                     await message.crosspost();
+                }
+            }
+        }
+
+        ////////////////////// Poll Deletion
+        if (!message.content && message.attachments.size <= 0 && message.stickers.size <= 0) {
+            if (!(message.member.roles.cache.has('614196214078111745'))) {
+                if (data.deletepoll === true) {
+                    await message.reply({ content: 'Polls have been disallowed for posting!' }).then((m) => setTimeout(() => m.delete(), 4000));
+                    await message.delete();
                 }
             }
         }
@@ -86,7 +96,7 @@ module.exports = async (Discord, client, message) => {
                             });
                         }
 
-                        setTimeout(async() => await message.guild.channels.cache.get(data.modChat).send({ content: `<:bITFGG:1022548636481114172>` }), 1500);
+                        setTimeout(async () => await message.guild.channels.cache.get(data.modChat).send({ content: `<:bITFGG:1022548636481114172>` }), 1500);
                     }
                 }
             }

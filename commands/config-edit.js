@@ -29,7 +29,8 @@ const configOptions = ([
     { name: 'Set VXTwitter Feature (Boolean)', value: 'vxtwitter' },
     { name: 'Set Non-Art Delete Feature (Boolean)', value: 'artdelete' },
     { name: 'Set General Greeting Feature (Boolean)', value: 'generalgreeting' },
-    { name: 'Set Giveaway Winner Feature (Boolean)', value: 'autogiveaway' }
+    { name: 'Set Giveaway Winner Feature (Boolean)', value: 'autogiveaway' },
+    { name: 'Set Poll Deletion Feature (Boolean)', value: 'deletepoll' }
 ]);
 
 module.exports = {
@@ -212,6 +213,12 @@ module.exports = {
 
                     data.autogiveaway = boolOption;
                     data.save().catch((err) => console.log(err)).then(() => interaction.reply({ content: `Setting up channels for new giveaway winners in the giveaway channel has been ${(boolOption === true) ? 'enabled' : 'disabled'} successfully. <:bITFGG:1022548636481114172>` }));
+                    break;
+                case "deletepoll":
+                    if (!boolOption) return interaction.reply({ content: 'This configuration requires a `boolean` option to be filled out. <:bITFFacepalm:1063265618155020358>' });
+
+                    data.deletepoll = boolOption;
+                    data.save().catch((err) => console.log(err)).then(() => interaction.reply({ content: `Poll deletions by non-Moderators has been ${(boolOption === true) ? 'enabled' : 'disabled'} successfully. <:bITFGG:1022548636481114172>` }));
                     break;
                 default:
                     break;
