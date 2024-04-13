@@ -448,10 +448,10 @@ module.exports = async (Discord, client, interaction) => {
 
                                                     const newApproveRow = ActionRowBuilder.from(appealMessage.components[0]);
 
-                                                    newApproveRow.components.find((button) => button.data.custom_id === 'appeal-seemsg').setDisabled(true);
                                                     newApproveRow.components.find((button) => button.data.custom_id === 'appeal-accept').setDisabled(true);
                                                     newApproveRow.components.find((button) => button.data.custom_id === 'appeal-deny').setDisabled(true);
                                                     newApproveRow.components.find((button) => button.data.custom_id === 'appeal-misuse').setDisabled(true);
+                                                    if (newApproveRow.components.find((button) => button.data.custom_id === 'appeal-seemsg')) newApproveRow.components.find((button) => button.data.custom_id === 'appeal-seemsg').setDisabled(true);
 
                                                     appealMessage.edit({ components: [newApproveRow] });
                                                     appealMessage.unpin().catch((err) => console.log(err));
@@ -511,10 +511,10 @@ module.exports = async (Discord, client, interaction) => {
 
                                                     const newDenyRow = ActionRowBuilder.from(appealMessage.components[0]);
 
-                                                    newDenyRow.components.find((button) => button.data.custom_id === 'appeal-seemsg').setDisabled(true);
                                                     newDenyRow.components.find((button) => button.data.custom_id === 'appeal-accept').setDisabled(true);
                                                     newDenyRow.components.find((button) => button.data.custom_id === 'appeal-deny').setDisabled(true);
                                                     newDenyRow.components.find((button) => button.data.custom_id === 'appeal-misuse').setDisabled(true);
+                                                    if (newDenyRow.components.find((button) => button.data.custom_id === 'appeal-seemsg')) newDenyRow.components.find((button) => button.data.custom_id === 'appeal-seemsg').setDisabled(true);
 
                                                     appealMessage.edit({ components: [newDenyRow] });
                                                     appealMessage.unpin().catch((err) => console.log(err));
