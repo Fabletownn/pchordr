@@ -33,7 +33,7 @@ module.exports = {
 
             const viewEmbed = new EmbedBuilder()
                 .setAuthor({
-                    name: `${interaction.user.username}${interaction.user.discriminator == 0 ? "" : `#${interaction.user.discriminator}`}`,
+                    name: interaction.user.tag,
                     iconURL: interaction.user.displayAvatarURL({
                         dynamic: true
                     })

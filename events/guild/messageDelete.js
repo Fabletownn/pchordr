@@ -32,7 +32,7 @@ module.exports = async (Discord, client, message) => {
         let overloadedEmbed = 0;
 
         const deletedEmbed = new EmbedBuilder()
-            .setAuthor({ name: `${client.users.cache.get(deletedAuthorID).tag}`, iconURL: client.users.cache.get(deletedAuthorID).displayAvatarURL({ dynamic: true }) })
+            .setAuthor({ name: `${client.users.cache.get(deletedAuthorID).tag}`, iconURL: client.users.cache.get(deletedAuthorID).displayAvatarURL({ dynamic: true }) || 'https://i.imgur.com/NZzCLrw.png' })
             .setDescription(`Message deleted in <#${deletedChannelID}>`)
             .setTimestamp()
             .setColor('#822AED');

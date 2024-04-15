@@ -5,6 +5,7 @@ const LCONFIG = require('../../models/logconfig.js');
 
 module.exports = async (Discord, client, messages, channel) => {
     var bulkDeleteInformation = [];
+    var bulkDeleteUserIDs = [];
 
     const guild = channel.guild;
 
@@ -37,13 +38,15 @@ module.exports = async (Discord, client, messages, channel) => {
             if (deleted.partial) return;
             if (deleted.author.bot) return;
 
-            const authorTag = `${deleted.author.username}${deleted.author.discriminator == 0 ? "" : `#${deleted.author.discriminator}`}`;
+            const authorTag = `${deleted.author.tag}`
             const authorDisplayName = deleted.author.displayName;
             const authorID = deleted.author.id;
             const channelName = channel.name;
 
             let addString = `${authorTag} (${authorDisplayName}) [${authorID}] | (#${channelName}): ${deleted.content > 2000 ? `${deleted.content.slice(0, 2000)}...` : deleted.content}`;
+            let userString = `${authorID}`;
             bulkDeleteInformation.push(addString);
+            if (!bulkDeleteUserIDs.includes(userString)) bulkDeleteUserIDs.push(userString);
         });
 
         const pasteURL = await pastebinClient.createPaste({
@@ -55,12 +58,12 @@ module.exports = async (Discord, client, messages, channel) => {
             publicity: Publicity.Unlisted,
         });
 
-        if (pasteURL === null) return console.log('null link')
-        if (bulkDeleteInformation.length <= 0) return console.log('no msgs');
+        if (pasteURL === null) return;
+        if (bulkDeleteInformation.length <= 0) return;
 
         const rawPasteURL = pasteURL.replace('.com/', '.com/raw/');
         const bulkDeleteEmbed = new EmbedBuilder()
-            .setDescription(`**${bulkDeleteInformation.length}**/**${messages.size}** message(s) were deleted and known in cache.`)
+            .setDescription(`**${bulkDeleteInformation.length}**/**${messages.size}** message(s) were deleted and known in cache.\n\n**IDs Involved**: ${(bulkDeleteUserIDs.length > 0) ? bulkDeleteUserIDs.join(' ') : 'Unknown'}`)
             .addFields(
                 { name: 'Link', value: rawPasteURL }
             )

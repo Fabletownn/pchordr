@@ -10,7 +10,7 @@ module.exports = async (Discord, client, interaction) => {
         if (interaction.customId === 'schedule-msg') {
             SCHEDULE.findOne({
                 guildID: interaction.guild.id
-            }, async (err, data) => {
+            }, async (err) => {
                 if (err) return console.log(err);
 
                 let dateInput = interaction.fields.getTextInputValue('schedule-date');
@@ -96,7 +96,7 @@ module.exports = async (Discord, client, interaction) => {
             let appealAttachment = interaction.fields.getTextInputValue('appeal-attachments') || 'None';
             var banReason;
 
-            await interaction.client.guilds.cache.get('614193406838571085').bans.fetch(interaction.user.id).then((ban) => banReason = ban.reason).catch((err) => banReason = 'None');
+            await interaction.client.guilds.cache.get('614193406838571085').bans.fetch(interaction.user.id).then((ban) => banReason = ban.reason).catch(() => banReason = 'None');
 
             APPEALS.findOne({
                 guildID: interaction.guild.id,
@@ -108,7 +108,7 @@ module.exports = async (Discord, client, interaction) => {
                 await interaction.client.guilds.cache.get('685876599199236173').members.cache.get(interaction.user.id).roles.add('1208961459283959848');
 
                 const appealEmbed = new EmbedBuilder()
-                    .setAuthor({ name: `${interaction.user.username}#${interaction.user.discriminator} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
+                    .setAuthor({ name: `${interaction.user.tag} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
                     .addFields([
                         { name: 'Appeal Message', value: appealMessage.slice(0, 1023) || 'None', inline: true },
                         { name: 'Ban Reason', value: banReason || '???', inline: true },
@@ -120,9 +120,9 @@ module.exports = async (Discord, client, interaction) => {
                     .setTimestamp()
 
                 const appealEmbedOL = new EmbedBuilder()
-                    .setAuthor({ name: `${interaction.user.username}#${interaction.user.discriminator} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
+                    .setAuthor({ name: `${interaction.user.tag} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
                     .addFields([
-                        { name: 'Appeal Message', value: `${appealMessage.slice(0, 970)}... (see full message)` || 'None', inline: true },
+                        { name: 'Appeal Message', value: `${appealMessage.slice(0, 970)}... (see full message)`, inline: true },
                         { name: 'Ban Reason', value: banReason || '???', inline: true },
                         { name: 'Additional Notes', value: appealNotes || 'None', inline: false },
                         { name: 'Additional Files', value: appealAttachment || 'None', inline: false }
@@ -221,7 +221,7 @@ module.exports = async (Discord, client, interaction) => {
                 }
 
                 const fileEmbed = new EmbedBuilder()
-                    .setAuthor({ name: `${interaction.user.username}#${interaction.user.discriminator} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
+                    .setAuthor({ name: `${interaction.user.tag} (${interaction.user.displayName})`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
                     .setDescription(`<@${interaction.user.id}> has filed an appeal and obtained the <@&1208961459283959848> role.`)
                     .setFooter({ text: `User ID: ${interaction.user.id}` })
                     .setTimestamp()
@@ -257,7 +257,7 @@ module.exports = async (Discord, client, interaction) => {
                         if (aerr) return console.log(aerr);
 
                         switch (interaction.customId) {
-                            case "setup-reset":
+                            case "setup-reset": {
                                 if (cdata) await cdata.delete();
                                 if (ldata) await ldata.delete();
 
@@ -300,14 +300,15 @@ module.exports = async (Discord, client, interaction) => {
 
                                 await interaction.update({ content: 'Set configuration back to the default settings. Use the `/config-edit` and `/log-config-edit` commands to edit their values.', components: [] });
                                 break;
-                            case "setup-cancel":
+                            }
+                            case "setup-cancel": 
                                 await interaction.update({
                                     content: 'Configuration reset cancelled.',
                                     components: []
                                 });
 
                                 break;
-                            case "gtb-reset":
+                            case "gtb-reset": {
                                 await gtbData.delete();
 
                                 const newGTBData = new GTB({
@@ -338,6 +339,7 @@ module.exports = async (Discord, client, interaction) => {
 
                                 await interaction.update({ content: 'Reset all Guess the Blank images and answers. Use the `/gtb-add` command to re-add their values.', components: [] });
                                 break;
+                            }
                             case "gtb-reset-cancel":
                                 await interaction.update({
                                     content: 'Guess the Blank data reset cancelled.',
@@ -350,7 +352,7 @@ module.exports = async (Discord, client, interaction) => {
 
                                 await interaction.reply({ content: adata.appealmsg, ephemeral: true });
                                 break;
-                            case "appeal-accept":
+                            case "appeal-accept": {
                                 const optionButtons = new ActionRowBuilder()
                                     .addComponents(
                                         new ButtonBuilder()
@@ -369,7 +371,8 @@ module.exports = async (Discord, client, interaction) => {
 
                                 await interaction.reply({ content: 'This will unban <@' + adata.userID + '> (' + adata.userID + ') from the main server.\n\nAre you sure? Ensure that you have discussed this decision with other moderators/I Talk first! <:bITFSweat:1022548683176284281>', components: [optionButtons], ephemeral: true });
                                 break;
-                            case "appeal-deny":
+                            }
+                            case "appeal-deny": {
                                 const optionButtons2 = new ActionRowBuilder()
                                     .addComponents(
                                         new ButtonBuilder()
@@ -388,7 +391,8 @@ module.exports = async (Discord, client, interaction) => {
 
                                 await interaction.reply({ content: 'This will ban <@' + adata.userID + '> (' + adata.userID + ') from the appeals server.\n\nAre you sure? Ensure that you have discussed this decision with other moderators/I Talk first! <:bITFSweat:1022548683176284281>', components: [optionButtons2], ephemeral: true });
                                 break;
-                            case "appeal-misuse":
+                            }
+                            case "appeal-misuse": {
                                 const optionButtons3 = new ActionRowBuilder()
                                     .addComponents(
                                         new ButtonBuilder()
@@ -407,7 +411,8 @@ module.exports = async (Discord, client, interaction) => {
 
                                 await interaction.reply({ content: 'This will kick <@' + adata.userID + '> (' + adata.userID + ') from the appeals server for misuse (submitted an appeal when not banned).\n\nAre you sure? <:bITFSweat:1022548683176284281>', components: [optionButtons3], ephemeral: true });
                                 break;
-                            case "appeal-accept-sure":
+                            }
+                            case "appeal-accept-sure": {
                                 if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to unban or accept that appeal, you do not have permission!', components: [], ephemeral: true });
 
                                 const aUser = interaction.message.content.split('(')[1].split(')')[0];
@@ -417,8 +422,8 @@ module.exports = async (Discord, client, interaction) => {
                                 const acceptEmbed = new EmbedBuilder()
                                     .setAuthor({ name: `Appeal Approved by ${interaction.user.displayName}`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
                                     .addFields([
-                                        { name: 'User', value: `${interaction.client.users.cache.get(aUser).username}#${interaction.client.users.cache.get(aUser).discriminator}\n(${interaction.client.users.cache.get(aUser).displayName})`, inline: true },
-                                        { name: 'Moderator', value: `${interaction.user.username}#${interaction.user.discriminator}\n(${interaction.user.displayName})`, inline: true },
+                                        { name: 'User', value: `${interaction.client.users.cache.get(aUser).tag}\n(${interaction.client.users.cache.get(aUser).displayName})`, inline: true },
+                                        { name: 'Moderator', value: `${interaction.user.tag}\n(${interaction.user.displayName})`, inline: true },
                                         { name: 'Date', value: `<t:${Math.round((interaction.message.createdTimestamp) / 1000)}:F> (<t:${Math.round((interaction.message.createdTimestamp) / 1000)}:R>)`, inline: false }
                                     ])
                                     .setColor('#00FF00')
@@ -467,7 +472,8 @@ module.exports = async (Discord, client, interaction) => {
                                 }
 
                                 break;
-                            case "appeal-deny-sure":
+                            }
+                            case "appeal-deny-sure": {
                                 if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to deny that appeal, you do not have permission!', components: [], ephemeral: true });
 
                                 const dUser = interaction.message.content.split('(')[1].split(')')[0];
@@ -479,8 +485,8 @@ module.exports = async (Discord, client, interaction) => {
                                 const denyEmbed = new EmbedBuilder()
                                     .setAuthor({ name: `Appeal Denied by ${interaction.user.displayName}`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
                                     .addFields([
-                                        { name: 'User', value: `${interaction.client.users.cache.get(dUser).username}#${interaction.client.users.cache.get(dUser).discriminator}\n(${interaction.client.users.cache.get(dUser).displayName})`, inline: true },
-                                        { name: 'Moderator', value: `${interaction.user.username}#${interaction.user.discriminator}\n(${interaction.user.displayName})`, inline: true },
+                                        { name: 'User', value: `${interaction.client.users.cache.get(dUser).tag}\n(${interaction.client.users.cache.get(dUser).displayName})`, inline: true },
+                                        { name: 'Moderator', value: `${interaction.user.tag}\n(${interaction.user.displayName})`, inline: true },
                                         { name: 'Date', value: `<t:${Math.round((interaction.message.createdTimestamp) / 1000)}:F> (<t:${Math.round((interaction.message.createdTimestamp) / 1000)}:R>)`, inline: false }
                                     ])
                                     .setColor('#FF0000')
@@ -489,7 +495,7 @@ module.exports = async (Discord, client, interaction) => {
 
                                 try {
                                     await interaction.client.channels.cache.get('794486722356183052').send({ embeds: [denyEmbed] });
-                                    await interaction.client.users.cache.get(dUser).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nAfter consideration, your I Talk Server ban appeal has been denied and you can no longer appeal.` }).catch((err) => { return });
+                                    await interaction.client.users.cache.get(dUser).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nAfter consideration, your I Talk Server ban appeal has been denied and you can no longer appeal.` }).catch(() => { return });
                                     await interaction.client.guilds.cache.get('685876599199236173').members.ban(dUser, { reason: 'After consideration, your I Talk Server ban appeal has been denied.' });
 
                                     APPEALS.findOne({
@@ -529,7 +535,8 @@ module.exports = async (Discord, client, interaction) => {
                                 }
 
                                 break;
-                            case "appeal-misuse-sure":
+                            }
+                            case "appeal-misuse-sure": {
                                 if (!interaction.member.permissions.has(PermissionsBitField.Flags.BanMembers)) return interaction.update({ content: 'Ran into an issue trying to void that appeal, you do not have permission!', components: [], ephemeral: true });
 
                                 const mUser = interaction.message.content.split('(')[1].split(')')[0];
@@ -541,8 +548,8 @@ module.exports = async (Discord, client, interaction) => {
                                 const misuseEmbed = new EmbedBuilder()
                                     .setAuthor({ name: `Appeal Voided for Misuse by ${interaction.user.displayName}`, iconURL: interaction.user.displayAvatarURL({ size: 512, dynamic: true }) })
                                     .addFields([
-                                        { name: 'User', value: `${interaction.client.users.cache.get(mUser).username}#${interaction.client.users.cache.get(mUser).discriminator}\n(${interaction.client.users.cache.get(mUser).displayName})`, inline: true },
-                                        { name: 'Moderator', value: `${interaction.user.username}#${interaction.user.discriminator}\n(${interaction.user.displayName})`, inline: true },
+                                        { name: 'User', value: `${interaction.client.users.cache.get(mUser).tag}\n(${interaction.client.users.cache.get(mUser).displayName})`, inline: true },
+                                        { name: 'Moderator', value: `${interaction.user.tag}\n(${interaction.user.displayName})`, inline: true },
                                         { name: 'Date', value: `<t:${Math.round((interaction.message.createdTimestamp) / 1000)}:F> (<t:${Math.round((interaction.message.createdTimestamp) / 1000)}:R>)`, inline: false }
                                     ])
                                     .setColor('#FF0000')
@@ -551,7 +558,7 @@ module.exports = async (Discord, client, interaction) => {
 
                                 try {
                                     await interaction.client.channels.cache.get('794486722356183052').send({ embeds: [misuseEmbed] });
-                                    await interaction.client.users.cache.get(mUser).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nFor misuse of the ban appeals server, you have been kicked from the server. Do not file an appeal if you aren't banned!` }).catch((err) => { return });
+                                    await interaction.client.users.cache.get(mUser).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nFor misuse of the ban appeals server, you have been kicked from the server. Do not file an appeal if you aren't banned!` }).catch(() => { return });
                                     await interaction.client.guilds.cache.get('685876599199236173').members.kick(mUser, { reason: 'Misuse (Not Banned)' });
 
                                     APPEALS.findOne({
@@ -565,7 +572,7 @@ module.exports = async (Discord, client, interaction) => {
                                                     const appealEmbed = appealMessage.embeds[0];
 
                                                     if (appealEmbed) {
-                                                        let newMisuseEmbed = EmbedBuilder.from(appealEmbed).setColor('#4E525B').setFooter({ text: `Appeal Voided For Misuse  •  User ID: ${dUser}` });
+                                                        let newMisuseEmbed = EmbedBuilder.from(appealEmbed).setColor('#4E525B').setFooter({ text: `Appeal Voided For Misuse  •  User ID: ${mUser}` });
 
                                                         await appealMessage.edit({ content: null, embeds: [newMisuseEmbed] });
 
@@ -591,6 +598,7 @@ module.exports = async (Discord, client, interaction) => {
                                 }
 
                                 break;
+                            }
                             case "appeal-accept-cancel":
                                 await interaction.update({ content: 'The user will not be unbanned as requested. <:bITFGG:1022548636481114172>', components: [], ephemeral: true });
 
