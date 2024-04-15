@@ -26,14 +26,13 @@ module.exports = async (Discord, client, message) => {
         const deletedChannelID = message.channel.id;
         const deletedAuthorID = message.author.id;
         const deletedTime = Math.round((message.createdTimestamp) / 1000);
-        const deletedAuthorTag = client.users.cache.get(deletedAuthorID).discriminator;
 
         const embedCharacterLimit = 1000;
         const contentFieldsNeeded = Math.ceil(deletedEditedContent.length / embedCharacterLimit);
         let overloadedEmbed = 0;
 
         const deletedEmbed = new EmbedBuilder()
-            .setAuthor({ name: `${client.users.cache.get(deletedAuthorID).username}#${deletedAuthorTag}`, iconURL: message.guild.members.cache.get(deletedAuthorID).displayAvatarURL({ dynamic: true }) })
+            .setAuthor({ name: `${client.users.cache.get(deletedAuthorID).tag}`, iconURL: client.users.cache.get(deletedAuthorID).displayAvatarURL({ dynamic: true }) })
             .setDescription(`Message deleted in <#${deletedChannelID}>`)
             .setTimestamp()
             .setColor('#822AED');

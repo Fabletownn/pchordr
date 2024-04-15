@@ -27,7 +27,6 @@ module.exports = async (Discord, client, oldMessage, newMessage) => {
         const editedChannelID = newMessage.channel.id;
         const editedAuthorID = newMessage.author.id;
         const editedNewTime = Math.round((Date.now()) / 1000);
-        const editedAuthorTag = client.users.cache.get(editedAuthorID).discriminator;
         const editedLink = newMessage.url;
 
         const embedCharacterLimit = 1000;
@@ -37,7 +36,7 @@ module.exports = async (Discord, client, oldMessage, newMessage) => {
         if (editedEditedOldContent == editedEditedNewContent) return;
 
         const editedEmbed = new EmbedBuilder()
-            .setAuthor({ name: `${client.users.cache.get(editedAuthorID).username}#${editedAuthorTag}`, iconURL: newMessage.guild.members.cache.get(editedAuthorID).displayAvatarURL({ dynamic: true }) })
+            .setAuthor({ name: `${client.users.cache.get(editedAuthorID).tag}`, iconURL: client.users.cache.get(editedAuthorID).displayAvatarURL({ dynamic: true }) })
             .setDescription(`Message updated in <#${editedChannelID}> ([jump to message](${editedLink}))`)
             .setTimestamp()
             .setColor('#E62AED');

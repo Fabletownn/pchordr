@@ -66,6 +66,6 @@ module.exports = {
         if (optionFooter) customEmbed.setFooter({ text: optionFooter });
 
         await optionChannel.send({ content: optionMessage || null, embeds: [customEmbed] });
-        await interaction.reply({ content: `Sent the attached embed in <#${optionChannel.id}> successfully. <:bITFTalk:1063265609112100945>`, embeds: [customEmbed] });
+        await interaction.reply({ content: `Sent the attached embed in <#${optionChannel.id}> successfully${(optionMessage !== null ? ` with message content attached.` : '.')} <:bITFTalk:1063265609112100945>`, embeds: [customEmbed] });
     },
 };
