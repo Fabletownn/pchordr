@@ -1,12 +1,6 @@
 const CONFIG = require('../models/config.js');
 const LCONFIG = require('../models/logconfig.js');
-const {
-    SlashCommandBuilder,
-    PermissionFlagsBits,
-    ButtonStyle,
-    ActionRowBuilder,
-    ButtonBuilder
-} = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ButtonStyle, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -57,7 +51,7 @@ module.exports = {
                     await newConfigData.save().catch((err) => console.log(err));
 
                     const newLogData = new LCONFIG({
-                        guildID: message.guild.id,
+                        guildID: interaction.guild.id,
                         msglogid: "",
                         ignoredchannels: [],
                         ignoredcategories: [],
@@ -67,8 +61,7 @@ module.exports = {
                     await newLogData.save().catch((err) => console.log(err));
 
                     await interaction.reply({ content: 'Set up data for the server. Use the `/config-edit` and `/log-config-edit` commands to edit configuration values. <:bITFVictory:1063265610303295619>' });
-                } else if (data) {
-
+                } else if (data || ldata) {
                     const setupRow = new ActionRowBuilder()
                         .addComponents(
                             new ButtonBuilder()

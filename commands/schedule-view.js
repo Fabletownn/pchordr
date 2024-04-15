@@ -1,11 +1,4 @@
-const {
-    SlashCommandBuilder,
-    PermissionFlagsBits,
-    ActionRowBuilder,
-    ModalBuilder,
-    TextInputBuilder,
-    TextInputStyle
-} = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const SCHEDULE = require('../models/schedules.js');
 
 module.exports = {

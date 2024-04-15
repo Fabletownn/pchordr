@@ -23,7 +23,7 @@ module.exports = {
                 await interaction.member.roles.remove('1019684924372045947').then(async () => {
                     await interaction.member.roles.add(data.modRole);
 
-                    await interaction.guild.channels.cache.get(data.modChat).send({ content: `${interaction.user} is **back from break**. Welcome back!`, ephemeral: true });
+                    await interaction.guild.channels.cache.get(data.modChat).send({ content: `${interaction.user} has **returned from their break**. Welcome back!`, ephemeral: true });
 
                     await interaction.reply({ content: `Successfully returned. Welcome back!`, ephemeral: true });
                 });

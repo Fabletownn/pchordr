@@ -1,17 +1,14 @@
-const {
-    SlashCommandBuilder,
-    PermissionFlagsBits
-} = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('eval')
-        .setDescription('Command for testing')
+        .setDescription('Evaluate a custom code block')
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .setDMPermission(false)
         .addStringOption((option) =>
             option.setName('eval')
-                .setDescription('Code to evaluate?')
+                .setDescription('The line of code to evaluate')
                 .setRequired(true)
         ),
     async execute(interaction) {

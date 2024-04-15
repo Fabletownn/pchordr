@@ -1,6 +1,5 @@
-const { Discord, Client, ChannelType, AttachmentBuilder } = require('discord.js');
+const { ChannelType } = require('discord.js');
 const CONFIG = require('../../models/config.js');
-const fs = require('fs');
 
 module.exports = async (Discord, client, message) => {
     if (message.author.bot) return;
@@ -62,10 +61,10 @@ module.exports = async (Discord, client, message) => {
                     const randomGreetArray = [`<:bITFHi:1022548645641474129>`, `<:bITFGift:1022548639542951977>`, `<:bITFBits:1022548606995136572>`, `<a:bITFLove:1022586073043435611>`, `<:dNickLove:798240179894222859>`];
                     const greetReaction = randomGreetArray[Math.floor(Math.random() * randomGreetArray.length)];
 
-                    if (greetingArray.some((greeting) => message.content.toLowerCase() === greeting)) await message.react(greetReaction).catch((err) => { return });
+                    if (greetingArray.some((greeting) => message.content.toLowerCase() === greeting)) await message.react(greetReaction).catch(() => { return });
 
-                    if (goodmorningArray.some((gm) => message.content.toLowerCase().startsWith(gm)) || goodnightArray.some(gn => message.content.toLowerCase().startsWith(gn))) await message.react('<a:bITFPeace:1063268900730568735>').then(() => message.react('<a:bITFLove:1022586073043435611>')).catch((err) => { return });
-                    if (message.content.toLowerCase().startsWith('welcome') || message.content.toLowerCase().includes('i\'m new') || message.content.toLowerCase().includes('im new')) await message.react(greetReaction).catch((err) => { return });
+                    if (goodmorningArray.some((gm) => message.content.toLowerCase().startsWith(gm)) || goodnightArray.some(gn => message.content.toLowerCase().startsWith(gn))) await message.react('<a:bITFPeace:1063268900730568735>').then(() => message.react('<a:bITFLove:1022586073043435611>')).catch(() => { return });
+                    if (message.content.toLowerCase().startsWith('welcome') || message.content.toLowerCase().includes('i\'m new') || message.content.toLowerCase().includes('im new')) await message.react(greetReaction).catch(() => { return });
                 }
             }
         }

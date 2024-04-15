@@ -1,11 +1,5 @@
 const POINTS = require('../models/points-lb.js');
-const {
-    SlashCommandBuilder,
-    PermissionFlagsBits,
-    ChannelType,
-    AllowedMentionsTypes,
-    EmbedBuilder
-} = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()

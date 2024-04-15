@@ -1,8 +1,4 @@
-const {
-    SlashCommandBuilder,
-    PermissionFlagsBits,
-    ChannelType
-} = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const GTB = require('../models/gtb.js');
 
 module.exports = {

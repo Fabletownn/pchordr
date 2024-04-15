@@ -49,65 +49,23 @@ module.exports = {
         ),
 
     async execute(interaction) {
-        let messageContents = null;
+        const optionChannel = interaction.options.getChannel('channel');
+        const optionTitle = interaction.options.getString('title');
+        const optionDescription = interaction.options.getString('description').replace(/\\n/g, '\n');
+        const optionFooter = interaction.options.getString('footer');
+        const optionColor = interaction.options.getString('color');
+        const optionAttach = interaction.options.getAttachment('attachment');
+        const optionMessage = interaction.options.getString('message');
 
-        const channel = interaction.options.getChannel('channel');
-        const title = interaction.options.getString('title');
-        const description = interaction.options.getString('description').replace(/\\n/g, '\n');
-        const footer = interaction.options.getString('footer');
-        const color = interaction.options.getString('color');
-        const attachment = interaction.options.getAttachment('attachment');
+        const customEmbed = new EmbedBuilder();
 
-        if (interaction.options.getString('message') !== null) messageContents = interaction.options.getString('message');
+        customEmbed.setTitle(optionTitle);
+        customEmbed.setDescription(optionDescription);
+        if (optionColor) customEmbed.setColor(optionColor);
+        if (optionAttach) customEmbed.setImage(optionAttach.url);
+        if (optionFooter) customEmbed.setFooter({ text: optionFooter });
 
-        /*
-            Likely redo this command, check for option, just do X.setTitle() or .addFields() etc.
-        */
-
-        if (attachment) {
-            if (footer) {
-                const custom_embed = new EmbedBuilder()
-                    .setTitle(title)
-                    .setDescription(description)
-                    .setFooter({ text: footer })
-                    .setColor(color)
-                    .setImage(attachment.url)
-                
-                channel.send({ content: messageContents, embeds: [custom_embed] });
-
-                await interaction.reply({ content: `Sent embed to ${channel} with the assets **title**, **description**, **footer**, **color**, **attachment**. <:bITFVictory:1063265610303295619>` });
-            } else if (!footer) {
-                const custom_embed = new EmbedBuilder()
-                    .setTitle(title)
-                    .setDescription(description)
-                    .setColor(color || '23ff09')
-                    .setImage(attachment.url)
-
-                channel.send({ content: messageContents, embeds: [custom_embed] });
-
-                await interaction.reply({ content: `Sent embed to ${channel} with the assets **title**, **description**, **color**, **attachment**. <:bITFVictory:1063265610303295619>` });
-            }
-        } else {
-            if (footer) {
-                const custom_embed = new EmbedBuilder()
-                    .setTitle(title)
-                    .setDescription(description)
-                    .setFooter({ text: footer })
-                    .setColor(color || '23ff09')
-
-                channel.send({ content: messageContents, embeds: [custom_embed] });
-
-                await interaction.reply({ content: `Sent embed to ${channel} with the assets **title**, **description**, **footer**, **color**. <:bITFVictory:1063265610303295619>` });
-            } else if (!footer) {
-                const custom_embed = new EmbedBuilder()
-                    .setTitle(title)
-                    .setDescription(description)
-                    .setColor(color || '23ff09')
-
-                channel.send({ content: messageContents, embeds: [custom_embed] });
-
-                await interaction.reply({ content: `Sent embed to ${channel} with the assets **title**, **description**, **color**. <:bITFVictory:1063265610303295619>` });
-            }
-        }
+        await optionChannel.send({ content: optionMessage || null, embeds: [customEmbed] });
+        await interaction.reply({ content: `Sent the attached embed in <#${optionChannel.id}> successfully. <:bITFTalk:1063265609112100945>`, embeds: [customEmbed] });
     },
 };

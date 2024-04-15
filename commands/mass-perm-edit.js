@@ -1,4 +1,4 @@
-const { Client, SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require('discord.js');
 
 const lcArray = ([
     { name: 'Everyone', value: '0' },

@@ -1,14 +1,6 @@
 const GTB = require('../models/gtb.js');
 const POINTS = require('../models/points-lb.js');
-const {
-    SlashCommandBuilder,
-    PermissionFlagsBits,
-    ChannelType,
-    AllowedMentionsTypes,
-    EmbedBuilder,
-    PermissionsBitField,
-    OverwriteType
-} = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, PermissionsBitField, OverwriteType } = require('discord.js');
 
 var roundsPlayed;
 

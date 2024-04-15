@@ -1,8 +1,4 @@
-const {
-    SlashCommandBuilder,
-    PermissionFlagsBits,
-    ChannelType
-} = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -16,7 +12,6 @@ module.exports = {
                 .setRequired(true)
                 .addChannelTypes(ChannelType.GuildVoice)
         ),
-
     async execute(interaction) {
         const channelDisconnect = interaction.options.getChannel('channel');
 

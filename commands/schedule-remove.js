@@ -1,7 +1,4 @@
-const {
-    SlashCommandBuilder,
-    PermissionFlagsBits
-} = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const SCHEDULE = require('../models/schedules.js');
 
 module.exports = {
@@ -16,7 +13,7 @@ module.exports = {
             .setRequired(true)
         ),
     async execute(interaction) {
-        const schedID = interaction.options.get('schedule-id').value;
+        const schedID = interaction.options.getString('schedule-id');
 
         SCHEDULE.findOne({
             guildID: interaction.guild.id,

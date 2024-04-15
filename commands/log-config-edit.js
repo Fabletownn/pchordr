@@ -1,5 +1,5 @@
 const LCONFIG = require('../models/logconfig.js');
-const { Client, WebhookClient, SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -42,7 +42,7 @@ module.exports = {
             await interaction.deferReply();
 
             switch (configChoice) {
-                case "ignorecatchan":
+                case "ignorecatchan": {
                     const ignoredChannelOrCategory = interaction.guild.channels.cache.get(configVal);
 
                     if (!ignoredChannelOrCategory) return interaction.editReply({ content: 'Invalid channel or category (doesn\'t exist or is invalid).' });
@@ -60,7 +60,8 @@ module.exports = {
                     }
 
                     break;
-                case "unignorecatchan":
+                }
+                case "unignorecatchan": {
                     const unignoredChannelOrCategory = interaction.guild.channels.cache.get(configVal);
 
                     if (!unignoredChannelOrCategory) return interaction.editReply({ content: 'The channel provided doesn\'t exist or is invalid.' });
@@ -84,15 +85,14 @@ module.exports = {
                     }
 
                     break;
-                case "updatemsg":
+                }
+                case "updatemsg": {
                     const logChannel = interaction.guild.channels.cache.get(configVal);
 
                     let oldMsgChannel;
-                    let oldMsgWebhook;
                     let deletedWebhook = false;
 
                     if (data.msglogid) oldMsgChannel = data.msglogid;
-                    if (data.logwebhook) oldMsgWebhook = data.logwebhook;
 
                     if ((!logChannel) || (logChannel && logChannel.type !== ChannelType.GuildText)) return interaction.editReply({ content: 'The channel provided doesn\'t exist or is not text based.' });
 
@@ -118,9 +118,9 @@ module.exports = {
                         await interaction.editReply({ content: 'Message logs will now send to the channel <#' + logChannel.id + '>.\n\n' + (deletedWebhook ? 'The previous webhook has been deleted, and a new one ' : 'A new webhook ') + 'has been created for message logs in the <#' + logChannel.id + '> channel. This webhook will send message logs using the URL that was generated.' });
                     });
                     break;
+                }
                 default:
                     break;
-
             }
         });
     },

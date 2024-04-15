@@ -1,27 +1,25 @@
-const fs = require('fs');
+module.exports = (client) => {
+    process.on('unhandledRejection', (reason, promise) => {
+        console.log(reason, promise);
 
-module.exports = (client, Discord) => {
-    const load_dir = (dirs) => {
-        process.on('unhandledRejection', (reason, promise) => {
-            console.log(reason, promise);
-            return console.log(`An unhandled rejection error came through.\n${reason}\n${promise}`);
-        });
+        return client.channels.cache.get('890718960016838686').send(`<t:${Math.round(parseInt(Date.now()) / 1000)}:F> An error came through (unhandled rejection).\n\`\`\`${reason}\n${promise}\`\`\``);
+    });
 
-        process.on('uncaughtException', (reason, promise) => {
-            console.log(reason, promise);
-            return console.log(`An uncaught exception error came through.\n${reason}\n${promise}`);
-        });
+    process.on('uncaughtException', (reason, promise) => {
+        console.log(reason, promise);
 
-        process.on('uncaughtExceptionMonitor', (reason, promise) => {
-            console.log(reason, promise);
-            return console.log(`An uncaught exception error came through via Monitor.\n${reason}\n${promise}`);
-        });
+        return client.channels.cache.get('890718960016838686').send(`<t:${Math.round(parseInt(Date.now()) / 1000)}:F> An error came through (uncaught exception).\n\`\`\`${reason}\n${promise}\`\`\``);
+    });
 
-        process.on('rejectionHandled', (reason, promise) => {
-            console.log(reason, promise);
-            return console.log(`A promise rejection error came through.\n${reason}\n${promise}`);
-        });
-    }
+    process.on('uncaughtExceptionMonitor', (reason, promise) => {
+        console.log(reason, promise);
 
-    ['guild'].forEach(e => load_dir(e));
+        return client.channels.cache.get('890718960016838686').send(`<t:${Math.round(parseInt(Date.now()) / 1000)}:F> An error came through (monitor).\n\`\`\`${reason}\n${promise}\`\`\``);
+    });
+
+    process.on('rejectionHandled', (reason, promise) => {
+        console.log(reason, promise);
+
+        return client.channels.cache.get('890718960016838686').send(`<t:${Math.round(parseInt(Date.now()) / 1000)}:F> An error came through (promise rejection).\n\`\`\`${reason}\n${promise}\`\`\``);
+    });
 }

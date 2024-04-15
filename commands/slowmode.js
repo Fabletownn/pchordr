@@ -1,8 +1,4 @@
-const {
-    SlashCommandBuilder,
-    PermissionFlagsBits,
-    ChannelType
-} = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require('discord.js');
 const sf = require('seconds-formater');
 
 module.exports = {

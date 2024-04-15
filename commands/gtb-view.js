@@ -1,11 +1,5 @@
 const GTB = require('../models/gtb.js');
-const {
-    SlashCommandBuilder,
-    PermissionFlagsBits,
-    ChannelType,
-    AllowedMentionsTypes,
-    EmbedBuilder
-} = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -30,7 +24,6 @@ module.exports = {
 
             for (const roundInfo of gtbRounds) {
                 if ((roundInfo === undefined) || (roundInfo.length == 0)) {
-                    roundInformation = 'None';
                     roundNumber++;
 
                     gtbEmbed.addFields([

@@ -1,8 +1,5 @@
 const sf = require('seconds-formater');
-const {
-    SlashCommandBuilder,
-    PermissionFlagsBits
-} = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -23,6 +20,6 @@ module.exports = {
 
         const uptimeInSeconds = (client.uptime / 1000) || 0;
 
-        await interaction.editReply(`Pong! <:bITFGG:1022548636481114172>\n\nUptime: ${sf.convert(uptimeInSeconds).format('**Dd Hh Mm** and **Ss**')}\nTrip Latency: **${tripLatency}ms**\nHeartbeat: **${botHeartbeat}ms**`);
+        await interaction.editReply({ content: `Pong! <:bITFGG:1022548636481114172>\n\nUptime: ${sf.convert(uptimeInSeconds).format('**Dd Hh Mm** and **Ss**')}\nTrip Latency: **${tripLatency}ms**\nHeartbeat: **${botHeartbeat}ms**` });
     },
 };

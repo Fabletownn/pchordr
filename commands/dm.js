@@ -1,7 +1,4 @@
-const {
-    SlashCommandBuilder,
-    PermissionFlagsBits
-} = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -46,11 +43,11 @@ module.exports = {
 
         if (attachmentContents) {
             await userMessage.send({ content: `<:bITFThink:1022548686158442537> You have received a message from **${userAuthor}** via I Talk Server:\n\n${messageContents}`, files: [attachmentContents.url] }).then(async () => {
-                await interaction.reply(`${anonState} messaged **${userMessage.displayName}** with attachment(s). <:bITFVictory:1063265610303295619>`).catch((err) => interaction.editReply(`Failed to message that user (${err}). Tell them to enable their messages. <:bITFSweat:1022548683176284281>`));
+                await interaction.reply({ content: `${anonState} messaged **${userMessage.displayName}** with attachment(s). <:bITFVictory:1063265610303295619>` }).catch((err) => interaction.editReply({ content: `Failed to message that user (${err}). Tell them to enable their messages. <:bITFSweat:1022548683176284281>` }));
             });
         } else if (!attachmentContents) {
             await userMessage.send({ content: `<:bITFThink:1022548686158442537> You have received a message from **${userAuthor}** via I Talk Server:\n\n${messageContents}` }).then(async () => {
-                await interaction.reply(`${anonState} messaged **${userMessage.displayName}** with no attachments. <:bITFVictory:1063265610303295619>`).catch((err) => interaction.editReply(`Failed to message that user (${err}). Tell them to enable their messages. <:bITFSweat:1022548683176284281>`));
+                await interaction.reply({ content: `${anonState} messaged **${userMessage.displayName}** with no attachments. <:bITFVictory:1063265610303295619>` }).catch((err) => interaction.editReply({ content: `Failed to message that user (${err}). Tell them to enable their messages. <:bITFSweat:1022548683176284281>` }));
             });
         }
     },

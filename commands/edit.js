@@ -1,8 +1,4 @@
-const {
-    SlashCommandBuilder,
-    PermissionFlagsBits,
-    ChannelType
-} = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -32,9 +28,9 @@ module.exports = {
 
         await interaction.client.channels.cache.get(channelID).messages.fetch(messageID).then(async (messageFound) => {
             if (!messageFound) return interaction.reply({ content: 'Failed to find the message corresponding to that link. <:bITFSweat:1022548683176284281>' });
-            if (messageFound.author.id !== interaction.client.user.id) return interaction.reply(`Failed to edit that message, as it doesn't belong to me. This command is designated for editing Power Chord messages, often for announcements or posts.`);
+            if (messageFound.author.id !== interaction.client.user.id) return interaction.reply({ content: 'Failed to edit that message, as it does not belong to me. This command is designated for editing Power Chord messages, often for announcements or posts.' });
 
-            messageFound.edit(newMessage).then(async () => await interaction.reply(`Edited the message (**[jump here](<${messageFound.url}>)**) with '${newMessage.replace(/\n/g, `..`)}'.`));
-        }).catch((err) => interaction.reply(`Failed to edit the post (${err}). Ensure it's valid and in the proper channel.`));
+            messageFound.edit(newMessage).then(async () => await interaction.reply({ content: `Edited the message (**[jump here](<${messageFound.url}>)**) with '${newMessage.replace(/\n/g, `..`)}'.` }));
+        }).catch((err) => interaction.reply({ content: `Failed to edit the post (${err}). Ensure it's valid and in the proper channel.` }));
     },
 };

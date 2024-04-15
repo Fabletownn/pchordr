@@ -1,8 +1,4 @@
-const {
-    SlashCommandBuilder,
-    PermissionFlagsBits,
-    ChannelType
-} = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -38,11 +34,11 @@ module.exports = {
             await interaction.deferReply();
 
             for (const iemoji in emojiArray) {
-                await messageFound.react(emojiArray[iemoji]).catch((err) => { return failCounter++ }).then(() => emojiCounter++);
+                await messageFound.react(emojiArray[iemoji]).catch(() => { return failCounter++ }).then(() => emojiCounter++);
             }
 
             await interaction.followUp({ content: `Reacted with **${emojiCounter - failCounter} emotes** on the [specified post](<${messageFound.url}>)${(failCounter > 0) ? `, with **${failCounter}** emotes failing to be reacted.` : '.'} <:bITFAYAYA:1022548602255589486>` });
-        }).catch((err) => {
+        }).catch(() => {
             return interaction.followUp({ content: `Failed to append reaction on the post. Ensure the emoji, channel and message is valid.` });
         });
     },

@@ -1,8 +1,4 @@
-const {
-    SlashCommandBuilder,
-    PermissionFlagsBits,
-    ChannelType
-} = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -29,7 +25,7 @@ module.exports = {
             SendMessages: false,
         });
 
-        await channel.send(`This channel has been locked by a moderator. Expect further explanation from a staff member soon. <:bITFHuh:1022548647948333117>\n\nReason: **${reason}**`);
+        await channel.send({ content: `This channel has been locked by a moderator. Expect further explanation from a staff member soon. <:bITFHuh:1022548647948333117>\n\nReason: **${reason}**` });
 
         await interaction.reply({ content: `Locked ${channel} channel with the reason "**${reason}**". <:bITFVictory:1063265610303295619>` });
     },
