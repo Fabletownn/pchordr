@@ -34,16 +34,6 @@ module.exports = async (Discord, client, message) => {
             }
         }
 
-        ////////////////////// Poll Deletion
-        if (!message.content && message.attachments.size <= 0 && message.stickers.size <= 0 && message.embeds.length <= 0) {
-            if (!(message.member.roles.cache.has('614196214078111745')) && message.channel.id !== data.modChat) {
-                if (data.deletepoll === true) {
-                    await message.reply({ content: 'Polls have been disallowed for posting!' }).then((m) => setTimeout(() => m.delete(), 4000));
-                    await message.delete();
-                }
-            }
-        }
-
         ////////////////////// Server Updates and Poll Notifications
         if ((data.serverUpdatesChat !== null) && (data.pollsChat !== null)) {
             if ((message.channel.id === data.serverUpdatesChat) && (!message.content.startsWith('='))) client.channels.cache.get('614193406842765375').send(`There has been a new server update posted, you can read more in <#${data.serverUpdatesChat}>. <:bITFGG:1022548636481114172>`);

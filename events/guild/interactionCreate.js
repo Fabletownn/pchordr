@@ -282,8 +282,7 @@ module.exports = async (Discord, client, interaction) => {
                                     vxtwitter: false,
                                     artdelete: false,
                                     greeting: false,
-                                    autogiveaway: false,
-                                    deletepoll: false
+                                    autogiveaway: false
                                 });
 
                                 newConfigData.save().catch((err) => console.log(err));
@@ -466,7 +465,7 @@ module.exports = async (Discord, client, interaction) => {
                                         }
                                     });
 
-                                    await interaction.update({ content: 'Successfully unbanned and notified the user! <:bITFDab:1022548625735303258>', ephemeral: true });
+                                    await interaction.update({ content: 'Successfully unbanned and notified the user! <:bITFDab:1022548625735303258>', ephemeral: true, components: [] });
                                 } catch (err) {
                                     await interaction.update({ content: 'Ran into an issue trying to unban or accept that appeal, are you sure they are banned? <:bITFCry:1022548623243886593>\n```' + err + '```', components: [], ephemeral: true });
                                 }

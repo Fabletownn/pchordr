@@ -49,8 +49,7 @@ module.exports = {
                     { name: `VXTwitter`, value: ((data.vxtwitter === true) ? 'Enabled' : 'Disabled'), inline: true },
                     { name: `Non-Art Deletion`, value: ((data.artdelete === true) ? 'Enabled' : 'Disabled'), inline: true },
                     { name: `General Chat Greeting`, value: ((data.greeting === true) ? 'Enabled' : 'Disabled'), inline: true },
-                    { name: `Giveaway Winner Setup`, value: ((data.autogiveaway === true) ? 'Enabled' : 'Disabled'), inline: true },
-                    { name: `Poll Deletions`, value: ((data.deletepoll === true) ? 'Enabled' : 'Disabled'), inline: true },
+                    { name: `Giveaway Winner Setup`, value: ((data.autogiveaway === true) ? 'Enabled' : 'Disabled'), inline: true }
                 );
 
             await interaction.reply({ embeds: [channelEmbed, roleEmbed, featureEmbed] });

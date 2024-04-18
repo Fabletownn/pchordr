@@ -24,8 +24,7 @@ const configSchema = mongoose.Schema({
     vxtwitter: Boolean,
     artdelete: Boolean,
     greeting: Boolean,
-    autogiveaway: Boolean,
-    deletepoll: Boolean
+    autogiveaway: Boolean
 });
 
 module.exports = mongoose.model("rconfigs", configSchema);

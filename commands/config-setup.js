@@ -44,8 +44,7 @@ module.exports = {
                         vxtwitter: false,
                         artdelete: false,
                         greeting: false,
-                        autogiveaway: false,
-                        deletepoll: false
+                        autogiveaway: false
                     });
 
                     await newConfigData.save().catch((err) => console.log(err));
