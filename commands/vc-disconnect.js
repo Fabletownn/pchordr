@@ -15,12 +15,12 @@ module.exports = {
     async execute(interaction) {
         const channelDisconnect = interaction.options.getChannel('channel');
 
-        if (channelDisconnect.members.size <= 0) return interaction.reply(`Failed to disconnect members, as there are no occupants in that channel. <:bITFSweat:1022548683176284281>`);
+        if (channelDisconnect.members.size <= 0) return interaction.reply({ content: `Failed to disconnect members, as there are no occupants in that channel. <:bITFSweat:1022548683176284281>` });
 
         await channelDisconnect.members.each((member) => {
             if (!member.user.bot) member.voice.disconnect();
         });
 
-        await interaction.reply(`Disconnected all members from ${channelDisconnect}. <:bITFVictory:1063265610303295619>`)
+        await interaction.reply({ content: `Disconnected all members from ${channelDisconnect}. <:bITFVictory:1063265610303295619>` })
     },
 };

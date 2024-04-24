@@ -29,9 +29,9 @@ module.exports = {
         const attachment = interaction.options.getAttachment('attachment');
 
         if (attachment) {
-            channel.send({ content: message, files: [attachment.url] }).then((sent) => interaction.reply(`Sent bot message in ${channel} with **${sent.attachments.size} attachment(s)**. <:bITFVictory:1063265610303295619>`));
+            await channel.send({ content: message, files: [attachment.url] }).then((sent) => interaction.reply({ content: `Sent bot message in ${channel} with **${sent.attachments.size} attachment(s)**. <:bITFVictory:1063265610303295619>` }));
         } else if (!attachment) {
-            channel.send({ content: message }).then(() => interaction.reply(`Sent bot message in ${channel} with **no attachments**. <:bITFVictory:1063265610303295619>`));
+            await channel.send({ content: message }).then(() => interaction.reply({ content: `Sent bot message in ${channel} with **no attachments**. <:bITFVictory:1063265610303295619>` }));
         }
     },
 };

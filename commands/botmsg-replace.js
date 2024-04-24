@@ -58,15 +58,15 @@ module.exports = {
             if (instance === 'first_instance') {
                 newMessage = messageFound.content.replace(toReplace, replaceWith);
 
-                messageFound.edit({ content: newMessage });
+                await messageFound.edit({ content: newMessage });
 
-                return interaction.reply(`Edited the message (**[jump here](<${messageFound.url}>)**) replacing '${toReplace}' with '${replaceWith}' using the first instance only.`);
+                await interaction.reply({ content: `Edited the message (**[jump here](<${messageFound.url}>)**) replacing '${toReplace}' with '${replaceWith}' using the first instance only.` });
             } else if (instance === 'every_instance') {
                 newMessage = messageFound.content.replaceAll(toReplace, replaceWith);
 
                 await messageFound.edit({ content: newMessage });
 
-                return interaction.reply(`Edited the message (**[jump here](<${messageFound.url}>)**) replacing '${toReplace}' with '${replaceWith}' using every instance.`);
+                await interaction.reply({ content: `Edited the message (**[jump here](<${messageFound.url}>)**) replacing '${toReplace}' with '${replaceWith}' using every instance.` });
             } else if (instance === 'last_instance') {
                 let lastIndex = messageFound.content.lastIndexOf(toReplace);
 
@@ -74,7 +74,7 @@ module.exports = {
 
                 await messageFound.edit({ content: newMessage });
 
-                return interaction.reply({ content: `Edited the message (**[jump here](<${messageFound.url}>)**) replacing '${toReplace}' with '${replaceWith}' using just the last instance.` });
+                await interaction.reply({ content: `Edited the message (**[jump here](<${messageFound.url}>)**) replacing '${toReplace}' with '${replaceWith}' using just the last instance.` });
             }
         }).catch(() => interaction.reply({ content: 'Failed to edit the post. Ensure it\'s valid and in the proper channel.' }));
     },
