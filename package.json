@@ -92,6 +92,7 @@
     "streamsearch": "^1.1.0",
     "string_decoder": "^1.3.0",
     "strtok3": "^7.0.0",
+    "superagent": "^9.0.2",
     "time-stamp": "^2.2.0",
     "toidentifier": "^1.0.1",
     "token-types": "^5.0.1",
