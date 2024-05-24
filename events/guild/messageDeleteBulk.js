@@ -1,11 +1,11 @@
 const { EmbedBuilder, WebhookClient } = require('discord.js');
-const { PasteClient, ExpireDate, Publicity } = require('pastebin-api');
-const pastebinClient = new PasteClient({ apiKey: process.env.PBKEY });
+const superagent = require('superagent')
 const LCONFIG = require('../../models/logconfig.js');
 
 module.exports = async (Discord, client, messages, channel) => {
     var bulkDeleteInformation = [];
     var bulkDeleteUserIDs = [];
+    var hasteURL;
 
     const guild = channel.guild;
 
@@ -21,7 +21,7 @@ module.exports = async (Discord, client, messages, channel) => {
 
         const deleteWebhookID = data.logwebhook.split(/\//)[5];
         const deleteWebhookToken = data.logwebhook.split(/\//)[6];
-        
+
         const fetchDeleteWebhooks = await client.channels.cache.get(data.msglogid).fetchWebhooks();
         const fetchedDeleteWebhook = fetchDeleteWebhooks.find((wh) => wh.id === deleteWebhookID);
 
@@ -49,27 +49,39 @@ module.exports = async (Discord, client, messages, channel) => {
             if (!bulkDeleteUserIDs.includes(userString)) bulkDeleteUserIDs.push(userString);
         });
 
-        const pasteURL = await pastebinClient.createPaste({
-            code: `If a deleted message's author was a bot, the message is not cached by the bot, or similar, some messages may not be logged. Out of ${messages.size} deleted messages, ${bulkDeleteInformation.length} are logged.\n`
-                + `I Talk Server Message Bulk Delete Log @ ${currentDate} UTC:\n----------------------------------------------------------------------\n${bulkDeleteInformation.join('\n')}`,
-            expireDate: ExpireDate.OneWeek,
-            format: "javascript",
-            name: "Bulk Delete Log",
-            publicity: Publicity.Unlisted,
-        });
+        const sendContent = `If a deleted message's author was a bot, the message is not cached by the bot, or similar, some messages may not be logged. Out of ${messages.size} deleted messages, ${bulkDeleteInformation.length} are logged.\n`
+            + `I Talk Server Message Bulk Delete Log @ ${currentDate} UTC:\n----------------------------------------------------------------------\n${bulkDeleteInformation.join('\n')}`;
 
-        if (pasteURL === null) return;
+        try {
+            superagent
+                .post('https://hastebin.com/documents')
+                .set('content-type', 'text/plain')
+                .set('Authorization', process.env.HBKEY)
+                .send(sendContent)
+                .end((err, res) => {
+                    if (err) return console.log(err);
+
+                    if (res.ok) {
+                        hasteURL = `https://hastebin.com/share/${res.body.key}`;
+                    } else {
+                        return console.error(`Error uploading bulk delete log: ${res.statusCode} - ${res.body.message}`);
+                    }
+                });
+        } catch (error) {
+            return console.error(`Error uploading bulk delete log: ${error}`);
+        }
+
+        if (hasteURL === null) return;
         if (bulkDeleteInformation.length <= 0) return;
 
-        const rawPasteURL = pasteURL.replace('.com/', '.com/raw/');
         const bulkDeleteEmbed = new EmbedBuilder()
             .setDescription(`**${bulkDeleteInformation.length}**/**${messages.size}** message(s) were deleted and known in cache.\n\n**IDs Involved**: ${(bulkDeleteUserIDs.length > 0) ? bulkDeleteUserIDs.join(' ') : 'Unknown'}`)
             .addFields(
-                { name: 'Link', value: rawPasteURL }
+                { name: 'Link', value: hasteURL }
             )
             .setTimestamp()
             .setColor('#ED498D');
-        
+
         await deleteWebhook.send({ embeds: [bulkDeleteEmbed] });
     });
 }
