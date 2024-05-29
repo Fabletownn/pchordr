@@ -5,7 +5,6 @@ const LCONFIG = require('../../models/logconfig.js');
 module.exports = async (Discord, client, messages, channel) => {
     var bulkDeleteInformation = [];
     var bulkDeleteUserIDs = [];
-    var hasteURL;
 
     const guild = channel.guild;
 
@@ -25,7 +24,7 @@ module.exports = async (Discord, client, messages, channel) => {
         const fetchDeleteWebhooks = await client.channels.cache.get(data.msglogid).fetchWebhooks();
         const fetchedDeleteWebhook = fetchDeleteWebhooks.find((wh) => wh.id === deleteWebhookID);
 
-        if (!fetchedDeleteWebhook) return console.log('No delete webhook found.');
+        if (!fetchedDeleteWebhook) return;
 
         const deleteWebhook = new WebhookClient({ id: deleteWebhookID, token: deleteWebhookToken });
 
@@ -38,7 +37,7 @@ module.exports = async (Discord, client, messages, channel) => {
             if (deleted.partial) return;
             if (deleted.author.bot) return;
 
-            const authorTag = `${deleted.author.tag}`
+            const authorTag = deleted.author.tag;
             const authorDisplayName = deleted.author.displayName;
             const authorID = deleted.author.id;
             const channelName = channel.name;

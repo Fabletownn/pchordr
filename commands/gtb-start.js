@@ -292,7 +292,6 @@ async function playRound(interaction, data) {
     });
 
     roundsPlayed++;
-
 }
 
 async function lockChat(interaction) {

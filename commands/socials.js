@@ -8,7 +8,7 @@ module.exports = {
     async execute(interaction) {
         const socialLinks = new EmbedBuilder()
             .setAuthor({
-                name: `Social Media Links - I Talk`, iconURL: interaction.guild.iconURL({
+                name: `Social Media - I Talk`, iconURL: interaction.guild.iconURL({
                     dynamic: true
                 })
             })

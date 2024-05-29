@@ -30,7 +30,8 @@ module.exports = {
             if (!messageFound) return interaction.reply({ content: 'Message not found!' });
             if (messageFound.author.id !== interaction.client.user.id) return interaction.reply({ content: `Failed to edit message as it doesn't belong to me. This command is designated for editing Power Chord messages, often for announcements or posts.` });
 
-            await messageFound.edit({ content: `${messageFound} ${appendedContent}` }).then(async () => await interaction.reply({ content: `Edited the message (**[jump here](<${messageFound.url}>)**) to end with '${appendedContent.replace(/\n/g, `..`)}'.` }));
+            await messageFound.edit({ content: `${messageFound} ${appendedContent}` });
+            await interaction.reply({ content: `Edited the message (**[jump here](<${messageFound.url}>)**) to end with '${appendedContent.replace(/\n/g, `..`)}'.` });
 
         }).catch(() => interaction.reply({ content: 'Failed to edit the post. Ensure it\'s valid and in the proper channel.' }));
     },
