@@ -643,7 +643,7 @@ module.exports = async (Discord, client, interaction) => {
                                 const reportChannel = reportFields[1].value.replace(/[<#>]/g, '');
 
                                 await interaction.guild.channels.cache.get(reportChannel).messages.fetch(reportMessageID).then(async (reportmsg) => {
-                                    const handledEmbed = EmbedBuilder.from(reportEmbed).setColor('#38DD86').setAuthor({ name: 'Report Handled', iconURL: 'https://i.imgur.com/7WEoXUM.png' });
+                                    const handledEmbed = EmbedBuilder.from(reportEmbed).setColor('#38DD86').setAuthor({ name: 'Report Handled', iconURL: 'https://i.imgur.com/CGgTthf.png' });
 
                                     await reportmsg.delete();
                                     await interaction.message.edit({ embeds: [handledEmbed], components: [] });
@@ -653,7 +653,7 @@ module.exports = async (Discord, client, interaction) => {
                                 break;
                             case "report-handle":
                                 let reportEmbed2 = interaction.message.embeds[0];
-                                const handledEmbed = EmbedBuilder.from(reportEmbed2).setColor('#38DD86').setAuthor({ name: 'Report Handled', iconURL: 'https://i.imgur.com/7WEoXUM.png' });
+                                const handledEmbed = EmbedBuilder.from(reportEmbed2).setColor('#38DD86').setAuthor({ name: 'Report Handled', iconURL: 'https://i.imgur.com/CGgTthf.png' });
 
                                 await interaction.message.edit({ embeds: [handledEmbed], components: [] });
                                 await interaction.reply({ content: 'Marked the report as handled. <:bITFAYAYA:1022548602255589486>', ephemeral: true });
@@ -733,7 +733,7 @@ module.exports = async (Discord, client, interaction) => {
                 const msgAttachment = (msgAttachs.length > 0 ? msgAttachs[0].url : null);
 
                 const reportEmbed = new EmbedBuilder()
-                    .setAuthor({ name: `Unhandled User Report`, iconURL: 'https://i.imgur.com/rSqII8d.png' })
+                    .setAuthor({ name: `Unhandled Report`, iconURL: 'https://i.imgur.com/tOI2sB7.png' })
                     .addFields([
                         { name: 'User', value: `${msgAuthor}\n(${msgAuthor.id})`, inline: true },
                         { name: 'Channel', value: `<#${interaction.channel.id}>`, inline: true },
@@ -743,7 +743,7 @@ module.exports = async (Discord, client, interaction) => {
                         { name: 'Reported', value: `<t:${reportCreated}:R>`, inline: true },
                         { name: 'Reported By', value: `${interaction.user}\n(${interaction.user.id})`, inline: true }
                     ])
-                    .setFooter({ text: `Message ID: ${reportedMessage.id}  •  Reported by ${interaction.user.username}` })
+                    .setFooter({ text: `Message ID: ${reportedMessage.id}  •  Reported by ${interaction.user.username}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true, size: 512 }) })
                     .setThumbnail(msgAuthor.displayAvatarURL({ dynamic: true, size: 1024 }))
                     .setImage(msgAttachment)
                     .setColor('#FF756E')
@@ -770,7 +770,7 @@ module.exports = async (Discord, client, interaction) => {
 
                 await interaction.guild.channels.cache.get('1110289979663470714').send({ embeds: [reportEmbed], components: [reportRow] });
 
-                await interaction.reply({ content: `Submitted your report to the staff team, we'll get back to you soon!\n\nFor emergencies or messages that need to be handled ASAP, please use the \`/assistance\` command instead!`, ephemeral: true });
+                await interaction.reply({ content: `Submitted your report to the staff team, we'll take action as soon as we can!\n\nFor emergencies or messages that need to be handled ASAP, please use the \`/assistance\` command instead!`, ephemeral: true });
                 break;
             default:
                 break;
