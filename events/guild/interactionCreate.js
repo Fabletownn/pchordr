@@ -300,7 +300,7 @@ module.exports = async (Discord, client, interaction) => {
                                 await interaction.update({ content: 'Set configuration back to the default settings. Use the `/config-edit` and `/log-config-edit` commands to edit their values.', components: [] });
                                 break;
                             }
-                            case "setup-cancel": 
+                            case "setup-cancel":
                                 await interaction.update({
                                     content: 'Configuration reset cancelled.',
                                     components: []
@@ -635,6 +635,36 @@ module.exports = async (Discord, client, interaction) => {
                                 });
 
                                 break;
+                            case "report-delete":
+                                let reportEmbed = interaction.message.embeds[0];
+                                const reportFields = reportEmbed.fields;
+                                const reportFooter = reportEmbed.footer.text;
+                                const reportMessageID = reportFooter.split(' ')[2];
+                                const reportChannel = reportFields[1].value.replace(/[<#>]/g, '');
+
+                                await interaction.guild.channels.cache.get(reportChannel).messages.fetch(reportMessageID).then(async (reportmsg) => {
+                                    const handledEmbed = EmbedBuilder.from(reportEmbed).setColor('#38DD86').setAuthor({ name: 'Report Handled', iconURL: 'https://i.imgur.com/7WEoXUM.png' });
+
+                                    await reportmsg.delete();
+                                    await interaction.message.edit({ embeds: [handledEmbed], components: [] });
+                                    await interaction.reply({ content: 'Deleted the message. <:bITFAYAYA:1022548602255589486>', ephemeral: true });
+                                }).catch((err) => { return interaction.reply({ content: 'Unable to delete the message, does it exist? <:bITFHuh:1022548647948333117>', ephemeral: true }) });
+
+                                break;
+                            case "report-handle":
+                                let reportEmbed2 = interaction.message.embeds[0];
+                                const handledEmbed = EmbedBuilder.from(reportEmbed2).setColor('#38DD86').setAuthor({ name: 'Report Handled', iconURL: 'https://i.imgur.com/7WEoXUM.png' });
+
+                                await interaction.message.edit({ embeds: [handledEmbed], components: [] });
+                                await interaction.reply({ content: 'Marked the report as handled. <:bITFAYAYA:1022548602255589486>', ephemeral: true });
+                                break;
+                            case "report-dismiss":
+                                let reportEmbed3 = interaction.message.embeds[0];
+                                const handledEmbed2 = EmbedBuilder.from(reportEmbed3).setColor('#747F8D').setAuthor({ name: 'Report Dismissed', iconURL: 'https://i.imgur.com/BGYUUfe.png' });
+
+                                await interaction.message.edit({ embeds: [handledEmbed2], components: [] });
+                                await interaction.reply({ content: 'Dismissed the report. <:bITFComfy:1022548611738914886>', ephemeral: true });
+                                break;
                             default:
                                 break;
                         }
@@ -685,6 +715,65 @@ module.exports = async (Discord, client, interaction) => {
                 default:
                     break;
             }
+        }
+    }
+
+    ///////////////////////// Message Context Interactions
+    if (interaction.isMessageContextMenuCommand()) {
+        switch (interaction.commandName) {
+            case "Report Message":
+                const reportedMessage = interaction.targetMessage;
+                const msgAuthor = reportedMessage.author;
+                const msgContent0 = reportedMessage.content;
+                const msgContent1 = msgContent0.length > 800 ? `${msgContent0.slice(0, 800)}...` : msgContent0;
+                const msgContent = msgContent1.replace(/[`]/g, '');
+                const msgCreated = Math.round(reportedMessage.createdAt / 1000);
+                const reportCreated = Math.round(Date.now() / 1000);
+                const msgAttachs = Array.from(reportedMessage.attachments.values());
+                const msgAttachment = (msgAttachs.length > 0 ? msgAttachs[0].url : null);
+
+                const reportEmbed = new EmbedBuilder()
+                    .setAuthor({ name: `Unhandled User Report`, iconURL: 'https://i.imgur.com/rSqII8d.png' })
+                    .addFields([
+                        { name: 'User', value: `${msgAuthor}\n(${msgAuthor.id})`, inline: true },
+                        { name: 'Channel', value: `<#${interaction.channel.id}>`, inline: true },
+                        { name: 'Message', value: `**[Jump](${reportedMessage.url})**`, inline: true },
+                        { name: 'Content', value: `\`\`\`${msgContent || 'No Content (File/Sticker)'}\`\`\``, inline: false },
+                        { name: 'Posted', value: `<t:${msgCreated}:R>`, inline: true },
+                        { name: 'Reported', value: `<t:${reportCreated}:R>`, inline: true },
+                        { name: 'Reported By', value: `${interaction.user}\n(${interaction.user.id})`, inline: true }
+                    ])
+                    .setFooter({ text: `Message ID: ${reportedMessage.id}  •  Reported by ${interaction.user.username}` })
+                    .setThumbnail(msgAuthor.displayAvatarURL({ dynamic: true, size: 1024 }))
+                    .setImage(msgAttachment)
+                    .setColor('#FF756E')
+
+                const reportRow = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('report-handle')
+                            .setLabel('Mark Handled')
+                            .setStyle(ButtonStyle.Success),
+                    )
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('report-delete')
+                            .setLabel('Delete Message')
+                            .setStyle(ButtonStyle.Danger),
+                    )
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('report-dismiss')
+                            .setLabel('Dismiss')
+                            .setStyle(ButtonStyle.Secondary),
+                    );
+
+                await interaction.guild.channels.cache.get('1110289979663470714').send({ embeds: [reportEmbed], components: [reportRow] });
+
+                await interaction.reply({ content: `Submitted your report to the staff team, we'll get back to you soon!\n\nFor emergencies or messages that need to be handled ASAP, please use the \`/assistance\` command instead!`, ephemeral: true });
+                break;
+            default:
+                break;
         }
     }
 }
