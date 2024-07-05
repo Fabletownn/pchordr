@@ -50,7 +50,7 @@ module.exports = async (Discord, client, messages, channel) => {
 
         if (bulkDeleteInformation.length <= 0) return;
 
-        const lineLength = bulkDeleteInformation[bulkDeleteInformation.length - 1].replace(`/./g`, '-');
+        const lineLength = bulkDeleteInformation[bulkDeleteInformation.length - 1].replace(/./g, '-');
         const sendContent = `ITF Bulk Delete @ ${currentDate} UTC:\n\n${bulkDeleteInformation.join('\n')}\n\n${lineLength}\n`
         + `If a deleted message's author was a bot, the message is not cached by the bot, or similar, some messages may not be logged. Out of ${messages.size} deleted messages, ${bulkDeleteInformation.length} are logged.`;
 
