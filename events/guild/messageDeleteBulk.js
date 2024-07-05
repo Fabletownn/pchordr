@@ -55,10 +55,13 @@ module.exports = async (Discord, client, messages, channel) => {
 
         try {
             superagent
-                .post('https://hastebin.com/documents')
-                .set('content-type', 'text/plain')
-                .set('Authorization', process.env.HBKEY)
-                .send(sendContent)
+                .post('https://sourceb.in/api/bins')
+                .send({
+                    files: [{
+                        name: 'ITF Delete Sourcebin Log',
+                        content: sendContent
+                    }]
+                })
                 .end((err, res) => {
                     if (err) return console.log(err);
 
@@ -66,7 +69,7 @@ module.exports = async (Discord, client, messages, channel) => {
                         const bulkDeleteEmbed = new EmbedBuilder()
                             .setDescription(`**${bulkDeleteInformation.length}**/**${messages.size}** message(s) were deleted and known in cache.\n\n**IDs Involved**: ${(bulkDeleteUserIDs.length > 0) ? bulkDeleteUserIDs.join(' ') : 'Unknown'}`)
                             .addFields(
-                                { name: 'Link', value: `https://hastebin.com/share/${res.body.key}` }
+                                { name: 'Link', value: `https://cdn.sourceb.in/bins/${res.body.key}/0` }
                             )
                             .setTimestamp()
                             .setColor('#ED498D');
