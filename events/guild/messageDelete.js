@@ -39,7 +39,7 @@ module.exports = async (Discord, client, message) => {
 
         if (contentFieldsNeeded <= 1) {
             deletedEmbed.setFields(
-                { name: `Content`, value: deletedEditedContent },
+                { name: `Content`, value: deletedEditedContent || 'None' },
                 { name: `Date`, value: `<t:${deletedTime}:F> (<t:${deletedTime}:R>)` },
                 { name: `ID`, value: `\`\`\`ini\nUser = ${deletedAuthorID}\nMessage = ${deletedID}\`\`\`` }
             )

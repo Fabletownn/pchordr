@@ -47,8 +47,8 @@ module.exports = async (Discord, client, oldMessage, newMessage) => {
 
         if (contentFieldsNeeded <= 1) {
             editedEmbed.setFields(
-                { name: `Now`, value: editedEditedNewContent },
-                { name: `Previous`, value: editedEditedOldContent },
+                { name: `Now`, value: editedEditedNewContent || 'None' },
+                { name: `Previous`, value: editedEditedOldContent || 'None' },
                 { name: `Date`, value: `<t:${editedNewTime}:F> (<t:${editedNewTime}:R>)` },
                 { name: `ID`, value: `\`\`\`ini\nUser = ${editedAuthorID}\nMessage = ${editedID}\`\`\`` }
             )
