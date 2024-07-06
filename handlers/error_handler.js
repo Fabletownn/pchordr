@@ -3,12 +3,9 @@ module.exports = (client) => {
     const errorLog = (type, error) => {
         const unixTS = `<t:${Math.round(Date.now() / 1000)}:F>`;
         const errorMessage = (error instanceof Error ? `${error.stack}` : `${error}`);
+        const botChannel = client.channels.cache.get('890718960016838686');
 
-        console.log(client);
-        console.log('...')
-        console.log(client.channels.cache.get('890718960016838686'));
-
-        //return client.channels.cache.get('890718960016838686').send({ content: `${unixTS} **${type}** error log:\n\`\`\`${errorMessage}\`\`\`` });
+        if (botChannel) return botChannel.send({ content: `${unixTS} **${type}** error log:\n\`\`\`${errorMessage}\`\`\`` });
     };
 
     process.on('unhandledRejection', (reason, promise) => {
