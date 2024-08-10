@@ -26,7 +26,7 @@ module.exports = {
 
             if (interaction.member.roles.cache.has(data.adminRole)) {
 
-                await interaction.guild.member.roles.remove(data.modRole).then(async () => {
+                await interaction.guild.member.cache.roles.remove(data.modRole).then(async () => {
                     await interaction.member.roles.remove(data.adminRole);
                     await interaction.member.roles.add('1019684924372045947');
 
