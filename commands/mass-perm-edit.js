@@ -96,7 +96,7 @@ module.exports = {
         var pFlagBit;
         var pValue;
 
-        pValue = (permValue == 'permtrue') ? pValue = true : (permValue == 'permfalse') ? pValue = false : pValue = null;
+        pValue = (permValue === 'permtrue') ? pValue = true : (permValue === 'permfalse') ? pValue = false : pValue = null;
 
         ///////////////////////////// Set permission flag bit
         switch (permPerm) {
@@ -152,13 +152,13 @@ module.exports = {
         ///////////////////////////////////// Logic
         const permIndex = lvlArray.map((v) => v.name).indexOf(permAccess);
 
-        if (permIndex == -1) return interaction.reply({ content: 'Something went wrong, and I couldn\'t find an index for that value.' });
+        if (permIndex === -1) return interaction.reply({ content: 'Something went wrong, and I couldn\'t find an index for that value.' });
         if (pFlagBit == null) return interaction.reply({ content: 'Something went wrong, and I couldn\'t the permission flag bit for that value.' });
         if (pValue === undefined) return interaction.reply({ content: 'Something went wrong, and I couldn\'t find a permission value to use.' });
 
         const newLevelArray = lvlArray.slice(permIndex);
 
-        if (permAccess != 0) {
+        if (permAccess !== 0) {
             let changeCounter = 0;
 
             interaction.deferReply().then(() => {
@@ -166,8 +166,8 @@ module.exports = {
                     permChannel.permissionOverwrites.edit(item.value, { [pFlagBit]: pValue }).then(async () => {
                         changeCounter++;
 
-                        if (changeCounter == newLevelArray.length) {
-                            interaction.followUp({ content: `${(pValue == true) ? 'Enabled' : (pValue == false) ? 'Disabled' : 'Unset'} **${pcArray[pcArray.map((v) => v.value).indexOf(permPerm)].name}** permission for **${changeCounter} roles** in ${permChannel}. <:bITFGG:1022548636481114172>` });
+                        if (changeCounter === newLevelArray.length) {
+                            interaction.followUp({ content: `${(pValue === true) ? 'Enabled' : (pValue === false) ? 'Disabled' : 'Unset'} **${pcArray[pcArray.map((v) => v.value).indexOf(permPerm)].name}** permission for **${changeCounter} roles** in ${permChannel}. <:bITFGG:1022548636481114172>` });
                         }
                     });
                 }
@@ -175,7 +175,7 @@ module.exports = {
         } else if (permAccess === 0) {
             interaction.deferReply().then(() => {
                 permChannel.permissionOverwrites.edit(interaction.guild.id, { [pFlagBit]: pValue }).then(async () => {
-                    await interaction.followUp({ content: `${(pValue == true) ? 'Enabled' : (pValue == false) ? 'Disabled' : 'Unset'} **${pcArray[pcArray.map((v) => v.value).indexOf(permPerm)].name}** permission for **everyone** in ${permChannel}. <:bITFGG:1022548636481114172>` });
+                    await interaction.followUp({ content: `${(pValue === true) ? 'Enabled' : (pValue === false) ? 'Disabled' : 'Unset'} **${pcArray[pcArray.map((v) => v.value).indexOf(permPerm)].name}** permission for **everyone** in ${permChannel}. <:bITFGG:1022548636481114172>` });
                 });
             });
         }

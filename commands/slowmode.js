@@ -27,7 +27,7 @@ module.exports = {
         if (limitSeconds > 21600) return interaction.reply({ content: `Failed to set slowmode to **${limitSeconds.toLocaleString()} seconds**. Invalid integer was provided (not through 1 to 21,600).` });
 
         slowmodeChannel.setRateLimitPerUser(limitSeconds).then(async () => {
-            if (limitSeconds == '0') return interaction.reply({ content: `Disabled slowmode in ${slowmodeChannel} (previously **${sf.convert(oldSlowmode).format('MM:SS')}**). <:bITFVictory:1063265610303295619>` });
+            if (limitSeconds === '0') return interaction.reply({ content: `Disabled slowmode in ${slowmodeChannel} (previously **${sf.convert(oldSlowmode).format('MM:SS')}**). <:bITFVictory:1063265610303295619>` });
 
             await interaction.reply({ content: `Edited slowmode in ${slowmodeChannel} (previously **${sf.convert(oldSlowmode).format('MM:SS')}**; now set to **${sf.convert(slowmodeChannel.rateLimitPerUser || 0).format('MM:SS')}**). <:bITFVictory:1063265610303295619>` });
         });

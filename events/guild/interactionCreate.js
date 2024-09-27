@@ -494,7 +494,7 @@ module.exports = async (Discord, client, interaction) => {
 
                                 try {
                                     await interaction.client.channels.cache.get('794486722356183052').send({ embeds: [denyEmbed] });
-                                    await interaction.client.users.cache.get(dUser).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nAfter consideration, your I Talk Server ban appeal has been denied and you can no longer appeal.` }).catch(() => { return });
+                                    await interaction.client.users.cache.get(dUser).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nAfter consideration, your I Talk Server ban appeal has been denied and you can no longer appeal.` }).catch(() => {  });
                                     await interaction.client.guilds.cache.get('685876599199236173').members.ban(dUser, { reason: 'After consideration, your I Talk Server ban appeal has been denied.' });
 
                                     APPEALS.findOne({
@@ -557,7 +557,7 @@ module.exports = async (Discord, client, interaction) => {
 
                                 try {
                                     await interaction.client.channels.cache.get('794486722356183052').send({ embeds: [misuseEmbed] });
-                                    await interaction.client.users.cache.get(mUser).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nFor misuse of the ban appeals server, you have been kicked from the server. Do not file an appeal if you aren't banned!` }).catch(() => { return });
+                                    await interaction.client.users.cache.get(mUser).send({ content: `🔧 **I Talk Server Ban Appeals**\n\nFor misuse of the ban appeals server, you have been kicked from the server. Do not file an appeal if you aren't banned!` }).catch(() => {  });
                                     await interaction.client.guilds.cache.get('685876599199236173').members.kick(mUser, { reason: 'Misuse (Not Banned)' });
 
                                     APPEALS.findOne({

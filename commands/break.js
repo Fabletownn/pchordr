@@ -25,7 +25,6 @@ module.exports = {
             if (!interaction.member.roles.cache.has(data.modRole)) return interaction.reply({ content: 'Failed to put you on a break. You are either already on break, or not a staff member. <:bITFSweat:1022548683176284281>', ephemeral: true });
 
             if (interaction.member.roles.cache.has(data.adminRole)) {
-
                 await interaction.member.roles.remove(data.modRole).then(async () => {
                     await interaction.member.roles.remove(data.adminRole);
                     await interaction.member.roles.add('1019684924372045947');
@@ -42,8 +41,6 @@ module.exports = {
 
                     await interaction.reply({ content: `Successfully went on break.`, ephemeral: true });
                 });
-            } else {
-                return;
             }
         });
     },

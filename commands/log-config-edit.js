@@ -100,7 +100,7 @@ module.exports = {
                         const fetchMsgWebhooks = await interaction.guild.channels.cache.get(oldMsgChannel).fetchWebhooks();
                         const botWebhooks = fetchMsgWebhooks.filter((webhook) => webhook.owner.id === interaction.client.user.id && webhook.name.startsWith("Power Chord"));
 
-                        if ((data) && (data.msglogid === logChannel.id) && (data.logwebhook === null || (data.logwebhook !== null && fetchMsgWebhooks.find((wh) => wh.id === data.logwebhook.split(/\//)[5])))) return interaction.editReply({ content: 'That channel and webhook is already in use.' });
+                        if ((data) && (data.msglogid === logChannel.id) && (data.logwebhook === null || fetchMsgWebhooks.find((wh) => wh.id === data.logwebhook.split(/\//)[5]))) return interaction.editReply({ content: 'That channel and webhook is already in use.' });
 
                         for (const webhook of botWebhooks.values()) await webhook.delete().then(() => deletedWebhook = true);
                     }

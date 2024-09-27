@@ -33,7 +33,7 @@ module.exports = async (Discord, client, oldMessage, newMessage) => {
         const contentFieldsNeeded = Math.ceil(editedEditedNewContent.length / embedCharacterLimit);
         let overloadedEmbed = 0;
 
-        if (editedEditedOldContent == editedEditedNewContent) return;
+        if (editedEditedOldContent === editedEditedNewContent) return;
 
         const editedEmbed = new EmbedBuilder()
             .setAuthor({ name: `${client.users.cache.get(editedAuthorID).tag}`, iconURL: client.users.cache.get(editedAuthorID).displayAvatarURL({ dynamic: true }) || 'https://i.imgur.com/NZzCLrw.png' })
@@ -107,7 +107,7 @@ module.exports = async (Discord, client, oldMessage, newMessage) => {
                         }
                     });
 
-                    if (addedData == 0) {
+                    if (addedData === 0) {
                         const newEditedData = new LOGS({
                             guildID: newMessage.guild.id,
                             overload: overloadedEmbed,

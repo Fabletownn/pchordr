@@ -34,7 +34,7 @@ module.exports = {
 
         if ((!imageName.endsWith('.png')) && (!imageName.endsWith('.jpg')) && !imageName.endsWith('.jpeg')) return interaction.editReply({ content: `Failed to set that information. The file type is not allowed, and only \`.png\`, \`.jpg\`, and \`.jpeg\` extensions can be used for Guess the Blank. ${imageName}` });
 
-        createGTBData(interaction, roundNumber, roundAnswer, roundImage.url);
+        await createGTBData(interaction, roundNumber, roundAnswer, roundImage.url);
     },
 };
 

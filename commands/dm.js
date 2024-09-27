@@ -35,11 +35,11 @@ module.exports = {
         let userAuthor;
         let anonState;
 
-        if (anonymityMode == true) userAuthor = 'a staff member';
-        if (anonymityMode == true) anonState = 'Anonymously';
+        if (anonymityMode === true) userAuthor = 'a staff member';
+        if (anonymityMode === true) anonState = 'Anonymously';
 
-        if (anonymityMode == false) userAuthor = interaction.user.username;
-        if (anonymityMode == false) anonState = 'Non-anonymously';
+        if (anonymityMode === false) userAuthor = interaction.user.username;
+        if (anonymityMode === false) anonState = 'Non-anonymously';
 
         if (attachmentContents) {
             await userMessage.send({ content: `<:bITFThink:1022548686158442537> You have received a message from **${userAuthor}** via I Talk Server:\n\n${messageContents}`, files: [attachmentContents.url] }).then(async () => {

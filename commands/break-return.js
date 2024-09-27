@@ -27,8 +27,6 @@ module.exports = {
 
                     await interaction.reply({ content: `Successfully returned. Welcome back!`, ephemeral: true });
                 });
-            } else {
-                return;
             }
         });
     },

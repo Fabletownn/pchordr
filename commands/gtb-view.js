@@ -23,13 +23,13 @@ module.exports = {
             let roundNumber = 0;
 
             for (const roundInfo of gtbRounds) {
-                if ((roundInfo === undefined) || (roundInfo.length == 0)) {
+                if ((roundInfo === undefined) || (roundInfo.length === 0)) {
                     roundNumber++;
 
                     gtbEmbed.addFields([
                         { name: `Round ${roundNumber}`, value: `None`, inline: true }
                     ]);
-                } else if ((roundInfo !== undefined) && (roundInfo.length > 0)) {
+                } else if ((roundInfo.length > 0)) {
                     roundNumber++;
 
                     gtbEmbed.addFields([
