@@ -13,7 +13,7 @@ module.exports = async (Discord, client, message) => {
         if (!data) return;
 
         ////////////////////// VXTwitter
-        if (message.channel.id === data.modChat) {
+        if (message.channel.id === data.modChat || message.channel.id === '1295133102787526676') {
             if (data.vxtwitter === true) {
                 const twitterRegex = /(https:\/\/twitter\.com\/)|(https:\/\/x\.com\/)/;
 
