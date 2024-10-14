@@ -14,7 +14,7 @@
     "call-bind": "^1.0.2",
     "content-disposition": "^0.5.4",
     "content-type": "^1.0.4",
-    "cookie": "^0.5.0",
+    "cookie": "^1.0.1",
     "cookie-signature": "^1.0.6",
     "crypto": "^1.0.1",
     "debug": "^2.6.9",
