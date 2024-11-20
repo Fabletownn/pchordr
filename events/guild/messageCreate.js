@@ -2,7 +2,6 @@ const { ChannelType } = require('discord.js');
 const CONFIG = require('../../models/config.js');
 
 module.exports = async (Discord, client, message) => {
-    if (message.author.bot) return;
     if (message.channel.isDMBased()) return;
     if (message.guild === null) return;
 
@@ -11,6 +10,8 @@ module.exports = async (Discord, client, message) => {
     }, async (err, data) => {
         if (err) return console.log(err);
         if (!data) return;
+
+        if (message.author.bot && message.channel.id !== '703294596914085989') return;
 
         ////////////////////// VXTwitter
         if (message.channel.id === data.modChat || message.channel.id === '1295133102787526676') {
@@ -36,6 +37,10 @@ module.exports = async (Discord, client, message) => {
 
         ////////////////////// Server Updates and Poll Notifications
         if ((data.serverUpdatesChat !== null) && (data.pollsChat !== null)) {
+            // Don't announce poll closes or pre-poll messages with images
+            if (message.content.toLowerCase().includes("poll") && message.content.toLowerCase().includes("has closed")) return;
+            if (message.attachments.size > 0) return;
+            
             if ((message.channel.id === data.serverUpdatesChat) && (!message.content.startsWith('='))) client.channels.cache.get('614193406842765375').send(`There has been a new server update posted, you can read more in <#${data.serverUpdatesChat}>. <:bITFGG:1022548636481114172>`);
             if ((message.channel.id === data.pollsChat) && (!message.content.startsWith('='))) client.channels.cache.get('614193406842765375').send(`There has been a new poll posted, check it out and vote in <#${data.pollsChat}>! <:bITFCool:1022548621360635994>`);
         }
