@@ -5,7 +5,21 @@ const LOGS = require('../../models/msglogs.js');
 module.exports = async (Discord, client, oldMessage, newMessage) => {
     if (oldMessage.partial || newMessage.partial) return;
     if (oldMessage.author.bot || newMessage.author.bot) return;
+    
+    // Pinned Count
+    if (!oldMessage.pinned && newMessage.pinned) {
+        if (newMessage.channel.id !== '832319951242919946') return;
+        
+        let pinnedAmount;
+        
+        newMessage.channel.messages.fetchPinned().then((pinned) => {
+            pinnedAmount = pinned.size;
+        });
+        
+        newMessage.channel.send({ content: `${(50 - pinnedAmount)} pins left` });
+    }
 
+    // Message Logs
     LCONFIG.findOne({
         guildID: newMessage.guild.id
     }, (err, data) => {
