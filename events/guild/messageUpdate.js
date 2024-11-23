@@ -7,16 +7,16 @@ module.exports = async (Discord, client, oldMessage, newMessage) => {
     if (oldMessage.author.bot || newMessage.author.bot) return;
     
     // Pinned Count
-    if (!oldMessage.isPinned() && newMessage.isPinned()) {
+    if (!oldMessage.pinned && newMessage.pinned) {
         if (newMessage.channel.id !== '832319951242919946') return;
         
         let pinnedAmount;
         
         newMessage.channel.messages.fetchPinned().then((pinned) => {
             pinnedAmount = pinned.size;
+
+            newMessage.channel.send({ content: `${(50 - pinnedAmount)} pins left` });
         });
-        
-        newMessage.channel.send({ content: `${(50 - pinnedAmount)} pins left` });
     }
 
     // Message Logs
