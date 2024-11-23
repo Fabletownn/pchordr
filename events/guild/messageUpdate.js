@@ -8,7 +8,7 @@ module.exports = async (Discord, client, oldMessage, newMessage) => {
     
     // Pinned Count
     if (!oldMessage.pinned && newMessage.pinned) {
-        if (newMessage.channel.id !== '832319951242919946') return;
+        if (newMessage.channel.id !== '1295133102787526676' && newMessage.channel.id !== '1084175949853118484') return;
         
         let pinnedAmount;
         
