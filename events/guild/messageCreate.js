@@ -10,6 +10,12 @@ module.exports = async (Discord, client, message) => {
     }, async (err, data) => {
         if (err) return console.log(err);
         if (!data) return;
+        
+        if (message.channel.id === '1198024034437320774' && message.author.id === '1271446364626358302') {
+            await message.react('<:aITFUpvote:1022548599697051790>');
+            await message.react('<:bITFThink:1022548686158442537>');
+            await message.react('<:aITFDownvote:1022548597390180382>');
+        }
 
         if (message.author.bot && message.channel.id !== '703294596914085989') return;
 
