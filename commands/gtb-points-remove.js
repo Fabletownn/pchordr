@@ -6,7 +6,6 @@ module.exports = {
         .setName('gtb-points-remove')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .setDescription('Removes points for Guess The Blank from a server member')
-        .setDMPermission(false)
         .addUserOption((option) =>
             option.setName('member')
                 .setDescription('Who would you like to remove points from?')

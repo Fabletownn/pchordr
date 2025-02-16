@@ -5,7 +5,6 @@ module.exports = {
         .setName('vc-move')
         .setDescription('Moves all server members from a voice channel to another')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-        .setDMPermission(false)
         .addChannelOption((option) =>
             option.setName('from')
                 .setDescription('What voice channel would you like to move all users FROM?')

@@ -5,7 +5,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('schedule-remove')
         .setDescription('Removes a scheduled message from being posted')
-        .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .addStringOption((option) =>
             option.setName('schedule-id')

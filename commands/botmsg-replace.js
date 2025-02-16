@@ -4,7 +4,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('botmsg-replace')
         .setDescription('Replaces a specific portion of a bot message with the given values')
-        .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .addStringOption((option) =>
             option.setName('message-link')

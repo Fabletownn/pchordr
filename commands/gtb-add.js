@@ -5,7 +5,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('gtb-add')
         .setDescription('Adds answers and images for Guess the Blank rounds')
-        .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .addIntegerOption((option) =>
             option.setName('round-number')

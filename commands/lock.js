@@ -4,7 +4,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('lock')
         .setDescription('Locks a channel and announces it with the specified reason if given')
-        .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .addChannelOption((option) =>
             option.setName('channel')

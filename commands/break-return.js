@@ -8,7 +8,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('break-return')
         .setDescription('Adds your staff roles if returning from a break')
-        .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.ViewAuditLog),
     async execute(interaction) {
         CONFIG.findOne({

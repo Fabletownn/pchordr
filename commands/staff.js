@@ -3,8 +3,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('staff')
-        .setDescription('Showcases the I Talk Server staff team')
-        .setDMPermission(false),
+        .setDescription('Showcases the I Talk Server staff team'),
     async execute(interaction) {
         let serverAdmins = interaction.guild.roles.cache.find(n => n.id === '614195872347062273').members.map((m) => `${m}\n`);
         let serverModerators = interaction.guild.members.cache.filter((member) => { 

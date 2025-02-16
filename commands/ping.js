@@ -4,8 +4,7 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('ping')
-        .setDescription('Provides the bot\'s ping, trip latency, and heartbeat')
-        .setDMPermission(false),
+        .setDescription('Provides the bot\'s ping, trip latency, and heartbeat'),
     async execute(interaction) {
         let client = interaction.client;
 

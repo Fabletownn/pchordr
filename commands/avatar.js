@@ -4,7 +4,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('avatar')
         .setDescription('Provides the profile picture of a member or the command executor')
-        .setDMPermission(false)
         .addUserOption((option) =>
             option.setName('member')
                 .setDescription('Who would you like to see the profile picture of? (ID or mention)')

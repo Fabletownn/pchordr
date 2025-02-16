@@ -5,7 +5,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('break')
         .setDescription('Removes your staff role if you need to take a break from moderation')
-        .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .addStringOption((option) =>
             option.setName('reason')

@@ -3,8 +3,7 @@ const { SlashCommandBuilder, ActionRowBuilder, StringSelectMenuBuilder } = requi
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('assistance')
-        .setDescription('Alerts the moderation team for server emergencies')
-        .setDMPermission(false),
+        .setDescription('Alerts the moderation team for server emergencies'),
     async execute(interaction) {
         const assistanceRow = new ActionRowBuilder()
             .addComponents(

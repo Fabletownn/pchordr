@@ -4,7 +4,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('unlock')
         .setDescription('Unlocks a channel and announces it in the specified channel')
-        .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .addChannelOption((option) =>
             option.setName('channel')

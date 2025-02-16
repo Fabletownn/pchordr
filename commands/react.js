@@ -4,7 +4,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('react')
         .setDescription('Reacts on a message with the specified emote')
-        .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .addStringOption((option) =>
             option.setName('message-link')

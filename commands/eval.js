@@ -5,7 +5,6 @@ module.exports = {
         .setName('eval')
         .setDescription('Evaluate a custom code block')
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-        .setDMPermission(false)
         .addStringOption((option) =>
             option.setName('eval')
                 .setDescription('The line of code to evaluate')

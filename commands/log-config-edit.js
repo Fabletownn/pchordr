@@ -6,7 +6,6 @@ module.exports = {
         .setName('log-config-edit')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .setDescription('Edits configuration values of message logging features')
-        .setDMPermission(false)
         .addStringOption((option) =>
             option.setName('config')
                 .setDescription('What are you looking to change?')

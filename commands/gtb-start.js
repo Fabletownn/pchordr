@@ -8,8 +8,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('gtb-start')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-        .setDescription('Starts a Guess the Blank game')
-        .setDMPermission(false),
+        .setDescription('Starts a Guess the Blank game'),
     async execute(interaction) {
         await interaction.reply({ content: `Setting game up!`, ephemeral: true });
 

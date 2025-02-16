@@ -4,7 +4,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('schedule-message')
         .setDescription('Schedules a message or announcement to send (interactive)')
-        .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
     async execute(interaction) {
         const scheduleModal = new ModalBuilder()

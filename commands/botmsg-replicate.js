@@ -8,7 +8,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('botmsg-replicate')
         .setDescription('Replicates a message\'s content in a specified channel')
-        .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .addChannelOption((option) =>
             option.setName('channel')

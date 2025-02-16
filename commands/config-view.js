@@ -5,8 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('config-view')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-        .setDescription('Views the server\'s configuration settings')
-        .setDMPermission(false),
+        .setDescription('Views the server\'s configuration settings'),
     async execute(interaction) {
         CONFIG.findOne({
             guildID: interaction.guild.id,

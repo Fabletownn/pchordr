@@ -4,7 +4,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('vote')
         .setDescription('Reacts on the specified post with upvote/downvote reactions')
-        .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .addStringOption((option) =>
             option.setName('message-link')

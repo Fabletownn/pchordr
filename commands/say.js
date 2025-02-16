@@ -4,7 +4,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('say')
         .setDescription('Sends a message in a specified channel')
-        .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .addChannelOption((option) =>
             option.setName('channel')

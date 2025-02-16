@@ -6,8 +6,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('gtb-end')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-        .setDescription('Ends a finished Guess The Blank game')
-        .setDMPermission(false),
+        .setDescription('Ends a finished Guess The Blank game'),
     async execute(interaction) {
         CONFIG.findOne({
             guildID: interaction.guild.id

@@ -5,7 +5,6 @@ module.exports = {
         .setName('vc-disconnect')
         .setDescription('Disconnects all server members from a specified voice channel')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-        .setDMPermission(false)
         .addChannelOption((option) =>
             option.setName('channel')
                 .setDescription('What voice channel would you like to disconnect all users from?')

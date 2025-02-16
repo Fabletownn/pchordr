@@ -5,8 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('gtb-view')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-        .setDescription('Views Guess the Blank\'s answer settings')
-        .setDMPermission(false),
+        .setDescription('Views Guess the Blank\'s answer settings'),
     async execute(interaction) {
         await interaction.deferReply();
 

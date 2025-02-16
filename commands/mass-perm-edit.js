@@ -33,7 +33,7 @@ const pcArray = ([
     { name: 'Use External Soundboard Sounds (VC)', value: 'useexternalsounds' }
 ]);
 
-var lvlArray = ([
+const lvlArray = ([
     { name: 0, value: '614193406838571085' }, // @everyone
     { name: 5, value: '615583350819913750' },
     { name: 10, value: '615583518793400321' },
@@ -53,7 +53,6 @@ module.exports = {
         .setName('mass-perm-edit')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .setDescription('Edits channel permissions for a large group of Levels (e.g. Level 10 and above)')
-        .setDMPermission(false)
         .addChannelOption((option) =>
             option.setName('channel')
                 .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement, ChannelType.GuildForum, ChannelType.GuildVoice)

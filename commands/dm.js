@@ -4,7 +4,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('dm')
         .setDescription('Will message a member with specified content if DMs are turned on')
-        .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .addUserOption((option) =>
             option.setName('member')

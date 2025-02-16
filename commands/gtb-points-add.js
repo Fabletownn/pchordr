@@ -6,7 +6,6 @@ module.exports = {
         .setName('gtb-points-add')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .setDescription('Adds points for Guess The Blank to a server member')
-        .setDMPermission(false)
         .addUserOption((option) =>
             option.setName('member')
                 .setDescription('Who would you like to award points to?')

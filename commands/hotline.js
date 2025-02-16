@@ -4,7 +4,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('hotline')
         .setDescription('Provides suicide hotline information for those in need')
-        .setDMPermission(false)
         .addBooleanOption((option) =>
             option.setName('hidden')
                 .setDescription('Whether the message is put in chat or sent privately to you')

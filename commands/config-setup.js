@@ -6,8 +6,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('config-setup')
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-        .setDescription('Sets up initial data for the server or resets it')
-        .setDMPermission(false),
+        .setDescription('Sets up initial data for the server or resets it'),
     async execute(interaction) {
         CONFIG.findOne({
             guildID: interaction.guild.id,

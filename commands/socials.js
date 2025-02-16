@@ -3,8 +3,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('socials')
-        .setDescription('Provides I Talk\'s social media links')
-        .setDMPermission(false),
+        .setDescription('Provides I Talk\'s social media links'),
     async execute(interaction) {
         const socialLinks = new EmbedBuilder()
             .setAuthor({

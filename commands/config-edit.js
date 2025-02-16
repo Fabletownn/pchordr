@@ -37,7 +37,6 @@ module.exports = {
         .setName('config-edit')
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .setDescription('Edits configuration values of specific bot features')
-        .setDMPermission(false)
         .addStringOption((option) =>
             option.setName('config')
                 .setDescription('What are you looking to change?')

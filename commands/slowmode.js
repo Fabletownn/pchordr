@@ -5,7 +5,6 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('slowmode')
         .setDescription('Edits the slowmode on a channel')
-        .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
         .addChannelOption((option) =>
             option.setName('channel')

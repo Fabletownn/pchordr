@@ -3,8 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('peace-and-love')
-        .setDescription('Peace and love, peace and love!')
-        .setDMPermission(false),
+        .setDescription('Peace and love, peace and love!'),
     async execute(interaction) {
         await interaction.reply({
             content: 'Peace & love!',

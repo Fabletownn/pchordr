@@ -10,7 +10,6 @@ module.exports = {
         .setName('embed')
         .setDescription('Creates a custom embed and sends to the specified channel')
         .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-        .setDMPermission(false)
         .addChannelOption((option) =>
             option.setName('channel')
                 .setDescription('Specified channel to send the embed in?')
