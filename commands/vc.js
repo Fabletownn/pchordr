@@ -43,8 +43,6 @@ module.exports = {
 
         if (interaction.user.id !== pData.ownerID) return interaction.reply({ content: `You are not the current host of this custom voice channel. Ask <@${pData.ownerID}> to run these commands!`, ephemeral: true });
 
-        let userID = 0;
-
         switch (actionOption) {
             case "lockroom": // Lock Room; locks the room to prevent members from joining
                 if (!(await checkOwnership(interaction))) return interaction.reply({ content: 'You no longer own this room.', ephemeral: true });
@@ -73,8 +71,6 @@ module.exports = {
                 });
 
                 await interaction.reply({ content: `Kicked <@${userOption.id}> from your voice channel.`, ephemeral: true });
-
-                userID = userOption.id;
                 break;
             case "banuser": // Ban User (User); bans a user from the room
                 if (!userOption) return interaction.reply({ content: 'This action requires a `user` option to be filled out.', ephemeral: true });
@@ -98,8 +94,6 @@ module.exports = {
 
                     await interaction.reply({ content: `Banned <@${userOption.id}> from your voice channel.`, ephemeral: true });
                 });
-
-                userID = userOption.id;
                 break;
             case "unbanuser": // Unban User (User); unbans a user from the room
                 const unbanVoiceChannel = interaction.guild.members.cache.get(interaction.user.id).voice.channel;
@@ -110,8 +104,6 @@ module.exports = {
                 if (!(await checkOwnership(interaction))) return interaction.reply({ content: 'You no longer own this room.', ephemeral: true });
                 await unbanVoiceChannel.permissionOverwrites.delete(userOption.id);
                 await interaction.reply({ content: `Unbanned <@${userOption.id}> from your voice channel.`, ephemeral: true });
-
-                userID = userOption.id;
                 break;
             case "transferowner": // Transfer Room Ownership (User); transfers ownership to another person in the voice channel
                 if (!userOption) return interaction.reply({ content: 'This action requires a `user` option to be filled out.', ephemeral: true });
@@ -126,8 +118,7 @@ module.exports = {
 
                 pData.ownerID = userOption.id;
                 await pData.save().catch((err) => console.log(err)).then(() => interaction.reply({ content: `Transferred voice channel ownership to <@${userOption.id}>.`, ephemeral: true }));
-
-                userID = userOption.id;
+                await ownerVoiceChannel.edit({ name: `${userOption.member.displayName}'s Channel` });
                 break;
             default:
                 break;
