@@ -122,10 +122,10 @@ module.exports = {
                 if (ownerVoiceChannel.id !== voiceChannelID) return interaction.reply({ content: 'That user is not connected to your voice channel.', ephemeral: true });
                 if (!interaction.guild.members.cache.get(userOption.id)) return interaction.reply({ content: 'That user is no longer in the server.', ephemeral: true });
 
-                pData.ownerID = userOption.id;
-
                 if (!(await checkOwnership(interaction))) return interaction.reply({ content: 'You no longer own this room!', ephemeral: true });
-                pData.save().catch((err) => console.log(err)).then(() => interaction.reply({ content: `Transferred voice channel ownership to <@${userOption.id}>.`, ephemeral: true }));
+
+                await pData.ownerID = userOption.id;
+                await pData.save().catch((err) => console.log(err)).then(() => interaction.reply({ content: `Transferred voice channel ownership to <@${userOption.id}>.`, ephemeral: true }));
 
                 userID = userOption.id;
                 break;

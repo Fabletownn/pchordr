@@ -28,7 +28,7 @@ module.exports = async (Discord, client, oldState, newState) => {
             const pbParent = newVoiceGuild.channels.cache.get('1351324286782013490').parent.id;
 
             await newVoiceGuild.channels.create({
-                name: newState.member.displayName,
+                name: `${newState.member.displayName}'s Channel`,
                 type: ChannelType.GuildVoice,
                 parent: pbParent,
                 userLimit: 4
