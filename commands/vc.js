@@ -124,7 +124,7 @@ module.exports = {
 
                 if (!(await checkOwnership(interaction))) return interaction.reply({ content: 'You no longer own this room!', ephemeral: true });
 
-                await pData.ownerID = userOption.id;
+                pData.ownerID = userOption.id;
                 await pData.save().catch((err) => console.log(err)).then(() => interaction.reply({ content: `Transferred voice channel ownership to <@${userOption.id}>.`, ephemeral: true }));
 
                 userID = userOption.id;
