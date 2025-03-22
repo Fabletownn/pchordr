@@ -117,8 +117,9 @@ module.exports = {
                 if (!(await checkOwnership(interaction))) return interaction.reply({ content: 'You no longer own this room!', ephemeral: true });
 
                 pData.ownerID = userOption.id;
-                await pData.save().catch((err) => console.log(err)).then(() => interaction.reply({ content: `Transferred voice channel ownership to <@${userOption.id}>.`, ephemeral: true }));
-                await ownerVoiceChannel.edit({ name: `${userOption.member.displayName}'s Channel` });
+                pData.save().catch((err) => console.log(err)).then(() => interaction.reply({ content: `Transferred voice channel ownership to <@${userOption.id}>.`, ephemeral: true }));
+                
+                await ownerVoiceChannel.edit({ name: `${interaction.guild.members.cache.get(userOption.id).displayName}'s Channel` });
                 break;
             default:
                 break;
