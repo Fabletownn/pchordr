@@ -1,97 +1,9 @@
 const CONFIG = require('../../models/config.js');
 const LCONFIG = require('../../models/logconfig.js');
 const GTB = require('../../models/gtb.js');
-const SCHEDULE = require('../../models/schedules.js');
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = async (Discord, client, interaction) => {
-    if (interaction.isModalSubmit()) {
-        if (interaction.customId === 'schedule-msg') {
-            SCHEDULE.findOne({
-                guildID: interaction.guild.id
-            }, async (err) => {
-                if (err) return console.log(err);
-
-                let dateInput = interaction.fields.getTextInputValue('schedule-date');
-                let timeInput = interaction.fields.getTextInputValue('schedule-time');
-                let messageInput = interaction.fields.getTextInputValue('schedule-message');
-                let imageInput = interaction.fields.getTextInputValue('schedule-attachment') || null;
-                let scheduleID = Math.floor(Math.random() * 1000000);
-
-                if (!dateInput.includes('/')) return interaction.reply({ content: `Unable to schedule a message considering your formatting was incorrect. Please double check the **date formatting** you used, and try again.`, ephemeral: false });
-
-                const diMonth = dateInput.split('/')[0];
-                const diDay = dateInput.split('/')[1];
-
-                if (!dateInput.match(/\b(0?[1-9]|1[0-2])\/(0?[1-9]|[12][0-9]|3[01])\b/)) return interaction.reply({ content: `Unable to schedule a message considering your formatting was incorrect. Please double check the **MM/DD formatting** you used, and try again.`, ephemeral: false });
-
-                if (!timeInput.includes(':')) return interaction.reply({ content: `Unable to schedule a message considering your formatting was incorrect. Please double check the **time formatting** you used, and try again (**HH:MM** AM/PM).`, ephemeral: false });
-                if (!timeInput.match(/(am|pm)/gmi)) return interaction.reply({ content: `Unable to schedule a message considering your formatting was incorrect. Please double check the **time formatting** you used, and try again (HH:MM **AM/PM**).`, ephemeral: false });
-                if (!timeInput.includes(' ')) return interaction.reply({ content: `Unable to schedule a message considering your formatting was incorrect. Please double check the **time formatting** you used, and try again (HH:MM **(space)** AM/PM).`, ephemeral: false });
-
-                const tiHour = timeInput.split(':')[0];
-                const tiMin = timeInput.split(':')[1].split(' ')[0];
-
-                const tiAPM = timeInput.split(' ')[1].toLowerCase();
-                const tiFM = timeInput.split(' ')[0];
-
-                if (!tiFM.match(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)) return interaction.reply({ content: `Unable to schedule a message considering your formatting was incorrect. Please double check the **time formatting** you used, and try again.`, ephemeral: false });
-                if (!tiAPM.match(/^(am|pm)$/gmi)) return interaction.reply({ content: `Unable to schedule a message considering your formatting was incorrect. Please double check the **AM/PM formatting** you used, and try again.`, ephemeral: false });
-
-                if (imageInput && !imageInput.match(/(https?:\/\/.*\.(?:png|jpg|jpeg|mp4|mov))/)) return interaction.reply({ content: `Unable to schedule a message considering your formatting was incorrect. Please double check the **image URL formatting** you used, and try again.`, ephemeral: false });
-                if ((imageInput) && !imageInput.match(/((cdn|media)\.discord)/)) return interaction.reply({ content: `Unable to schedule a message considering your formatting was incorrect. Please double check the **image URL formatting** you used, and try again. Please make sure it is a CDN Discord attachment.`, ephemeral: false });
-
-                const currentYear = new Date().getFullYear();
-
-                const dateObject = (Date.parse(`${diMonth}-${diDay}-${currentYear} ${tiHour}:${tiMin}:00 ${tiAPM}`));
-                const dateObjectUnix = (Date.parse(`${diMonth}-${diDay}-${currentYear} ${tiHour}:${tiMin}:00 ${tiAPM}`) / 1000);
-
-                let addImageText;
-
-                if (imageInput !== null) addImageText = ` with **an image attached**`;
-                if (imageInput === null) addImageText = ``;
-
-                const newScheduleData = new SCHEDULE({
-                    guildID: interaction.guild.id,
-                    scheduleID: scheduleID,
-                    timeScheduled: dateObject,
-                    sayChannel: interaction.channel.id,
-                    sayMessage: messageInput,
-                    sayImage: imageInput
-                });
-
-                await newScheduleData.save().catch((err) => console.log(err));
-
-                const optViewRow = new ActionRowBuilder()
-                    .addComponents(
-                        new ButtonBuilder()
-                            .setCustomId('schedule-viewmsg')
-                            .setEmoji('1063265606566166628')
-                            .setLabel('View Message')
-                            .setStyle(ButtonStyle.Primary),
-                    );
-
-                const schedResponse = await interaction.reply({ content: `Scheduled message to send in <#${interaction.channel.id}>, on <t:${dateObjectUnix}:F>${addImageText}. <:bITFGG:1022548636481114172>\n\nSchedule ID: **${scheduleID}**`, components: [optViewRow], ephemeral: true });
-
-                setTimeout(() => schedResponse.edit({ content: `Scheduled message to send in <#${interaction.channel.id}>, on <t:${dateObjectUnix}:F>${addImageText}. <:bITFGG:1022548636481114172>\n\nSchedule ID: **${scheduleID}**`, components: [], ephemeral: true }), 60000);
-
-                interaction.client.on('interactionCreate', async (interaction) => {
-                    if (interaction.isButton()) {
-                        if (interaction.customId === 'schedule-viewmsg') {
-                            if (imageInput !== null) {
-                                await interaction.reply({ content: `**The below message/attachment will be sent following the scheduled date.**\n\n${messageInput}`, files: [imageInput], ephemeral: true });
-                            } else {
-                                await interaction.reply({ content: `**The below message will be sent following the scheduled date.**\n\n${messageInput}`, ephemeral: true });
-                            }
-
-                            await schedResponse.edit({ content: `Scheduled message to send in <#${interaction.channel.id}>, on <t:${dateObjectUnix}:F>${addImageText}. <:bITFGG:1022548636481114172>`, components: [], ephemeral: true });
-                        }
-                    }
-                });
-            });
-        }
-    }
-
     if (interaction.isButton()) {
         CONFIG.findOne({
             guildID: interaction.guild.id
