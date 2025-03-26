@@ -3,8 +3,7 @@ const CONFIG = require('../models/config.js');
 const GTB = require('../models/gtb.js');
 const POINTS = require('../models/gtb_leaderboard.js');
 
-const configData = await CONFIG.findOne({ guildID: process.env.GUILDID });
-const gtbWinnerRole = configData.gtbRole ? configData.gtbRole : '626803737595478046';
+const gtbWinnerRole = '626803737595478046';
 const roundLockSections = 5;
 
 function delay(ms) {

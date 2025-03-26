@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const GTB = require('../models/gtb.js');
 const { endGame } = require('../handlers/gtb_functions.js');
 
