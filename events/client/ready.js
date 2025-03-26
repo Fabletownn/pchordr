@@ -5,7 +5,7 @@ const LOGS = require('../../models/msglogs.js');
 module.exports = async (Discord, client) => {
     console.log(`${client.user.username} (Rewrite V3) is successfully up and running in ${client.guilds.cache.size} guilds.\n\n`);
 
-    client.user.setPresence({ activities: [{ name: 'Guess The Blank', type: ActivityType.Competing }] });
+    client.user.setPresence({ activities: [{ name: 'Guess The Blank!', type: ActivityType.Competing }] });
 
     client.channels.cache.get('890718960016838686').send(`${client.user.username} is online.`);
 

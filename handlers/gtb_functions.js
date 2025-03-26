@@ -5,6 +5,7 @@ const POINTS = require('../models/gtb_leaderboard.js');
 
 const gtbWinnerRole = '626803737595478046';
 const roundLockSections = 5;
+const roundWinners = new Set();
 
 function delay(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms * 1000));
@@ -20,6 +21,9 @@ async function playRound(interaction) {
     // If there is no data, end the game
     const gtbData = await GTB.findOne({ guildID: interaction.guild.id });
     if (!gtbData) return endGame(interaction);
+
+    // Clear the round winners at the beginning of a round
+    await roundWinners.clear();
 
     // Variables
     const rounds = gtbData.rounds;
@@ -41,15 +45,12 @@ async function playRound(interaction) {
 
     // Allow players to speak and begin a filter
     await playersCanSpeak(interaction, true);
-    
-    // Track winners to prevent duplicate answers
-    const winners = new Set();
 
     // Ensure the player isn't a bot, filter the answer and their message for accuracy, already hasn't gotten the answer
     // correct, and doesn't have the winner role, then begin collecting messages
     const roundFilter = (m) => !m.author.bot
         && m.content.toLowerCase().replace(/[^a-zA-Z0-9]/g, '').startsWith(roundAnswer.toLowerCase().replace(/[^a-zA-Z0-9]/g, ''))
-        && !winners.has(m.author.id)
+        && !roundWinners.has(m.author.id)
         && !m.member.roles.cache.has(gtbWinnerRole);
     const msgCollector = await interaction.channel.createMessageCollector({ filter: roundFilter, max: 2, time: 1800000 });
 
@@ -65,8 +66,8 @@ async function playRound(interaction) {
         if (gtbData.currRound < 0) return msgCollector?.stop();
         
         // Prevent someone from answering twice, otherwise add them to the set
-        if (winners.has(playerCollected.id)) return;
-        await winners.add(playerCollected.id);
+        if (roundWinners.has(playerCollected.id)) return;
+        await roundWinners.add(playerCollected.id);
 
         // Award players their points for getting the answer correct
         if (!playerPoints) {
@@ -85,6 +86,9 @@ async function playRound(interaction) {
 
     await msgCollector.on('end', async (collected) => {
         const gtbData = await GTB.findOne({ guildID: interaction.guild.id });
+
+        // Clear the round winners at the end of a round
+        await roundWinners.clear();
 
         // Don't continue to collect messages if data was deleted or the game was forcefully ended
         if (!gtbData) return msgCollector?.stop();
@@ -165,7 +169,7 @@ async function getLeaderboard(interaction) {
         const icon = (i === 0) ? '🥇': (i === 1) ? '🥈' : (i === 2) ? '🥉' : '';
 
         lbEmbed.addFields([
-            { name: `${i+1}. ${member ? member.displayName : playerData.userID} ${icon}\n`, value: `${playerData.points} points`, inline: false }
+            { name: `${i+1}. ${member ? member.displayName : playerData.userID} ${icon}\n`, value: `${playerData.points} point${playerData.points > 1 ? 's' : ''}`, inline: false }
         ]);
 
         await playerData.deleteOne();
