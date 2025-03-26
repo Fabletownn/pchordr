@@ -144,7 +144,7 @@ async function endGame(interaction) {
     await interaction.channel.send({ content: '# Leaderboard', embeds: [leaderboard] });
     
     // Delete all remaining data that didn't make it onto the leaderboard
-    await pointsData.deleteMany();
+    await pointsData.delete();
     
     // Clear all winners and message collectors
     await clearWinnersAndCollectors();
