@@ -1,11 +1,11 @@
 ﻿const { EmbedBuilder } = require('discord.js');
-const CONFIG = require('../models/config.js');
 const GTB = require('../models/gtb.js');
 const POINTS = require('../models/gtb_leaderboard.js');
 
 const gtbWinnerRole = '626803737595478046';
 const roundLockSections = 5;
 const roundWinners = new Set();
+let currentCollector = null;
 
 function delay(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms * 1000));
@@ -23,7 +23,7 @@ async function playRound(interaction) {
     if (!gtbData) return endGame(interaction);
 
     // Clear the round winners at the beginning of a round
-    await roundWinners.clear();
+    await clearWinnersAndCollectors();
 
     // Variables
     const rounds = gtbData.rounds;
@@ -53,6 +53,9 @@ async function playRound(interaction) {
         && !roundWinners.has(m.author.id)
         && !m.member.roles.cache.has(gtbWinnerRole);
     const msgCollector = await interaction.channel.createMessageCollector({ filter: roundFilter, max: 2, time: 1800000 });
+
+    // Store the current collector so it can be stopped accordingly
+    currentCollector = msgCollector;
 
     await interaction.channel.send({ content: `<:bITFThink:1022548686158442537> **[Round #${currRound}](${roundImage})**: What do you see?` });
 
@@ -88,17 +91,17 @@ async function playRound(interaction) {
         const gtbData = await GTB.findOne({ guildID: interaction.guild.id });
 
         // Clear the round winners at the end of a round
-        await roundWinners.clear();
+        await clearWinnersAndCollectors();
 
         // Don't continue to collect messages if data was deleted or the game was forcefully ended
         if (!gtbData) return msgCollector?.stop();
         if (gtbData.currRound < 0) return msgCollector?.stop();
         
         // Store collected variables
-        const playerOneUID = collected.first().author.id; // Player 1 User ID
-        const playerOneMID = collected.first().id;        // Player 1 Message ID
-        const playerTwoUID = collected.last().author.id;  // Player 2 User ID
-        const playerTwoMID = collected.last().id;         // Player 2 Message ID
+        const playerOneUID = collected?.first()?.author?.id; // Player 1 User ID
+        const playerOneMID = collected?.first()?.id;                               // Player 1 Message ID
+        const playerTwoUID = collected?.last()?.author?.id;  // Player 2 User ID
+        const playerTwoMID = collected?.last()?.id;                               // Player 2 Message ID
 
         await interaction?.channel?.messages?.fetch(playerOneMID)?.then((m) => m?.react('✅'));
         await interaction?.channel?.messages?.fetch(playerTwoMID)?.then((m) => m?.react('✅'));
@@ -127,18 +130,27 @@ async function endGame(interaction) {
 
     // Reward all players with 3 or more points with the GTB Winner role
     for (const data of pointsData) {
+        // If the player doesn't have 3 points or more, skip them
         const points = data.points;
         if (points < 3) continue;
 
+        // If they do have 3 points or more, give them the role and announce them in chat
         const member = interaction.guild.members.cache.get(data.userID);
         await member?.roles?.add(gtbWinnerRole);
         await interaction.channel.send({ content: `<:bITFVictory:1063265610303295619> Congratulations to <@${data.userID}> for winning the <@&${gtbWinnerRole}> role! (total score: **${points} points**)`, allowedMentions: { parse: [] } });
     }
 
-    const leaderboard = await getLeaderboard(interaction);
-
     // Tally up the points for the leaderboard and display the results
+    const leaderboard = await getLeaderboard(interaction);
     await interaction.channel.send({ content: '# Leaderboard', embeds: [leaderboard] });
+    
+    // Delete all remaining data that didn't make it onto the leaderboard
+    for (const data of pointsData) {
+        await data.deleteOne();
+    }
+    
+    // Clear all winners and message collectors
+    await clearWinnersAndCollectors();
 }
 
 async function getLeaderboard(interaction) {
@@ -154,11 +166,12 @@ async function getLeaderboard(interaction) {
 
     // Loop for pushing all scores into an array and sorting them
     for (let i = 0; i < pointsData.length; i++) {
-        if (points_array.length === 10) break; // No more than 10
+        if (points_array.length === 10) break;   // No more than 10
         points_array.push(pointsData[i].points); // Push points into an array for sorting
     }
 
-    points_array.sort((a, b) => b - a); // Sort from greatest to least
+    // Sort the array from greatest to least
+    points_array.sort((a, b) => b - a);
 
     // Loop for finding and placing players on a leaderboard
     for (let i = 0; i < points_array.length; i++) {
@@ -172,10 +185,22 @@ async function getLeaderboard(interaction) {
             { name: `${i+1}. ${member ? member.displayName : playerData.userID} ${icon}\n`, value: `${playerData.points} point${playerData.points > 1 ? 's' : ''}`, inline: false }
         ]);
 
+        // Delete the data to prevent the player from being duplicated on the leaderboard
         await playerData.deleteOne();
     }
 
     return lbEmbed;
 }
 
-module.exports = { playRound, endGame, getLeaderboard, delay, playersCanSpeak };
+async function clearWinnersAndCollectors() {
+    // Clear the round winners set
+    await roundWinners?.clear();
+
+    // If there's a message collector, stop it and clear the variable
+    if (currentCollector) {
+        await currentCollector?.stop();
+        currentCollector = null;
+    }
+}
+
+module.exports = { playRound, endGame, delay, playersCanSpeak };
