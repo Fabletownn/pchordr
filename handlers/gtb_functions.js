@@ -26,7 +26,6 @@ async function playRound(interaction) {
     const maxRounds = rounds.size;
     const lastRound = gtbData.currRound;
     const currRound = lastRound + 1;
-    const winners = [];
 
     // If the game was abruptly ended or naturally ended, end the game
     if (lastRound < 0) return;
@@ -42,12 +41,15 @@ async function playRound(interaction) {
 
     // Allow players to speak and begin a filter
     await playersCanSpeak(interaction, true);
+    
+    // Track winners to prevent duplicate answers
+    const winners = new Set();
 
     // Ensure the player isn't a bot, filter the answer and their message for accuracy, already hasn't gotten the answer
     // correct, and doesn't have the winner role, then begin collecting messages
     const roundFilter = (m) => !m.author.bot
         && m.content.toLowerCase().replace(/[^a-zA-Z0-9]/g, '').startsWith(roundAnswer.toLowerCase().replace(/[^a-zA-Z0-9]/g, ''))
-        && !winners.includes(m.author.id)
+        && !winners.has(m.author.id)
         && !m.member.roles.cache.has(gtbWinnerRole);
     const msgCollector = await interaction.channel.createMessageCollector({ filter: roundFilter, max: 2, time: 1800000 });
 
@@ -56,6 +58,15 @@ async function playRound(interaction) {
     await msgCollector.on('collect', async (collected) => {
         const playerCollected = collected.author;
         const playerPoints = await POINTS.findOne({ userID: playerCollected.id });
+        const gtbData = await GTB.findOne({ guildID: interaction.guild.id });
+        
+        // Don't continue to collect messages if data was deleted or the game was forcefully ended
+        if (!gtbData) return msgCollector?.stop();
+        if (gtbData.currRound < 0) return msgCollector?.stop();
+        
+        // Prevent someone from answering twice, otherwise add them to the set
+        if (winners.has(playerCollected.id)) return;
+        await winners.add(playerCollected.id);
 
         // Award players their points for getting the answer correct
         if (!playerPoints) {
@@ -70,12 +81,16 @@ async function playRound(interaction) {
             playerPoints.points += 1;
             await playerPoints.save().catch((err) => console.log(err));
         }
-
-        // Push the player and the message into an array
-        winners.push(playerCollected.id);
     });
 
     await msgCollector.on('end', async (collected) => {
+        const gtbData = await GTB.findOne({ guildID: interaction.guild.id });
+
+        // Don't continue to collect messages if data was deleted or the game was forcefully ended
+        if (!gtbData) return msgCollector?.stop();
+        if (gtbData.currRound < 0) return msgCollector?.stop();
+        
+        // Store collected variables
         const playerOneUID = collected.first().author.id; // Player 1 User ID
         const playerOneMID = collected.first().id;        // Player 1 Message ID
         const playerTwoUID = collected.last().author.id;  // Player 2 User ID
