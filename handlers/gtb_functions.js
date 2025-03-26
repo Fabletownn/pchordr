@@ -59,7 +59,7 @@ async function playRound(interaction) {
 
     await interaction.channel.send({ content: `<:bITFThink:1022548686158442537> **[Round #${currRound}](${roundImage})**: What do you see?` });
 
-    await msgCollector.on('collect', async (collected) => {
+    msgCollector.on('collect', async (collected) => {
         const playerCollected = collected.author;
         const gtbData = await GTB.findOne({ guildID: interaction.guild.id });
         
@@ -86,7 +86,7 @@ async function playRound(interaction) {
         }
     });
 
-    await msgCollector.on('end', async (collected) => {
+    msgCollector.on('end', async (collected) => {
         const gtbData = await GTB.findOne({ guildID: interaction.guild.id });
 
         // Clear the round winners at the end of a round
