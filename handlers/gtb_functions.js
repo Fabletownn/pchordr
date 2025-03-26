@@ -61,18 +61,17 @@ async function playRound(interaction) {
 
     await msgCollector.on('collect', async (collected) => {
         const playerCollected = collected.author;
-        const playerPoints = await POINTS.findOne({ userID: playerCollected.id });
         const gtbData = await GTB.findOne({ guildID: interaction.guild.id });
         
         // Don't continue to collect messages if data was deleted or the game was forcefully ended
-        if (!gtbData) return msgCollector?.stop();
-        if (gtbData.currRound < 0) return msgCollector?.stop();
+        if (!gtbData || gtbData.currRound < 0) return msgCollector?.stop();
         
         // Prevent someone from answering twice, otherwise add them to the set
         if (roundWinners.has(playerCollected.id)) return;
-        await roundWinners.add(playerCollected.id);
+        roundWinners.add(playerCollected.id);
 
         // Award players their points for getting the answer correct
+        const playerPoints = await POINTS.findOne({ userID: playerCollected.id });
         if (!playerPoints) {
             const newPointsData = new POINTS({
                 guildID: interaction.guild.id,
@@ -145,9 +144,7 @@ async function endGame(interaction) {
     await interaction.channel.send({ content: '# Leaderboard', embeds: [leaderboard] });
     
     // Delete all remaining data that didn't make it onto the leaderboard
-    for (const data of pointsData) {
-        await data.deleteOne();
-    }
+    await pointsData.deleteMany();
     
     // Clear all winners and message collectors
     await clearWinnersAndCollectors();
