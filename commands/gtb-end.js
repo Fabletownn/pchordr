@@ -1,57 +1,17 @@
-const POINTS = require('../models/points-lb.js');
-const CONFIG = require('../models/config.js');
-const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const GTB = require('../models/gtb.js');
+const { endGame } = require('../handlers/gtb_functions.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('gtb-end')
-        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-        .setDescription('Ends a finished Guess The Blank game'),
+        .setDescription('Guess The Blank: Forcefully end the ongoing game')
+        .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
     async execute(interaction) {
-        CONFIG.findOne({
-            guildID: interaction.guild.id
-        }, async (cErr, cData) => {
-            if (cErr) return console.log(cErr);
-            if (!cData) return interaction.reply({ content: `Failed to end a game as there is no configuration data.` });
-            if (cData.gtbRole === null) return interaction.reply({ content: `Failed to end a game as there is no configuration data for the Guess The Blank Champion role (winner role).` });
+        const gtbData = await GTB.findOne({ guildID: interaction.guild.id });
+        if (!gtbData) return interaction.reply({ content: 'There is no Guess The Blank data set up yet. Run the `/gtb-setup` command to get started.' });
 
-            let participants = [];
-
-            await interaction.reply({ content: `This **Guess The Blank** game has ended! Thanks for playing, and congratulations to the winners!\n_ _` });
-
-            POINTS.find({
-                guildID: interaction.guild.id
-            }, async (err, data) => {
-                if (err) return interaction.editReply({ content: 'An unknown issue came up and I could not handle GTB. <:bITFSweat:1022548683176284281>', ephemeral: true });
-                if (!data) return interaction.editReply({ content: 'Failed to end the game as there is no game data.' });
-
-                for (var i = 0; i < data.length; i++) {
-                    if (!(participants.some((v) => data[i].userID.includes(v)))) {
-                        participants.push(data[i].userID);
-                    }
-                }
-
-                participants.forEach((participant) => {
-                    POINTS.findOne({
-                        guildID: interaction.guild.id,
-                        userID: participant
-                    }, async (pErr, pData) => {
-                        if (pErr) return console.log(pErr);
-                        if (!pData) return;
-
-                        let pArrayIndex = participants.indexOf(participant);
-
-                        if (pData.points >= 3) {
-                            await interaction.client.guilds.cache.get(interaction.guild.id).members.cache.get(participant).roles.add(cData.gtbRole).catch((err) => console.log(`Failed to provide player ${participant} with the role because of an error.\n${err}`));
-                            await interaction.channel.send({ content: `Congratulations to <@${participant}> for winning the <@&${cData.gtbRole}> role! (total score: **${pData.points} points**)`, allowedMentions: { parse: [] } });
-                        }
-
-                        await pData.delete();
-
-                        participants.splice(pArrayIndex, 1);
-                    });
-                });
-            });
-        });
+        await endGame(interaction);
+        await interaction.reply({ content: 'Forcefully ended the ongoing Guess The Blank game.', ephemeral: true });
     },
 };

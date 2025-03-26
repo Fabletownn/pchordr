@@ -2,7 +2,7 @@ const CONFIG = require('../../models/config.js');
 const LCONFIG = require('../../models/logconfig.js');
 const GTB = require('../../models/gtb.js');
 const SCHEDULE = require('../../models/schedules.js');
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = async (Discord, client, interaction) => {
     if (interaction.isModalSubmit()) {
@@ -160,46 +160,26 @@ module.exports = async (Discord, client, interaction) => {
                             });
 
                             break;
-                        case "gtb-reset": {
-                            await gtbData.delete();
+                        case 'gtb-reset':
+                            const gtbData = await GTB.findOne({ guildID: interaction.guild.id });
+                            const gtbMap = new Map();
 
                             const newGTBData = new GTB({
                                 guildID: interaction.guild.id,
-                                round1: [],
-                                round2: [],
-                                round3: [],
-                                round4: [],
-                                round5: [],
-                                round6: [],
-                                round7: [],
-                                round8: [],
-                                round9: [],
-                                round10: [],
-                                round11: [],
-                                round12: [],
-                                round13: [],
-                                round14: [],
-                                round15: [],
-                                round16: [],
-                                round17: [],
-                                round18: [],
-                                round19: [],
-                                round20: []
+                                rounds: gtbMap,
+                                currRound: 0
                             });
 
-                            newGTBData.save().catch((err) => console.log(err));
+                            if (gtbData)
+                                await gtbData.deleteOne();
 
-                            await interaction.update({ content: 'Reset all Guess the Blank images and answers. Use the `/gtb-add` command to re-add their values.', components: [] });
+                            await newGTBData.save().catch((err) => console.log(err));
+                            await interaction.update({ content: (gtbData ? 'Reset data for Guess The Blank successfully.' : 'Set up data for Guess The Blank successfully.'), components: [] });
                             break;
-                        }
-                        case "gtb-reset-cancel":
-                            await interaction.update({
-                                content: 'Guess the Blank data reset cancelled.',
-                                components: []
-                            });
-
+                        case 'gtb-reset-no':
+                            await interaction.update({ content: 'Guess The Blank round information will not be reset.', components: [] });
                             break;
-                        case "assistance-handled":
+                        case 'assistance-handled':
                             CONFIG.findOne({
                                 guildID: interaction.guild.id
                             }, async (cferr, cfdata) => {
@@ -228,7 +208,7 @@ module.exports = async (Discord, client, interaction) => {
                             });
 
                             break;
-                        case "report-delete":
+                        case 'report-delete':
                             let reportEmbed = interaction.message.embeds[0];
                             const reportFields = reportEmbed.fields;
                             const reportFooter = reportEmbed.footer.text;
@@ -244,14 +224,14 @@ module.exports = async (Discord, client, interaction) => {
                             }).catch((err) => { return interaction.reply({ content: 'Unable to delete the message, does it exist? <:bITFHuh:1022548647948333117>', ephemeral: true }) });
 
                             break;
-                        case "report-handle":
+                        case 'report-handle':
                             let reportEmbed2 = interaction.message.embeds[0];
                             const handledEmbed = EmbedBuilder.from(reportEmbed2).setColor('#38DD86').setAuthor({ name: 'Report Handled', iconURL: 'https://i.imgur.com/CGgTthf.png' });
 
                             await interaction.message.edit({ embeds: [handledEmbed], components: [] });
                             await interaction.reply({ content: 'Marked the report as handled. <:bITFAYAYA:1022548602255589486>', ephemeral: true });
                             break;
-                        case "report-dismiss":
+                        case 'report-dismiss':
                             let reportEmbed3 = interaction.message.embeds[0];
                             const handledEmbed2 = EmbedBuilder.from(reportEmbed3).setColor('#747F8D').setAuthor({ name: 'Report Dismissed', iconURL: 'https://i.imgur.com/BGYUUfe.png' });
 

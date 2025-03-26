@@ -1,47 +1,30 @@
+const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const GTB = require('../models/gtb.js');
-const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('gtb-view')
-        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-        .setDescription('Views Guess the Blank\'s answer settings'),
+        .setDescription('Guess The Blank: View all round information')
+        .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
     async execute(interaction) {
-        await interaction.deferReply();
+        const gtbData = await GTB.findOne({ guildID: interaction.guild.id });
+        if (!gtbData) return interaction.reply({ content: 'There is no Guess The Blank data set up yet. Run the `/gtb-setup` command to get started.' });
+        if (gtbData.rounds.size <= 0) return interaction.reply({ content: 'There are no Guess The Blank rounds set up yet. Run the `/gtb-add` command to get started.' });
 
+        const gtbMap = gtbData.rounds;
         const gtbEmbed = new EmbedBuilder()
-            .setAuthor({ name: 'Guess The Blank Answers', iconURL: interaction.guild.iconURL({ dynamic: true }) })
+            .setAuthor({ name: 'Guess The Blank Answers', iconURL: interaction.guild.iconURL({ size: 512, dynamic: true }) })
+            .setColor('#C51BDF');
 
-        GTB.findOne({
-            guildID: interaction.guild.id,
-        }, async (err, data) => {
-            if (err) return interaction.editReply({ content: 'An unknown issue came up and I could not view GTB. <:bITFSweat:1022548683176284281>', ephemeral: true });
-            if (!data) return interaction.editReply({ content: 'Could not view GTB values since data hasn\'t been set up yet. Use the `/gtb-setup` command to get started. <:bITFSweat:1022548683176284281>' });
+        for (const [round, roundInfo] of gtbMap) {
+            const roundAnswer = roundInfo[0];
+            const roundImageURL = roundInfo[1];
 
-            const gtbRounds = [data.round1, data.round2, data.round3, data.round4, data.round5, data.round6, data.round7, data.round8, data.round9, data.round10, data.round11, data.round12, data.round13, data.round14, data.round15, data.round16, data.round17, data.round18, data.round19, data.round20];
-            let roundNumber = 0;
-
-            for (const roundInfo of gtbRounds) {
-                if ((roundInfo === undefined) || (roundInfo.length === 0)) {
-                    roundNumber++;
-
-                    gtbEmbed.addFields([
-                        { name: `Round ${roundNumber}`, value: `None`, inline: true }
-                    ]);
-                } else if ((roundInfo.length > 0)) {
-                    roundNumber++;
-
-                    gtbEmbed.addFields([
-                        { name: `Round ${roundNumber}`, value: `**[${roundInfo[0]}](${roundInfo[1]})**`, inline: true }
-                    ]);
-                }
-            }
-
-            gtbEmbed.addFields([
-                { name: `\u200b`, value: `\u200b`, inline: true }
+            await gtbEmbed.addFields([
+                { name: `Round ${round}`, value: `**[${roundAnswer}](${roundImageURL})**`, inline: true }
             ]);
+        }
 
-            await interaction.editReply({ embeds: [gtbEmbed] });
-        });
+        await interaction.reply({ embeds: [gtbEmbed] });
     },
 };
