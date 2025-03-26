@@ -4,7 +4,6 @@ const GTB = require('../../models/gtb.js');
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = async (Discord, client, interaction) => {
-    console.log(interaction);
     if (interaction.isButton()) {
         switch (interaction.customId) {
             case 'setup-reset': {
