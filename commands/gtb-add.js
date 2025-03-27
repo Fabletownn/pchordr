@@ -111,7 +111,7 @@ async function getAccessToken() {
 
         return response.body.access_token;
     } catch (err) {
-        console.log('Error trying to get Dropbox access token:', error.response?.body || error.message);
+        console.log('Error trying to get Dropbox access token:', err.response?.body || err.message);
         return null;
     }
 }
