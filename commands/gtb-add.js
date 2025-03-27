@@ -35,7 +35,7 @@ module.exports = {
         const gtbAnswer = interaction.options.getString('answer');
         const gtbImage = interaction.options.getAttachment('image');
         const gtbOverride = interaction.options.getInteger('round-override')?.toString() || null;
-        const gtbImageURL = gtbImage.url.toLowerCase();
+        const gtbImageURL = gtbImage.url.toLowerCase().split('?ex=')[0];
         
         if (!gtbImageURL.endsWith('png') && !gtbImageURL.endsWith('jpg') && !gtbImageURL.endsWith('jpeg')) return interaction.reply({ content: 'You need to upload a `png`, `jpg`, or `jpeg` image. Otherwise file extensions are not allowed.' });
 
