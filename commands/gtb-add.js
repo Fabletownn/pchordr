@@ -37,7 +37,7 @@ module.exports = {
         const gtbOverride = interaction.options.getInteger('round-override')?.toString() || null;
         const gtbImageURL = gtbImage.url.toLowerCase();
         
-        if (!gtbImageURL.endsWith('png') || gtbImageURL.endsWith('jpg') || gtbImageURL.endsWith('jpeg')) return interaction.reply({ content: 'You need to upload a `png`, `jpg`, or `jpeg` image. Otherwise file extensions are not allowed.' });
+        if (!gtbImageURL.endsWith('png') && !gtbImageURL.endsWith('jpg') && !gtbImageURL.endsWith('jpeg')) return interaction.reply({ content: 'You need to upload a `png`, `jpg`, or `jpeg` image. Otherwise file extensions are not allowed.' });
 
         const gtbMap = gtbData.rounds;
         const gtbCurrRounds = gtbMap.size;
