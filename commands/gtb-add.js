@@ -2,7 +2,6 @@ const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const GTB = require('../models/gtb.js');
 const { Dropbox } = require('dropbox');
 const superagent = require('superagent');
-const dbx = new Dropbox({ accessToken: process.env.DB_ACCESS_TOKEN });
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -36,7 +35,7 @@ module.exports = {
         const gtbImage = interaction.options.getAttachment('image');
         const gtbOverride = interaction.options.getInteger('round-override')?.toString() || null;
         const gtbImageURL = gtbImage.url.toLowerCase().split('?ex=')[0];
-        
+
         if (!gtbImageURL.endsWith('png') && !gtbImageURL.endsWith('jpg') && !gtbImageURL.endsWith('jpeg')) return interaction.reply({ content: 'You need to upload a `png`, `jpg`, or `jpeg` image. Otherwise file extensions are not allowed.' });
 
         const gtbMap = gtbData.rounds;
@@ -51,6 +50,8 @@ module.exports = {
 
         // Try and upload the image to Dropbox first, otherwise use the CDN link which will expire
         try {
+            const dbx = await createDBXClient(); // Create Dropbox client
+            
             const response = await superagent.get(gtbImage.url).buffer(true);
             const fileExtension = gtbImage.name.split('.')[1];
             const fileName = `/PChord/Round${gtbRound}.${fileExtension}`;
@@ -95,3 +96,29 @@ module.exports = {
         await interaction.followUp({ content: `<:bITFCool:1022548621360635994> Set the following information for **Round #${gtbOverride ? gtbOverride : gtbNewRound}** of Guess The Blank: **${gtbAnswer}**\n-# **${uploadMessage}**`, files: [uploadLink] });
     },
 };
+
+async function getAccessToken() {
+    try {
+        const response = await superagent
+            .post('https://api.dropbox.com/oauth2/token')
+            .type('form')
+            .send({
+                grant_type: 'refresh_token',
+                refresh_token: process.env.DBX_REFRESH_TOKEN,
+                client_id: process.env.DBX_APP_KEY,
+                client_secret: process.env.DBX_APP_SECRET
+            });
+
+        return response.body.access_token;
+    } catch (err) {
+        console.log('Error trying to get Dropbox access token:', error.response?.body || error.message);
+        return null;
+    }
+}
+
+async function createDBXClient() {
+    const accessToken = await getAccessToken();
+    if (!accessToken) return console.log('Failed to get access token');
+
+    return new Dropbox({ accessToken });
+}
