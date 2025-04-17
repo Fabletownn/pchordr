@@ -22,7 +22,7 @@ module.exports = async (Discord, client, reaction, user) => {
                         const twitterIndex = messageSplit.findIndex((msg) => msg.includes('.com/'));
 
                         const preLink = messageSplit[twitterIndex];
-                        const repLink = preLink.replace(/(twitter)|(x)/, 'vxtwitter');
+                        const repLink = preLink.replace(/(twitter)|(x)/, 'fxtwitter');
 
                         await message.reply({ content: repLink });
                         await message.reactions.removeAll();
