@@ -15,16 +15,32 @@ module.exports = {
         const gtbEmbed = new EmbedBuilder()
             .setAuthor({ name: 'Guess The Blank Answers', iconURL: interaction.guild.iconURL({ size: 512, dynamic: true }) })
             .setColor('#C51BDF');
+        const overloadEmbed = new EmbedBuilder()
+            .setAuthor({ name: 'Guess The Blank Answers', iconURL: interaction.guild.iconURL({ size: 512, dynamic: true }) })
+            .setColor('#C51BDF');
 
+        let roundCounter = 1;
+        
         for (const [round, roundInfo] of gtbMap) {
             const roundAnswer = roundInfo[0];
             const roundImageURL = roundInfo[1];
-
-            await gtbEmbed.addFields([
-                { name: `Round ${round}`, value: `**[${roundAnswer}](${roundImageURL})**`, inline: true }
-            ]);
+            
+            if (roundCounter < 25) {
+                await gtbEmbed.addFields([
+                    { name: `Round ${round}`, value: `**[${roundAnswer}](${roundImageURL})**`, inline: true }
+                ]);
+            } else {
+                await overloadEmbed.addFields([
+                    { name: `Round ${round}`, value: `**[${roundAnswer}](${roundImageURL})**`, inline: true }
+                ]);
+            }
+            
+            roundCounter++;
         }
 
-        await interaction.reply({ embeds: [gtbEmbed] });
+        if (roundCounter > 25)
+            await interaction.reply({ embeds: [gtbEmbed, overloadEmbed] });
+        else 
+            await interaction.reply({ embeds: [gtbEmbed] });
     },
 };
