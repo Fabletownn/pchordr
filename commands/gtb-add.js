@@ -25,7 +25,6 @@ module.exports = {
                 .setDescription('If you need to override details for a specific round, the round number')
                 .setRequired(false)
                 .setMinValue(1)
-                .setMaxValue(20)
         ),
     async execute(interaction) {
         const gtbData = await GTB.findOne({ guildID: interaction.guild.id });
