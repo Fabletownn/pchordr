@@ -100,7 +100,7 @@ module.exports = {
         gtbData.rounds = gtbMap;
         gtbData.save().catch((err) => console.log(err));
 
-        await interaction.followUp({ content: `<:bITFCool:1022548621360635994> Set the following information for **Round #${gtbOverride ? gtbOverride : gtbNewRound}** of Guess The Blank:\nAnswer: **${gtbAnswer}**\nPrompt: **${gtbPrompt}\n\n-# **${uploadMessage}**`, files: [uploadLink] });
+        await interaction.followUp({ content: `<:bITFCool:1022548621360635994> Set the following information for **Round #${gtbOverride ? gtbOverride : gtbNewRound}** of Guess The Blank:\n\n**Answer**: ${gtbAnswer}\n**Prompt**: ${gtbPrompt}\n\n-# **${uploadMessage}**`, files: [uploadLink] });
     },
 };
 
