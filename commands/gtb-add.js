@@ -20,6 +20,13 @@ module.exports = {
                 .setDescription('The image for this Guess The Blank round')
                 .setRequired(true)
         )
+        .addStringOption((option) =>
+            option.setName('prompt')
+                .setDescription('The prompt for this Guess The Blank round (default: "What do you see?")')
+                .setRequired(false)
+                .setMinLength(10)
+                .setMaxLength(100)
+        )
         .addIntegerOption((option) =>
             option.setName('round-override')
                 .setDescription('If you need to override details for a specific round, the round number')
@@ -32,6 +39,7 @@ module.exports = {
 
         const gtbAnswer = interaction.options.getString('answer');
         const gtbImage = interaction.options.getAttachment('image');
+        const gtbPrompt = interaction.options.getString('prompt') || 'What do you see?';
         const gtbOverride = interaction.options.getInteger('round-override')?.toString() || null;
         const gtbImageURL = gtbImage.url.toLowerCase().split('?ex=')[0];
 
@@ -86,13 +94,13 @@ module.exports = {
             uploadMessage = '⚠️ Image has not been uploaded and will soon expire!';
         }
 
-        const addArray = [gtbAnswer, uploadLink];
+        const addArray = [gtbAnswer, uploadLink, gtbPrompt];
         await gtbMap.set(gtbRound, addArray);
 
         gtbData.rounds = gtbMap;
         gtbData.save().catch((err) => console.log(err));
 
-        await interaction.followUp({ content: `<:bITFCool:1022548621360635994> Set the following information for **Round #${gtbOverride ? gtbOverride : gtbNewRound}** of Guess The Blank: **${gtbAnswer}**\n-# **${uploadMessage}**`, files: [uploadLink] });
+        await interaction.followUp({ content: `<:bITFCool:1022548621360635994> Set the following information for **Round #${gtbOverride ? gtbOverride : gtbNewRound}** of Guess The Blank:\nAnswer: **${gtbAnswer}**\nPrompt: **${gtbPrompt}\n\n-# **${uploadMessage}**`, files: [uploadLink] });
     },
 };
 

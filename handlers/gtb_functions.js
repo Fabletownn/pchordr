@@ -42,6 +42,7 @@ async function playRound(interaction) {
     // Get the answer and image to the current round
     const roundAnswer = rounds.get(currRound.toString())[0];
     const roundImage = rounds.get(currRound.toString())[1];
+    const roundPrompt = rounds.get(currRound.toString())[2];
 
     // Allow players to speak and begin a filter
     await playersCanSpeak(interaction, true);
@@ -57,7 +58,7 @@ async function playRound(interaction) {
     // Store the current collector so it can be stopped accordingly
     currentCollector = msgCollector;
 
-    await interaction.channel.send({ content: `<:bITFThink:1022548686158442537> **Round #${currRound}**: What do you see?`, files: [roundImage] });
+    await interaction.channel.send({ content: `<:bITFThink:1022548686158442537> **Round #${currRound}**: ${roundPrompt}`, files: [roundImage] });
 
     msgCollector.on('collect', async (collected) => {
         const playerCollected = collected.author;
