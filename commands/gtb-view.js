@@ -33,11 +33,11 @@ module.exports = {
             
             if (roundCounter < 25) {
                 await gtbEmbed.addFields([
-                    { name: `Round ${round}`, value: `**A**: **[${roundAnswer}](${roundImageURL})**\n**P**: ${roundPrompt}`, inline: true }
+                    { name: `Round ${round}`, value: `*${roundPrompt}* **[${roundAnswer}](${roundImageURL})`, inline: true }
                 ]);
             } else {
                 await overloadEmbed.addFields([
-                    { name: `Round ${round}`, value: `**A**: **[${roundAnswer}](${roundImageURL})**\n**P**: ${roundPrompt}`, inline: true }
+                    { name: `Round ${round}`, value: `*${roundPrompt}* **[${roundAnswer}](${roundImageURL})`, inline: true }
                 ]);
             }
             

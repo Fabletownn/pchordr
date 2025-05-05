@@ -6,6 +6,7 @@ const gtbWinnerRole = '626803737595478046';
 const roundLockSections = 5;
 const roundWinners = new Set();
 let currentCollector = null;
+let championsList = '';
 
 function delay(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms * 1000));
@@ -128,26 +129,17 @@ async function endGame(interaction) {
     gtbData.currRound = -1;
     await gtbData.save().catch((err) => console.log(err));
 
-    // Reward all players with 3 or more points with the GTB Winner role
-    for (const data of pointsData) {
-        // If the player doesn't have 3 points or more, skip them
-        const points = data.points;
-        if (points < 3) continue;
-
-        // If they do have 3 points or more, give them the role and announce them in chat
-        const member = interaction.guild.members.cache.get(data.userID);
-        await member?.roles?.add(gtbWinnerRole);
-        await interaction.channel.send({ content: `<:bITFVictory:1063265610303295619> Congratulations to <@${data.userID}> for winning the <@&${gtbWinnerRole}> role! (total score: **${points} points**)`, allowedMentions: { parse: [] } });
-    }
+    // Reward all players with 3 or more points with the GTB Winner role, then list them
+    await rewardChampionsAndFillList(interaction, pointsData);
+    await interaction.channel.send({ content: `# Champions\n${championsList}` });
 
     // Tally up the points for the leaderboard and display the results
     const leaderboard = await getLeaderboard(interaction);
     await interaction.channel.send({ content: '# Leaderboard', embeds: [leaderboard] });
     
     // Delete all remaining data that didn't make it onto the leaderboard
-    for (const data of pointsData) {
+    for (const data of pointsData)
         await data.deleteOne();
-    }
     
     // Clear all winners and message collectors
     await clearWinnersAndCollectors();
@@ -192,9 +184,26 @@ async function getLeaderboard(interaction) {
     return lbEmbed;
 }
 
+async function rewardChampionsAndFillList(interaction, pointsData) {
+    // Reward all players with 3 or more points with the GTB Winner role
+    for (const data of pointsData) {
+        // If the player doesn't have 3 points or more, skip them
+        const points = data.points;
+        if (points < 3) continue;
+
+        // Add them to the champions list which will be posted before the leaderboard
+        championsList += `- <@${data.userID}> (Score: **${points} points**)\n`;
+
+        // If they do have 3 points or more, give them the role
+        const member = interaction.guild.members.cache.get(data.userID);
+        await member?.roles?.add(gtbWinnerRole);
+    }
+}
+
 async function clearWinnersAndCollectors() {
-    // Clear the round winners set
+    // Clear the round winners set and list
     await roundWinners?.clear();
+    championsList = '';
 
     // If there's a message collector, stop it and clear the variable
     if (currentCollector) {
