@@ -28,12 +28,13 @@ module.exports = {
                     .setLabel('Nevermind, Keep Champion Role')
                     .setStyle(ButtonStyle.Secondary)
             );
+        const components = isChampion ? [confirmRow] : [];
         
         await interaction.reply({
             content: `## ${canParticipateString}!\nPlayers with the <@&${configData.gtbRole}> role are not eligible to participate in Guess The Blank games.\n\n${participationInfoString}`,
             ephemeral: true,
-            components: isChampion ? [confirmRow] : [],
-            allowedMentions: []
+            components: components,
+            allowedMentions: { parse: [] }
         });
     },
 };
