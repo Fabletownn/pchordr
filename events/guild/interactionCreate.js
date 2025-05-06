@@ -76,7 +76,7 @@ module.exports = async (Discord, client, interaction) => {
                 await interaction.update({ content: 'Guess The Blank round information will not be reset.', components: [] });
                 break;
             case 'gtbrole-yes':
-                await interaction.member.roles.cache.remove(configData.gtbRole);
+                await interaction.member.roles.remove(configData.gtbRole);
                 await interaction.update({ content: `## You are now eligible to earn points in Guess The Blank!\nYour <@&${configData.gtbRole}> role has been removed successfully, and you can now participate in future Guess The Blank games.`, components: [], allowedMentions: { parse: [] } });
                 break;
             case 'gtbrole-no':
