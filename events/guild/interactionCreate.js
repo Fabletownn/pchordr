@@ -77,10 +77,10 @@ module.exports = async (Discord, client, interaction) => {
                 break;
             case 'gtbrole-yes':
                 await interaction.member.roles.cache.remove(configData.gtbRole);
-                await interaction.update({ content: `## You are now eligible to earn points in Guess The Blank!\nYour <@&${configData.gtbRole}> role has been removed successfully, and you can now participate in future Guess The Blank games.`, components: [] });
+                await interaction.update({ content: `## You are now eligible to earn points in Guess The Blank!\nYour <@&${configData.gtbRole}> role has been removed successfully, and you can now participate in future Guess The Blank games.`, components: [], allowedMentions: { parse: [] } });
                 break;
             case 'gtbrole-no':
-                await interaction.update({ content: `## You are still not eligible to earn points in Guess The Blank!\nYour <@&${configData.gtbRole}> role has been kept successfully. You may answer in future Guess The Blank games, but not earn any points.`, components: [] });
+                await interaction.update({ content: `## You are still not eligible to earn points in Guess The Blank!\nYour <@&${configData.gtbRole}> role has been kept successfully. You may answer in future Guess The Blank games, but not earn any points.`, components: [], allowedMentions: { parse: [] } });
                 break;
             case 'assistance-handled': {
                 await interaction.client.channels.cache.get(configData.modChat).messages.fetch(interaction.message.id).then(async (assistanceMessage) => {
