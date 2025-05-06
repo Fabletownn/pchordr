@@ -5,9 +5,10 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('
 
 module.exports = async (Discord, client, interaction) => {
     if (interaction.isButton()) {
+        const configData = await CONFIG.findOne({ guildID: interaction.guild.id });
+        
         switch (interaction.customId) {
             case 'setup-reset': {
-                const configData = await CONFIG.findOne({ guildID: interaction.guild.id });
                 const logData = await LCONFIG.findOne({ guildID: interaction.guild.id });
                 
                 if (configData) await configData.deleteOne();
@@ -74,9 +75,14 @@ module.exports = async (Discord, client, interaction) => {
             case 'gtb-reset-no':
                 await interaction.update({ content: 'Guess The Blank round information will not be reset.', components: [] });
                 break;
+            case 'gtbrole-yes':
+                await interaction.member.roles.cache.remove(configData.gtbRole);
+                await interaction.update({ content: `## You are now eligible to earn points in Guess The Blank!\nYour <@&${configData.gtbRole}> role has been removed successfully, and you can now participate in future Guess The Blank games.`, components: [] });
+                break;
+            case 'gtbrole-no':
+                await interaction.update({ content: `## You are still not eligible to earn points in Guess The Blank!\nYour <@&${configData.gtbRole}> role has been kept successfully. You may answer in future Guess The Blank games, but not earn any points.`, components: [] });
+                break;
             case 'assistance-handled': {
-                const configData = await CONFIG.findOne({ guildID: interaction.guild.id });
-
                 await interaction.client.channels.cache.get(configData.modChat).messages.fetch(interaction.message.id).then(async (assistanceMessage) => {
                     if (assistanceMessage) {
                         const assistanceEmbed = assistanceMessage.embeds[0];
