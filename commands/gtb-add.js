@@ -90,7 +90,7 @@ module.exports = {
             console.log(err);
 
             uploadLink = gtbImage.url;
-            uploadMessage = '⚠️ Image has not been uploaded and will soon expire!';
+            uploadMessage = '-# **⚠️ Image has not been uploaded and will soon expire!**';
         }
 
         const addArray = [gtbAnswer, uploadLink, gtbPrompt];
@@ -99,7 +99,7 @@ module.exports = {
         gtbData.rounds = gtbMap;
         gtbData.save().catch((err) => console.log(err));
 
-        await interaction.followUp({ content: `## <:bITFGG:1022548636481114172> Round #${gtbOverride ? gtbOverride : gtbNewRound} has been ${(gtbOverride !== null) ? 'modified' : 'set up'}\n\n- **Prompt**: ${gtbPrompt}\n- **Answer**: ${gtbAnswer}\n\n-# **${uploadMessage}**`, files: [uploadLink] });
+        await interaction.followUp({ content: `## <:bITFGG:1022548636481114172> Round #${gtbOverride ? gtbOverride : gtbNewRound} has been ${(gtbOverride !== null) ? 'modified' : 'set up'}\n\n- **Prompt**: ${gtbPrompt}\n- **Answer**: ${gtbAnswer}\n\n${uploadMessage}`, files: [uploadLink] });
     },
 };
 
