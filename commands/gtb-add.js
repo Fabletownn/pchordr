@@ -51,7 +51,7 @@ module.exports = {
         const gtbRound = (gtbOverride ? gtbOverride : gtbNewRound);
 
         let uploadLink;
-        let uploadMessage;
+        let uploadMessage = '';
 
         await interaction.deferReply();
 
@@ -84,7 +84,6 @@ module.exports = {
             const editedLink = createdLink.replace(/(&dl=0)/g, '&raw=1');
 
             uploadLink = editedLink;
-            uploadMessage = '🔒 Image has been uploaded and will not expire!';
 
             // Otherwise, if there was an error, just use the CDN link
         } catch (err) {
@@ -100,7 +99,7 @@ module.exports = {
         gtbData.rounds = gtbMap;
         gtbData.save().catch((err) => console.log(err));
 
-        await interaction.followUp({ content: `<:bITFCool:1022548621360635994> Set the following information for **Round #${gtbOverride ? gtbOverride : gtbNewRound}** of Guess The Blank:\n\n**Answer**: ${gtbAnswer}\n**Prompt**: ${gtbPrompt}\n\n-# **${uploadMessage}**`, files: [uploadLink] });
+        await interaction.followUp({ content: `## <:bITFGG:1022548636481114172> Round #${gtbOverride ? gtbOverride : gtbNewRound} has been ${(gtbOverride !== null) ? 'modified' : 'set up'}\n\n- **Prompt**: ${gtbPrompt}\n- **Answer**: ${gtbAnswer}\n\n-# **${uploadMessage}**`, files: [uploadLink] });
     },
 };
 
