@@ -59,7 +59,7 @@ async function playRound(interaction) {
     // Store the current collector so it can be stopped accordingly
     currentCollector = msgCollector;
 
-    await interaction.channel.send({ content: `<:bITFThink:1022548686158442537> **Round #${currRound}**: ${roundPrompt}`, files: [roundImage] });
+    await interaction.channel.send({ content: `## <:bITFGaming:1022548630948810752> Round #${currRound}\n# <:bITFThink:1022548686158442537> ${roundPrompt}`, files: [roundImage] });
 
     msgCollector.on('collect', async (collected) => {
         const playerCollected = collected.author;
