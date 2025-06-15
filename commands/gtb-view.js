@@ -47,6 +47,6 @@ module.exports = {
             roundCounter++;
         }
 
-        await interaction.reply({ embeds: [viewArray] });
+        await interaction.reply({ embeds: viewArray });
     },
 };
