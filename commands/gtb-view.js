@@ -31,7 +31,7 @@ module.exports = {
             // When the counter has been reset to 1, create a new embed and set it to current (should be per 10 rounds)
             if (roundCounter % 10 === 0) {
                 currEmbed = new EmbedBuilder()
-                    .setAuthor({ name: 'Guess The Blank Answers', iconURL: interaction.guild.iconURL({ size: 512, dynamic: true }) })
+                    .setAuthor({ name: `Guess The Blank Key: Rounds ${roundCounter/10} - ${roundCounter}`, iconURL: interaction.guild.iconURL({ size: 512, dynamic: true }) })
                     .setColor('#C51BDF');
                 
                 // Set the current embed variable to the embed we just created
