@@ -13,7 +13,7 @@ module.exports = {
                 .setDescription('The answer for this Guess The Blank image')
                 .setRequired(true)
                 .setMinLength(3)
-                .setMaxLength(30)
+                .setMaxLength(100)
         )
         .addAttachmentOption((option) =>
             option.setName('image')
