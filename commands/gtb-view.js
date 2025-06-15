@@ -17,36 +17,36 @@ module.exports = {
         if (interaction.channel.id === configData.gtbChat) return interaction.reply({ content: 'You cannot use that command here! Run it in a private channel.', ephemeral: true });
         
         const gtbMap = gtbData.rounds;
-        const gtbEmbed = new EmbedBuilder()
-            .setAuthor({ name: 'Guess The Blank Answers', iconURL: interaction.guild.iconURL({ size: 512, dynamic: true }) })
-            .setColor('#C51BDF');
-        const overloadEmbed = new EmbedBuilder()
-            .setAuthor({ name: 'Guess The Blank Answers', iconURL: interaction.guild.iconURL({ size: 512, dynamic: true }) })
-            .setColor('#C51BDF');
-
+        let viewArray = [];
         let roundCounter = 1;
+        let currEmbed;
         
         for (const [round, roundInfo] of gtbMap) {
             const roundAnswer = roundInfo[0];
             const roundImageURL = roundInfo[1];
             const roundPrompt = roundInfo[2];
             
-            if (roundCounter < 20) {
-                await gtbEmbed.addFields([
-                    { name: `Round ${round}`, value: `*${roundPrompt}*\n**[${roundAnswer}](${roundImageURL})**`, inline: true }
-                ]);
-            } else {
-                await overloadEmbed.addFields([
-                    { name: `Round ${round}`, value: `*${roundPrompt}*\n**[${roundAnswer}](${roundImageURL})**`, inline: true }
-                ]);
+            // If the amount of rounds have reached 10, reset the counter to 1 and create a new embed
+            if (roundCounter >= 10) roundCounter = 1;
+
+            // When the counter has been reset to 1, create a new embed (should be per 10 rounds)
+            if (roundCounter === 1) {
+                let newEmbed = new EmbedBuilder()
+                    .setAuthor({ name: 'Guess The Blank Answers', iconURL: interaction.guild.iconURL({ size: 512, dynamic: true }) })
+                    .setColor('#C51BDF');
+                
+                // Set the current embed variable to the embed we just created
+                currEmbed = newEmbed;
+                viewArray.push(newEmbed);
             }
+
+            await currEmbed.addFields([
+                { name: `Round ${round}`, value: `*${roundPrompt}*\n**[${roundAnswer}](${roundImageURL})**`, inline: true }
+            ]);
             
             roundCounter++;
         }
 
-        if (roundCounter > 20)
-            await interaction.reply({ embeds: [gtbEmbed, overloadEmbed] });
-        else 
-            await interaction.reply({ embeds: [gtbEmbed] });
+        await interaction.reply({ embeds: [viewArray] });
     },
 };
