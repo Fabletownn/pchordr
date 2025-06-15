@@ -31,7 +31,7 @@ module.exports = {
             const roundImageURL = roundInfo[1];
             const roundPrompt = roundInfo[2];
             
-            if (roundCounter < 25) {
+            if (roundCounter < 20) {
                 await gtbEmbed.addFields([
                     { name: `Round ${round}`, value: `*${roundPrompt}*\n**[${roundAnswer}](${roundImageURL})**`, inline: true }
                 ]);
@@ -44,7 +44,7 @@ module.exports = {
             roundCounter++;
         }
 
-        if (roundCounter > 25)
+        if (roundCounter > 20)
             await interaction.reply({ embeds: [gtbEmbed, overloadEmbed] });
         else 
             await interaction.reply({ embeds: [gtbEmbed] });
