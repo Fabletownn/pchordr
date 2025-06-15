@@ -37,7 +37,7 @@ module.exports = {
                 
                 // Set the current embed variable to the embed we just created
                 currEmbed = newEmbed;
-                viewArray.push(newEmbed);
+                viewArray.push(newEmbed.toJSON());
             }
 
             await currEmbed.addFields([
