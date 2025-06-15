@@ -16,6 +16,8 @@ module.exports = {
         if (gtbData.rounds.size <= 0) return interaction.reply({ content: 'There are no Guess The Blank rounds set up yet. Run the `/gtb-add` command to get started.' });
         if (interaction.channel.id === configData.gtbChat) return interaction.reply({ content: 'You cannot use that command here! Run it in a private channel.', ephemeral: true });
         
+        await interaction.deferReply();
+        
         const gtbMap = gtbData.rounds;
         let viewArray = [];
         let roundCounter = 1;
@@ -47,6 +49,6 @@ module.exports = {
             roundCounter++;
         }
 
-        await interaction.reply({ embeds: viewArray });
+        await interaction.update({ embeds: viewArray });
     },
 };
