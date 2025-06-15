@@ -44,7 +44,17 @@ module.exports = {
             
             roundCounter++;
         }
-
-        await interaction.followUp({ embeds: viewArray });
+        
+        // Split each embed into 2 embeds per message and send them
+        const embedLimit = 2;
+        
+        for (let i = 0; i < viewArray.length; i += embedLimit) {
+            const embedChunk = viewArray.slice(i, i + embedLimit);
+            
+            if (i === 0)
+                await interaction.followUp({ embeds: embedChunk });
+            else 
+                await interaction.channel.send({ embeds: embedChunk });
+        }
     },
 };
