@@ -27,19 +27,15 @@ module.exports = {
             const roundAnswer = roundInfo[0];
             const roundImageURL = roundInfo[1];
             const roundPrompt = roundInfo[2];
-            
-            // If the amount of rounds have reached 10, reset the counter to 1 and create a new embed
-            if (roundCounter >= 10) roundCounter = 1;
 
-            // When the counter has been reset to 1, create a new embed (should be per 10 rounds)
-            if (roundCounter === 1) {
-                let newEmbed = new EmbedBuilder()
+            // When the counter has been reset to 1, create a new embed and set it to current (should be per 10 rounds)
+            if (roundCounter % 10 === 0) {
+                currEmbed = new EmbedBuilder()
                     .setAuthor({ name: 'Guess The Blank Answers', iconURL: interaction.guild.iconURL({ size: 512, dynamic: true }) })
                     .setColor('#C51BDF');
                 
                 // Set the current embed variable to the embed we just created
-                currEmbed = newEmbed;
-                viewArray.push(newEmbed.toJSON());
+                viewArray.push(currEmbed);
             }
 
             await currEmbed.addFields([
@@ -49,6 +45,6 @@ module.exports = {
             roundCounter++;
         }
 
-        await interaction.followUp({ embeds: viewArray });
+        await interaction.followUp({ embeds: viewArray.map((e) => e.toJSON()) });
     },
 };
