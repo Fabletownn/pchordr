@@ -20,7 +20,7 @@ module.exports = {
         
         const gtbMap = gtbData.rounds;
         let viewArray = [];
-        let roundCounter = 1;
+        let roundCounter = 0;
         let currEmbed;
         
         for (const [round, roundInfo] of gtbMap) {
@@ -38,7 +38,7 @@ module.exports = {
                 viewArray.push(currEmbed);
             }
 
-            await currEmbed.addFields([
+            currEmbed.addFields([
                 { name: `Round ${round}`, value: `*${roundPrompt}*\n**[${roundAnswer}](${roundImageURL})**`, inline: true }
             ]);
             
