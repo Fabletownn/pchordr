@@ -45,6 +45,6 @@ module.exports = {
             roundCounter++;
         }
 
-        await interaction.followUp({ embeds: viewArray.map((e) => e.toJSON()) });
+        await interaction.followUp({ embeds: viewArray });
     },
 };
