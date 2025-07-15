@@ -30,8 +30,12 @@ module.exports = {
 
             // When the counter has been reset to 1, create a new embed and set it to current (should be per 10 rounds)
             if (roundCounter % 10 === 0) {
+                let startingRound = roundCounter + 1; // Add 1 to the current index as it starts with 0
+                let shouldEndingRound = roundCounter + 10; // The expected rounds if there's 10 more
+                let endingRound = gtbMap.size === shouldEndingRound ? shouldEndingRound : gtbMap.size; // If there aren't 10 more rounds, set it to the size of the actual amount of rounds
+                
                 currEmbed = new EmbedBuilder()
-                    .setAuthor({ name: `Guess The Blank Key: Rounds ${(roundCounter+10)/10} - ${(roundCounter+10)}`, iconURL: interaction.guild.iconURL({ size: 512, dynamic: true }) })
+                    .setAuthor({ name: `Guess The Blank: Rounds ${startingRound} - ${endingRound}`, iconURL: interaction.guild.iconURL({ size: 512, dynamic: true }) })
                     .setColor('#C51BDF');
                 
                 // Set the current embed variable to the embed we just created
