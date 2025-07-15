@@ -32,7 +32,7 @@ module.exports = {
             if (roundCounter % 10 === 0) {
                 let startingRound = roundCounter + 1; // Add 1 to the current index as it starts with 0
                 let shouldEndingRound = roundCounter + 10; // The expected rounds if there's 10 more
-                let endingRound = gtbMap.size === shouldEndingRound ? shouldEndingRound : gtbMap.size; // If there aren't 10 more rounds, set it to the size of the actual amount of rounds
+                let endingRound = gtbMap.size >= shouldEndingRound ? shouldEndingRound : gtbMap.size; // If there aren't 10 more rounds, set it to the size of the actual amount of rounds
                 
                 currEmbed = new EmbedBuilder()
                     .setAuthor({ name: `Guess The Blank: Rounds ${startingRound} - ${endingRound}`, iconURL: interaction.guild.iconURL({ size: 512, dynamic: true }) })
