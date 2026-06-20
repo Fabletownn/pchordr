@@ -2,7 +2,7 @@ const CONFIG = require('../../models/config.js');
 const LCONFIG = require('../../models/logconfig.js');
 const GTB = require('../../models/gtb.js');
 const BULKS = require('../../models/bulkdeletes.js');
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder} = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder, MessageFlags } = require('discord.js');
 const crypto = require("crypto");
 
 module.exports = async (Discord, client, interaction) => {
@@ -18,7 +18,7 @@ module.exports = async (Discord, client, interaction) => {
 
             await client.channels.cache.get('890718960016838686').send(`## ${errorCode}\n\n**User**: ${interaction.user.username} (${interaction.user.id})\n**Command**: /${interaction.commandName}\n**Error**: ${error}`);
 
-            return interaction.reply({ content: 'An issue occurred trying to execute that command. Contact <@528759471514845194> with the following code if this continues happening. <:bITFSweat:1022548683176284281>\n\nError Code: **`' + errorCode + '`**', ephemeral: true });
+            return interaction.reply({ content: 'An issue occurred trying to execute that command. Contact <@528759471514845194> with the following code if this continues happening. <:bITFSweat:1022548683176284281>\n\nError Code: **`' + errorCode + '`**', flags: MessageFlags.Ephemeral });
         }
     }
     
@@ -116,7 +116,7 @@ module.exports = async (Discord, client, interaction) => {
 
                             await assistanceMessage.edit({ components: [newAssistanceRow] });
 
-                            await interaction.reply({ content: 'Successfully marked the assistance request as handled. <:bITFPat:1022548669641277542>', ephemeral: true });
+                            await interaction.reply({ content: 'Successfully marked the assistance request as handled. <:bITFPat:1022548669641277542>', flags: MessageFlags.Ephemeral });
                         }
                     }
                 });
@@ -135,8 +135,8 @@ module.exports = async (Discord, client, interaction) => {
 
                     await reportmsg.delete();
                     await interaction.message.edit({ embeds: [handledEmbed], components: [] });
-                    await interaction.reply({ content: 'Deleted the message. <:bITFAYAYA:1022548602255589486>', ephemeral: true });
-                }).catch((err) => { return interaction.reply({ content: 'Unable to delete the message, does it exist? <:bITFHuh:1022548647948333117>', ephemeral: true }) });
+                    await interaction.reply({ content: 'Deleted the message. <:bITFAYAYA:1022548602255589486>', flags: MessageFlags.Ephemeral });
+                }).catch((err) => { return interaction.reply({ content: 'Unable to delete the message, does it exist? <:bITFHuh:1022548647948333117>', flags: MessageFlags.Ephemeral }) });
 
                 break;
             case 'report-handle':
@@ -144,18 +144,18 @@ module.exports = async (Discord, client, interaction) => {
                 const handledEmbed = EmbedBuilder.from(reportEmbed2).setColor('#38DD86').setAuthor({ name: 'Report Handled', iconURL: 'https://i.imgur.com/CGgTthf.png' });
 
                 await interaction.message.edit({ embeds: [handledEmbed], components: [] });
-                await interaction.reply({ content: 'Marked the report as handled. <:bITFAYAYA:1022548602255589486>', ephemeral: true });
+                await interaction.reply({ content: 'Marked the report as handled. <:bITFAYAYA:1022548602255589486>', flags: MessageFlags.Ephemeral });
                 break;
             case 'report-dismiss':
                 let reportEmbed3 = interaction.message.embeds[0];
                 const handledEmbed2 = EmbedBuilder.from(reportEmbed3).setColor('#747F8D').setAuthor({ name: 'Report Dismissed', iconURL: 'https://i.imgur.com/BGYUUfe.png' });
 
                 await interaction.message.edit({ embeds: [handledEmbed2], components: [] });
-                await interaction.reply({ content: 'Dismissed the report. <:bITFComfy:1022548611738914886>', ephemeral: true });
+                await interaction.reply({ content: 'Dismissed the report. <:bITFComfy:1022548611738914886>', flags: MessageFlags.Ephemeral });
                 break;
             case 'log-viewbulk': {
                 const deleteData = await BULKS.findOne({ messageID: interaction.message.id });
-                if (!deleteData) return interaction.reply({ content: 'Data for this bulk delete log has expired.', ephemeral: true });
+                if (!deleteData) return interaction.reply({ content: 'Data for this bulk delete log has expired.', flags: MessageFlags.Ephemeral });
                 
                 await interaction.deferReply({ ephemeral: true });
                 
@@ -178,27 +178,27 @@ module.exports = async (Discord, client, interaction) => {
             switch (interaction.values[0]) {
                 case "hatespeech":
                     emergencyEmbedAlert(interaction, interaction.user, `Hate Speech`);
-                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **Hate Speech**.`, components: [], ephemeral: true });
+                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **Hate Speech**.`, components: [], flags: MessageFlags.Ephemeral });
 
                     break;
                 case "nsfw":
                     emergencyEmbedAlert(interaction, interaction.user, `NSFW Content`);
-                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **NSFW Content**.`, components: [], ephemeral: true });
+                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **NSFW Content**.`, components: [], flags: MessageFlags.Ephemeral });
 
                     break;
                 case "spam":
                     emergencyEmbedAlert(interaction, interaction.user, `Spam`);
-                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **Spam**.`, components: [], ephemeral: true });
+                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **Spam**.`, components: [], flags: MessageFlags.Ephemeral });
 
                     break;
                 case "troll":
                     emergencyEmbedAlert(interaction, interaction.user, `Troll`);
-                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **Troll**.`, components: [], ephemeral: true });
+                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle **Troll**.`, components: [], flags: MessageFlags.Ephemeral });
 
                     break;
                 case "other":
                     emergencyEmbedAlert(interaction, interaction.user, `Other`);
-                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle the situation.`, components: [], ephemeral: true });
+                    await interaction.update({ content: `Thank you! The staff team has been notified and are on their way to handle the situation.`, components: [], flags: MessageFlags.Ephemeral });
 
                     break;
                 default:
@@ -258,7 +258,7 @@ module.exports = async (Discord, client, interaction) => {
                     );
 
                 await interaction.guild.channels.cache.get('1110289979663470714').send({ embeds: [reportEmbed], components: [reportRow] });
-                await interaction.reply({ content: `Submitted your report to the staff team, we'll take action as soon as we can!\n\nFor emergencies or messages that need to be handled ASAP, please use the \`/assistance\` command instead!`, ephemeral: true });
+                await interaction.reply({ content: `Submitted your report to the staff team, we'll take action as soon as we can!\n\nFor emergencies or messages that need to be handled ASAP, please use the \`/assistance\` command instead!`, flags: MessageFlags.Ephemeral });
                 break;
             default:
                 break;
