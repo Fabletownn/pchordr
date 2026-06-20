@@ -46,22 +46,4 @@ client.events = new Collection();
     require(`./handlers/${handler}`)(client, Discord);
 });
 
-client.on('interactionCreate', async (interaction) => {
-    const command = client.commands.get(interaction.commandName);
-
-    if ((interaction.isChatInputCommand()) && (command)) {
-        try {
-            await command.execute(interaction);
-        } catch (error) {
-            const errorCode = crypto.randomBytes(15).toString('hex');
-    
-            console.error(error);
-
-            await client.channels.cache.get('890718960016838686').send(`## ${errorCode}\n\n**User**: ${interaction.user.username} (${interaction.user.id})\n**Command**: /${interaction.commandName}\n**Error**: ${error}`);
-    
-            return interaction.reply({ content: 'An issue occurred trying to execute that command. Contact <@528759471514845194> with the following code if this continues happening. <:bITFSweat:1022548683176284281>\n\nError Code: **`' + errorCode + '`**', ephemeral: true });
-        }
-    }
-});
-
 client.login(process.env.TOKEN);
