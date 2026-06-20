@@ -1,7 +1,8 @@
 const CONFIG = require('../../models/config.js');
 const LCONFIG = require('../../models/logconfig.js');
 const GTB = require('../../models/gtb.js');
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const BULKS = require('../../models/bulkdeletes.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder} = require('discord.js');
 
 module.exports = async (Discord, client, interaction) => {
     if (interaction.isButton()) {
@@ -134,6 +135,21 @@ module.exports = async (Discord, client, interaction) => {
 
                 await interaction.message.edit({ embeds: [handledEmbed2], components: [] });
                 await interaction.reply({ content: 'Dismissed the report. <:bITFComfy:1022548611738914886>', ephemeral: true });
+                break;
+            case 'log-viewbulk': {
+                const deleteData = await BULKS.findOne({ messageID: interaction.message.id });
+                if (!deleteData) return interaction.reply({ content: 'Data for this bulk delete log has expired.', ephemeral: true });
+                
+                await interaction.deferReply({ ephemeral: true });
+                
+                const deleteLog = new AttachmentBuilder(
+                    Buffer.from(deleteData.log, 'utf8'), {
+                        name: `bulkdelete-${interaction.message.id}.txt`,
+                    }
+                );
+                
+                await interaction.followUp({ files: [deleteLog] });
+            }
                 break;
             default:
                 break;

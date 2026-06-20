@@ -1,87 +1,64 @@
-const { EmbedBuilder, WebhookClient } = require('discord.js');
-const superagent = require('superagent')
+const { MessageFlags } = require('discord.js');
+const BULKS = require('../../models/bulkdeletes.js');
 const LCONFIG = require('../../models/logconfig.js');
 
 module.exports = async (Discord, client, messages, channel) => {
-    var bulkDeleteInformation = [];
-    var bulkDeleteUserIDs = [];
+    let bulkDeleteInformation = [];
+    let bulkDeleteUserIDs = [];
 
     const guild = channel.guild;
+    const lData = await LCONFIG.findOne({ guildID: guild.id });
+    if (!lData) return;
+    
+    const logChannel = guild.channels.cache.get(lData.msglogid);
+    
+    for (const deleted of messages.values()) {
+        if (deleted.partial) continue;
+        if (deleted.author?.bot) continue;
+        
+        const content = (deleted.content || '').slice(0, 2000);
+        const authorTag = deleted.author.tag;
+        const authorID = deleted.author.id;
+        const channelName = channel.name;
+        
+        bulkDeleteInformation.push(`@${authorTag} (${authorID}) | #${channelName}: ${content}`);
+        if (!bulkDeleteUserIDs.includes(authorID))bulkDeleteUserIDs.push(bulkDeleteUserIDs);
+    }
+    
+    const logContent = bulkDeleteInformation.reverse().join('\n') +
+        + `\n\n${messages.size} messages were deleted in bulk and ${bulkDeleteInformation.length} are logged. Messages may not be logged if they are uncached, sent by a bot, or similar.`;
 
-    LCONFIG.findOne({
-        guildID: guild.id
-    }, async (err, data) => {
-        if (err) return console.log(err);
-        if (!data) return;
-        if (!(guild.channels.cache.get(data.msglogid))) return;
-        if (data.ignoredchannels == null) return;
-        if (data.ignoredcategories == null) return;
-        if (data.logwebhook == null) return;
+    const bulkLogText = new SectionBuilder()
+        .addTextDisplayComponents((text) =>
+            text.setContent(`### **${messages.size}** messages were deleted with **${bulkDeleteInformation.length}** known in cache\n**IDs Involved**: ${(bulkDeleteUserIDs.length > 0) ? bulkDeleteUserIDs.join(', ') : 'Unknown'}`)
+        )
+        .setButtonAccessory(new ButtonBuilder()
+            .setStyle(ButtonStyle.Primary)
+            .setEmoji('👁️')
+            .setCustomId('log-viewbulk')
+        );
 
-        const deleteWebhookID = data.logwebhook.split(/\//)[5];
-        const deleteWebhookToken = data.logwebhook.split(/\//)[6];
-
-        const fetchDeleteWebhooks = await client.channels.cache.get(data.msglogid).fetchWebhooks();
-        const fetchedDeleteWebhook = fetchDeleteWebhooks.find((wh) => wh.id === deleteWebhookID);
-
-        if (!fetchedDeleteWebhook) return;
-
-        const deleteWebhook = new WebhookClient({ id: deleteWebhookID, token: deleteWebhookToken });
-
-        if (data.ignoredchannels.some((ignored_channel) => channel.id === ignored_channel)) return;
-        if (data.ignoredcategories.some((ignored_cat) => channel.parent.id === ignored_cat)) return;
-
-        const currentDate = new Date().toLocaleString('en-US', { hour12: true });
-
-        messages.forEach((deleted) => {
-            if (deleted.partial) return;
-            if (deleted.author.bot) return;
-
-            const authorTag = deleted.author.tag;
-            const authorDisplayName = deleted.author.displayName;
-            const authorID = deleted.author.id;
-            const channelName = channel.name;
-
-            let addString = `${authorTag} (${authorDisplayName}) [${authorID}] | (#${channelName}): ${deleted.content > 2000 ? `${deleted.content.slice(0, 2000)}...` : deleted.content}`;
-            let userString = `${authorID}`;
-            bulkDeleteInformation.push(addString);
-            if (!bulkDeleteUserIDs.includes(userString)) bulkDeleteUserIDs.push(userString);
-        });
-
-        if (bulkDeleteInformation.length <= 0) return;
-
-        const lineLength = bulkDeleteInformation[bulkDeleteInformation.length - 1].replace(/./g, '-');
-        const sendContent = `ITF Bulk Delete @ ${currentDate} UTC:\n\n${bulkDeleteInformation.join('\n')}\n\n${lineLength}\n`
-        + `If a deleted message's author was a bot, the message is not cached by the bot, or similar, some messages may not be logged. Out of ${messages.size} deleted messages, ${bulkDeleteInformation.length} are logged.`;
-
-        try {
-            superagent
-                .post('https://sourceb.in/api/bins')
-                .send({
-                    files: [{
-                        name: 'ITF Delete Sourcebin Log',
-                        content: sendContent
-                    }]
-                })
-                .end((err, res) => {
-                    if (err) return console.log(err);
-
-                    if (res.ok) {
-                        const bulkDeleteEmbed = new EmbedBuilder()
-                            .setDescription(`**${bulkDeleteInformation.length}**/**${messages.size}** message(s) were deleted and known in cache.\n\n**IDs Involved**: ${(bulkDeleteUserIDs.length > 0) ? bulkDeleteUserIDs.join(', ') : 'Unknown'}`)
-                            .addFields(
-                                { name: 'Link', value: `https://cdn.sourceb.in/bins/${res.body.key}/0` }
-                            )
-                            .setTimestamp()
-                            .setColor('#ED498D');
-
-                        deleteWebhook.send({ embeds: [bulkDeleteEmbed] });
-                    } else {
-                        return console.error(`Error uploading bulk delete log: ${res.statusCode} - ${res.body.message}`);
-                    }
-                });
-        } catch (error) {
-            return console.error(`Error uploading bulk delete log: ${error}`);
+    const logContainer = new ContainerBuilder()
+        .addSectionComponents(bulkLogText)
+        .setAccentColor(0xED498D)
+    
+    const webhookID = lData.logwebhook?.split('/')[5];
+    const webhooks = await logChannel?.fetchWebhooks();
+    const webhook = webhooks.find((hook) => hook.id === webhookID);
+    if (!webhook) return;
+    
+    try {
+        const log = await webhook.send({ components: [logContainer], flags: MessageFlags.IsComponentsV2 });
+        if (log) {
+            const newBulkData = new BULKS({
+                messageID: log.id,
+                expiresAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 3 months
+                log: logContent
+            });
+            
+            await newBulkData.save();
         }
-    });
+    } catch (err) {
+        return console.log(err);
+    }
 }
