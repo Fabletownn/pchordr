@@ -25,7 +25,7 @@ module.exports = async (Discord, client, messages, channel) => {
         if (!bulkDeleteUserIDs.includes(authorID)) bulkDeleteUserIDs.push(authorID);
     }
     
-    const logContent = bulkDeleteInformation.reverse().join('\n') +
+    const logContent = bulkDeleteInformation.reverse().join('\n')
         + `\n\n${messages.size} messages were deleted in bulk and ${bulkDeleteInformation.length} are logged. Messages may not be logged if they are uncached, sent by a bot, or similar.`;
 
     const bulkLogText = new SectionBuilder()
