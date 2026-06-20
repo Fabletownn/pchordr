@@ -22,7 +22,7 @@ module.exports = async (Discord, client, messages, channel) => {
         const channelName = channel.name.replace(/[^a-zA-Z-]/g, ''); // does not like emoji
         
         bulkDeleteInformation.push(`@${authorTag} (${authorID}) | #${channelName}: ${content}`);
-        if (!bulkDeleteUserIDs.includes(authorID))bulkDeleteUserIDs.push(bulkDeleteUserIDs);
+        if (!bulkDeleteUserIDs.includes(authorID)) bulkDeleteUserIDs.push(authorID);
     }
     
     const logContent = bulkDeleteInformation.reverse().join('\n') +
