@@ -166,8 +166,8 @@ module.exports = async (Discord, client, interaction) => {
                 );
                 
                 await interaction.followUp({ files: [deleteLog] });
-            }
                 break;
+            }
             default:
                 break;
         }
