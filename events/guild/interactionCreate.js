@@ -157,7 +157,7 @@ module.exports = async (Discord, client, interaction) => {
                 const deleteData = await BULKS.findOne({ messageID: interaction.message.id });
                 if (!deleteData) return interaction.reply({ content: 'Data for this bulk delete log has expired.', flags: MessageFlags.Ephemeral });
                 
-                await interaction.deferReply({ ephemeral: true });
+                await interaction.deferReply({ flags: MessageFlags.Ephemeral });
                 
                 const deleteLog = new AttachmentBuilder(
                     Buffer.from(deleteData.log, 'utf8'), {
