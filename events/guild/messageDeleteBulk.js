@@ -1,4 +1,4 @@
-const { MessageFlags } = require('discord.js');
+const { SectionBuilder, ContainerBuilder, ButtonBuilder, MessageFlags } = require('discord.js');
 const BULKS = require('../../models/bulkdeletes.js');
 const LCONFIG = require('../../models/logconfig.js');
 
