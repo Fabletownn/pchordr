@@ -1,6 +1,5 @@
 require('dotenv').config();
 
-const crypto = require('crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const {
@@ -8,21 +7,30 @@ const {
     Client,
     Collection,
     GatewayIntentBits,
-    Partials,
-    PartialGroupDMChannel
+    Partials
 } = require('discord.js');
-
 const mongoose = require('mongoose');
 
 const client = new Client({
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildEmojisAndStickers, GatewayIntentBits.GuildIntegrations, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.GuildPresences, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildWebhooks],
-    partials: [Partials.User, Partials.Channel, Partials.Message, Partials.GuildMember, PartialGroupDMChannel],
+    intents: [
+        GatewayIntentBits.Guilds,           // needed for slash commands and server information
+        GatewayIntentBits.MessageContent,   // needed for reporting, logging deletes/edits,
+        GatewayIntentBits.GuildMessages,    // needed for reporting, logging deletes/edits, etc.
+        GatewayIntentBits.GuildMembers,     // needed for giving Supporter role
+        GatewayIntentBits.GuildVoiceStates  // needed for custom voice channels
+    ],
+    partials: [
+        Partials.User,      // useful for member search
+        Partials.Channel,   // useful for message caching
+        Partials.Message    // useful for logging
+    ],
     allowedMentions: {
         parse: ['users', 'everyone', 'roles'],
         repliedUser: false
     }
 });
 
+mongoose.set('strictQuery', false);
 mongoose.connect(process.env.MONGOPASS, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
