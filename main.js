@@ -17,7 +17,8 @@ const client = new Client({
         GatewayIntentBits.MessageContent,   // needed for reporting, logging deletes/edits,
         GatewayIntentBits.GuildMessages,    // needed for reporting, logging deletes/edits, etc.
         GatewayIntentBits.GuildMembers,     // needed for giving Supporter role
-        GatewayIntentBits.GuildVoiceStates  // needed for custom voice channels
+        GatewayIntentBits.GuildVoiceStates, // needed for custom voice channels
+        GatewayIntentBits.GuildMessageReactions
     ],
     partials: [
         Partials.User,      // useful for member search
