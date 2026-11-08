@@ -8,7 +8,7 @@ module.exports = async (Discord, client, reaction, user) => {
     if (!cData.vxtwitter) return;
     if (user.bot) return;
 
-    if (reaction.message.channel.id === data.modChat || reaction.message.channel.id === '1295133102787526676') {
+    if (reaction.message.channel.id === cData.modChat || reaction.message.channel.id === '1295133102787526676') {
         if (reaction.emoji.name === 'vxtwitterfy') {
             const twitterRegex = /(https:\/\/twitter\.com\/)|(https:\/\/x\.com\/)/;
 
